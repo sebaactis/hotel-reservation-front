@@ -1,0 +1,76 @@
+import {
+  Navbar as HeroUINavbar,
+  NavbarContent,
+  NavbarMenu,
+  NavbarMenuToggle,
+  NavbarBrand,
+  NavbarItem,
+  NavbarMenuItem,
+} from "@heroui/navbar";
+import { Button } from "@heroui/button";
+import { Link } from "@heroui/link";
+import { link as linkStyles } from "@heroui/theme";
+import NextLink from "next/link";
+import clsx from "clsx";
+
+import { Logo } from "@/components/icons";
+import { colorsAux } from "@/styles/colorsAux";
+
+
+
+export const Navbar = () => {
+
+  return (
+    <HeroUINavbar maxWidth="2xl" position="sticky" className="bg-[#523961]">
+      
+      <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+      
+        <NavbarBrand as="li" className="gap-3 max-w-fit">
+          <NextLink className="flex justify-start items-center gap-3" href="/">
+            <Logo width={50} heigth={50}/>
+            <p className="text-inherit italic">Solo pensá a donde ir</p>
+          </NextLink>
+        </NavbarBrand>
+
+      </NavbarContent>
+
+      <NavbarContent
+        className="hidden sm:flex basis-1/5 sm:basis-full"
+        justify="end"
+      >
+        <NavbarItem className="hidden md:flex">
+          <Button
+            isExternal
+            as={Link}
+            className={`text-sm font-bold bg-[${colorsAux.primarylighter}] text-white transition-all hover:bg-[#a47ac4]`}
+            href="/"
+            variant="flat"
+          >
+            Crear cuenta
+          </Button>
+        </NavbarItem>
+
+        <NavbarItem className="hidden md:flex">
+          <Button
+            isExternal
+            as={Link}
+            className={`text-sm font-bold bg-[${colorsAux.secondary}] text-white italic transition-all hover:bg-[#a092ad]`}
+            href="/"
+            variant="flat"
+          >
+            Iniciar Sesión
+          </Button>
+        </NavbarItem>
+        
+      </NavbarContent>
+
+      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+        <NavbarMenuToggle />
+      </NavbarContent>
+
+      <NavbarMenu>
+
+      </NavbarMenu>
+    </HeroUINavbar>
+  );
+};
