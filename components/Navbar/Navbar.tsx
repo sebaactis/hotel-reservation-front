@@ -28,7 +28,7 @@ export const Navbar = () => {
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-3" href="/">
             <Logo width={50} heigth={50}/>
-            <p className="text-inherit italic">Solo pensá a donde ir</p>
+            <p className="text-inherit italic text-white">Solo pensá a donde ir</p>
           </NextLink>
         </NavbarBrand>
 
@@ -42,9 +42,10 @@ export const Navbar = () => {
           <Button
             isExternal
             as={Link}
-            className={`text-sm font-bold bg-[${colorsAux.primarylighter}] text-white transition-all hover:bg-[#a47ac4]`}
+            className={`text-sm font-bold text-white transition-all hover:bg-[#a47ac4]`}
             href="/"
             variant="flat"
+            style={{backgroundColor: colorsAux.primarylighter}}
           >
             Crear cuenta
           </Button>
@@ -54,9 +55,10 @@ export const Navbar = () => {
           <Button
             isExternal
             as={Link}
-            className={`text-sm font-bold bg-[${colorsAux.secondary}] text-white italic transition-all hover:bg-[#a092ad]`}
+            className={`text-sm font-bold text-white italic transition-all hover:bg-[#a092ad]`}
             href="/"
             variant="flat"
+            style={{backgroundColor: colorsAux.secondary}}
           >
             Iniciar Sesión
           </Button>
