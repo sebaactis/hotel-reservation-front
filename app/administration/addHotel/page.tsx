@@ -8,21 +8,29 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
+import { features } from "process"
+import { toast } from "sonner"
 
 export default function AddHotel() {
-    
+
+    const [hotelData, setHotelData] = useState([])
     const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
     const [rating, setRating] = useState(0)
 
     const amenities = [
-        { id: "wifi", label: "WiFi Gratis", icon: Wifi },
-        { id: "parking", label: "Parking", icon: Car },
-        { id: "breakfast", label: "Desayuno", icon: Coffee },
-        { id: "pool", label: "Piscina", icon: Waves },
-        { id: "restaurant", label: "Restaurante", icon: Utensils },
-        { id: "gym", label: "Gimnasio", icon: Dumbbell },
-        { id: "laundry", label: "Lavandería", icon: Shirt },
+        { id: "Wifi", label: "WiFi Gratis", icon: Wifi },
+        { id: "Estacionamiento", label: "Parking", icon: Car },
+        { id: "Desayuno", label: "Desayuno", icon: Coffee },
+        { id: "Piscina", label: "Piscina", icon: Waves },
+        { id: "Restaurante", label: "Restaurante", icon: Utensils },
+        { id: "Gimnasio", label: "Gimnasio", icon: Dumbbell },
+        { id: "Lavanderia", label: "Lavandería", icon: Shirt },
     ]
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target
+        setHotelData({ ...hotelData, [name]: value })
+    }
 
     const handleAmenityChange = (amenityId: string, checked: boolean) => {
         if (checked) {
@@ -32,17 +40,45 @@ export default function AddHotel() {
         }
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        // Aquí iría la lógica para enviar el formulario
-        console.log("Formulario enviado")
+
+        const newHotel = {
+            ...hotelData,
+            score: rating.toFixed(1),
+            features: selectedAmenities,
+            images: [
+                {
+                    "url": "https://example.com/image.jpg",
+                }
+            ]
+        }
+
+        const submit = await fetch("http://localhost:8080/api/v1/hotel", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newHotel),
+        })
+
+        if (submit.ok) {
+            toast.success("Hotel agregado exitosamente")
+            setHotelData([])
+            setSelectedAmenities([])
+            setRating(0)
+            window.reload();
+        } else {
+            toast.error("Error al intentar agregar hotel")
+        }
     }
 
+    console.log("Hotel Data:", hotelData)
     return (
         <div className="min-h-screen p-8" style={{ backgroundColor: "#D4C7BF" }}>
             <div className="max-w-2xl mx-auto">
                 <Card className="shadow-lg border-0 overflow-hidden">
-                    
+
                     <CardHeader style={{ backgroundColor: "#3B234A" }}>
                         <CardTitle className="text-white text-2xl font-bold text-center">Agregar Nuevo Hotel</CardTitle>
                     </CardHeader>
@@ -62,13 +98,15 @@ export default function AddHotel() {
                                         </Label>
                                         <Input
                                             id="name"
+                                            name="name"
                                             placeholder="Ej: Hotel Elegante Vista"
-                                            className="mt-1 border-2 focus:ring-0"
+                                            className="mt-1 border-2 focus:ring-0 text-gray-500"
                                             style={{
                                                 borderColor: "#BAAFC4",
                                                 backgroundColor: "white",
                                             }}
                                             required
+                                            onChange={handleInputChange}
                                         />
                                     </div>
 
@@ -79,13 +117,15 @@ export default function AddHotel() {
                                         <Input
                                             id="price"
                                             type="number"
+                                            name="price"
                                             placeholder="89"
-                                            className="mt-1 border-2 focus:ring-0"
+                                            className="mt-1 border-2 focus:ring-0 text-gray-500"
                                             style={{
                                                 borderColor: "#BAAFC4",
                                                 backgroundColor: "white",
                                             }}
                                             required
+                                            onChange={handleInputChange}
                                         />
                                     </div>
                                 </div>
@@ -98,12 +138,14 @@ export default function AddHotel() {
                                     <Input
                                         id="location"
                                         placeholder="Ej: Centro Histórico, Barcelona"
-                                        className="mt-1 border-2 focus:ring-0"
+                                        name="location"
+                                        className="mt-1 border-2 focus:ring-0 text-gray-500"
                                         style={{
                                             borderColor: "#BAAFC4",
                                             backgroundColor: "white",
                                         }}
                                         required
+                                        onChange={handleInputChange}
                                     />
                                 </div>
 
@@ -113,9 +155,11 @@ export default function AddHotel() {
                                     </Label>
                                     <Textarea
                                         id="description"
+                                        name="description"
+                                        onChange={handleInputChange}
                                         placeholder="Describe las características principales del hotel..."
                                         rows={4}
-                                        className="mt-1 border-2 focus:ring-0 resize-none"
+                                        className="mt-1 border-2 focus:ring-0 resize-none text-gray-500"
                                         style={{
                                             borderColor: "#BAAFC4",
                                             backgroundColor: "white",
@@ -175,7 +219,7 @@ export default function AddHotel() {
                                                 />
                                                 <Label
                                                     htmlFor={amenity.id}
-                                                    className="text-sm font-medium cursor-pointer flex items-center gap-1"
+                                                    className="text-sm font-medium cursor-pointer flex items-center gap-1 "
                                                     style={{ color: "#523961" }}
                                                 >
                                                     <IconComponent className="w-4 h-4" />
@@ -225,12 +269,14 @@ export default function AddHotel() {
                                         <Input
                                             id="phone"
                                             type="tel"
+                                            name="phone"
                                             placeholder="+34 123 456 789"
-                                            className="mt-1 border-2 focus:ring-0"
+                                            className="mt-1 border-2 focus:ring-0 text-gray-500"
                                             style={{
                                                 borderColor: "#BAAFC4",
                                                 backgroundColor: "white",
                                             }}
+                                            onChange={handleInputChange}
                                         />
                                     </div>
 
@@ -241,12 +287,14 @@ export default function AddHotel() {
                                         <Input
                                             id="email"
                                             type="email"
+                                            name="email"
                                             placeholder="info@hotel.com"
-                                            className="mt-1 border-2 focus:ring-0"
+                                            className="mt-1 border-2 focus:ring-0 text-gray-500"
                                             style={{
                                                 borderColor: "#BAAFC4",
                                                 backgroundColor: "white",
                                             }}
+                                            onChange={handleInputChange}
                                         />
                                     </div>
                                 </div>

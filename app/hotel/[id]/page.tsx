@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
     ArrowLeft,
     MapPin,
@@ -19,8 +19,15 @@ import {
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { useParams } from "next/navigation"
+import { Hotel } from "@/types"
+import { BadgeListFromJsonBigger } from "@/components/BagdeListFromJson"
 
 export default function HotelDetails() {
+
+    const { id } = useParams({});
+
+    const [hotel, setHotel] = useState<Hotel>({});
     const [checkIn, setCheckIn] = useState("")
     const [checkOut, setCheckOut] = useState("")
     const [guests, setGuests] = useState(2)
@@ -43,10 +50,27 @@ export default function HotelDetails() {
         { icon: Shirt, label: "Servicio de Lavandería" },
     ]
 
+    useEffect(() => {
+        const fetchHotel = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/api/v1/hotel/${id}`)
+                if (!response.ok) {
+                    throw new Error("Error al obtener los datos del hotel")
+                }
+                const data = await response.json()
+                setHotel(data.entity)
+            } catch (error) {
+                console.error("Error fetching hotel data:", error)
+            }
+        }
+
+        fetchHotel();
+    }, [])
+
+    console.log(hotel)
 
     return (
         <div className="min-h-screen" style={{ backgroundColor: "#D4C7BF" }}>
-
             <div className="p-6" style={{ backgroundColor: "#3B234A" }}>
                 <div className="max-w-6xl mx-auto">
                     <Button variant="ghost" className="text-white hover:bg-white hover:bg-opacity-20 mb-4">
@@ -56,24 +80,24 @@ export default function HotelDetails() {
 
                     <div className="flex flex-col md:flex-row gap-6">
                         <div className="flex-1">
-                            <h1 className="text-3xl font-bold text-white mb-2">Hotel Elegante Vista</h1>
+                            <h1 className="text-3xl font-bold text-white mb-2">{hotel.name}</h1>
                             <div className="flex items-center gap-2 text-white mb-4">
                                 <MapPin className="w-5 h-5" />
-                                <span>Centro Histórico, Barcelona, España</span>
+                                <span>{hotel.location}</span>
                             </div>
 
                             <div className="flex items-center gap-4">
                                 <div className="flex items-center justify-center w-16 h-16 rounded-full text-white font-bold text-xl border-2 border-white">
-                                    8.9
+                                    {hotel.score}
                                 </div>
                                 <div className="text-white">
-                                    <p className="text-lg font-semibold">Excelente</p>
+                                    <p className="text-lg font-semibold">{hotel.score > 6 ? "Excelente" : "Normal"}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="text-right text-white">
-                            <div className="text-3xl font-bold">ARS($) 15000</div>
+                            <div className="text-3xl font-bold">ARS($) {hotel.price}</div>
                             <div className="text-sm opacity-90">por noche</div>
                         </div>
                     </div>
@@ -137,7 +161,6 @@ export default function HotelDetails() {
                                 className="absolute bottom-4 right-4 text-white font-semibold hover:opacity-90 transition-opacity shadow-lg"
                                 style={{ backgroundColor: "#3B234A" }}
                                 onClick={() => {
-                                    // Aquí iría la lógica para abrir la galería completa
                                     console.log("Abrir galería completa")
                                 }}
                             >
@@ -157,15 +180,7 @@ export default function HotelDetails() {
                             </CardHeader>
                             <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
                                 <p className="text-gray-700 leading-relaxed mb-4">
-                                    Ubicado en el corazón del Centro Histórico de Barcelona, el Hotel Elegante Vista ofrece una
-                                    experiencia única combinando la elegancia moderna con el encanto tradicional catalán. Nuestras
-                                    habitaciones cuentan con vistas espectaculares a la ciudad y están equipadas con todas las comodidades
-                                    modernas.
-                                </p>
-                                <p className="text-gray-700 leading-relaxed">
-                                    A solo unos pasos de las principales atracciones turísticas como La Sagrada Familia, Park Güell y Las
-                                    Ramblas, es el lugar perfecto para explorar la vibrante cultura barcelonesa. Nuestro equipo
-                                    multilingüe está disponible las 24 horas para hacer de su estancia una experiencia inolvidable.
+                                    {hotel.description}
                                 </p>
                             </CardContent>
                         </Card>
@@ -175,21 +190,11 @@ export default function HotelDetails() {
                                 <CardTitle style={{ color: "#3B234A" }}>Servicios y Amenidades</CardTitle>
                             </CardHeader>
                             <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                    {amenities.map((amenity, index) => {
-                                        const IconComponent = amenity.icon
-                                        return (
-                                            <div key={index} className="flex items-center gap-3">
-                                                <div className="p-2 rounded-full" style={{ backgroundColor: "#BAAFC4" }}>
-                                                    <IconComponent className="w-5 h-5" style={{ color: "#3B234A" }} />
-                                                </div>
-                                                <span className="text-sm font-medium" style={{ color: "#523961" }}>
-                                                    {amenity.label}
-                                                </span>
-                                            </div>
-                                        )
-                                    })}
-                                </div>
+                                {hotel && hotel.features ? (
+                                    <BadgeListFromJsonBigger key={hotel.id} features={hotel.features} />
+                                ) : (
+                                    "Esperando datos del hotel..."
+                                )}
                             </CardContent>
                         </Card>
 

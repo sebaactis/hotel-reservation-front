@@ -13,7 +13,7 @@ const RecommendationCard = () => {
     ]
 
     return (
-        <article style={{ backgroundColor: colorsAux.secondary }} className='grid grid-cols-[30%_1fr] '>
+        <article style={{ backgroundColor: colorsAux.secondary }} className='grid grid-cols-1 md:grid-cols-[30%_1fr]'>
             <div>
                 <img
                     src="https://imgs.search.brave.com/zekckRCy-3DvoqpeSJ7Z4-tU6HAtAcnOFy0K6WxfAFA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS92aXN0YS1waXNj/aW5hXzEwNDg5NDQt/MjA4MjEzMTkuanBn/P3NlbXQ9YWlzX2h5/YnJpZA"
@@ -22,7 +22,7 @@ const RecommendationCard = () => {
                 />
             </div>
             <div className='pl-8 pt-5'>
-                <p className="text-indigo-950 text-2xl font-bold ">Hotel Elegante Vista</p>
+                <p className="text-indigo-950 text-2xl font-bold">Hotel Elegante Vista</p>
 
                 <div style={{ color: colorsAux.primary }} className="flex items-center gap-1">
                     <MapIcon />
@@ -50,17 +50,17 @@ const RecommendationCard = () => {
                     }
                 </div>
 
-                <p style={{ color: colorsAux.darkprimary }} className='w-[80%] mt-5 text-base font-light'>"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nostrum quas accusantium et! Id, nam! Aspernatur optio atque quam? Asperiores excepturi id quidem eum autem temporibus, optio nobis similique aperiam quo."</p>
+                <p style={{ color: colorsAux.darkprimary }} className='w-[90%] mt-5 text-base font-light'>"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nostrum quas accusantium et! Id, nam! Aspernatur optio atque quam? Asperiores excepturi id quidem eum autem temporibus, optio nobis similique aperiam quo."</p>
 
-                <div className='flex justify-between mr-40 mt-7 mb-3'>
+                <div className='flex flex-col md:flex-row gap-5 md:gap-0 justify-between mr-5 mt-7 mb-3'>
                     <p style={{ color: colorsAux.darkprimary }} className="font-bold text-2xl">$25000 <span className="font-normal text-sm text-black/50 ">por noche</span> </p>
-                    <div className='flex gap-2 '>
+                    <div className='flex gap-2'>
 
-                        <button style={{ borderColor: colorsAux.darkprimary, color: colorsAux.darkprimary }} className="flex gap-2 py-1 pl-3 pr-4 rounded-lg transition-all hover:opacity-90 text-white border-3 text-sm font-semibold items-center">
+                        <button style={{ borderColor: colorsAux.darkprimary, color: colorsAux.darkprimary }} className="flex px-4 gap-2 py-1 pl-3 pr-4 rounded-lg transition-all hover:opacity-90 text-white border-3 text-sm font-semibold items-center">
                             <LikeIcon />
                             Me gusta
                         </button>
-                        <button style={{ backgroundColor: colorsAux.darkprimary }} className="py-1.5 px-5 rounded-lg transition-all hover:opacity-90 text-white text-base font-normal">
+                        <button style={{ backgroundColor: colorsAux.darkprimary }} className="py-1.5 px-4 md:px-5 rounded-lg transition-all hover:opacity-90 text-white text-base font-normal">
                             Ver detalles
                         </button>
                     </div>
