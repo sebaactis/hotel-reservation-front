@@ -18,12 +18,12 @@ const HotelPagination = ({ totalPages, page, seed, onChangePage }: { totalPages:
             pageLinks.push(
                 <PaginationItem className="" key={i}>
                     <PaginationLink
-                        href="#"
                         isActive={i === page + 1}
                         onClick={() => onChangePage(i - 1)}
+
                         className={i === page + 1
-                            ? "bg-indigo-600 text-white hover:bg-indigo-700 border-0"
-                            : "bg-gray-600/70 hover:bg-gray-700"}
+                            ? "bg-indigo-600 text-white hover:bg-indigo-700 border-0 cursor-pointer"
+                            : "bg-gray-600/70 hover:bg-gray-700 cursor-pointer"}
                     >
                         {i}
                     </PaginationLink>
@@ -38,8 +38,9 @@ const HotelPagination = ({ totalPages, page, seed, onChangePage }: { totalPages:
             <PaginationContent>
                 <PaginationItem>
                     <PaginationPrevious
-                        className="bg-gray-600/70 hover:bg-gray-700"
-                        href="#"
+                        className={page == 0 ? "bg-gray-600/40 hover:bg-gray-600/40" :
+                            "bg-gray-600/70 hover:bg-gray-700 cursor-pointer"
+                        }
                         onClick={() => {
                             if (page > 0) onChangePage(page - 1);
                         }}
@@ -50,8 +51,9 @@ const HotelPagination = ({ totalPages, page, seed, onChangePage }: { totalPages:
 
                 <PaginationItem>
                     <PaginationNext
-                        className="bg-gray-600/70 hover:bg-gray-700"
-                        href="#"
+                        className={page + 1 >= totalPages ? "bg-gray-600/40 hover:bg-gray-600/40" :
+                            "bg-gray-600/70 hover:bg-gray-700 cursor-pointer"
+                        }
                         onClick={() => {
                             if (page + 1 < totalPages) onChangePage(page + 1);
                         }}
