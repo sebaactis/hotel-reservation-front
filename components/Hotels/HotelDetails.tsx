@@ -24,6 +24,7 @@ import { Separator } from "@/components/ui/separator"
 import { BadgeListFromJsonBigger } from "@/components/BagdeListFromJson"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { HotelDetailSkeletonNames, HotelDetailsSkeletonBagdes, HotelDetailsSkeletonDescription, HotelDetailsSkeletonRating } from './HotelDetailSkeletons';
 
 
 const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
@@ -56,15 +57,15 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
 
                     <div className="flex flex-col md:flex-row gap-6">
                         <div className="flex-1">
-                            <h1 className="text-3xl font-bold text-white mb-2">{hotel.name}</h1>
+                            {!hotel.name ? <HotelDetailSkeletonNames width={"21.8rem"} /> : <h1 className="text-3xl font-bold text-white mb-2">{hotel.name}</h1>}
                             <div className="flex items-center gap-2 text-white mb-4">
                                 <MapPin className="w-5 h-5" />
-                                <span>{hotel.location}</span>
+                                {!hotel.location ? <HotelDetailSkeletonNames width={"20rem"} /> : <span>{hotel.location}</span>}
                             </div>
 
                             <div className="flex items-center gap-4">
                                 <div className="flex items-center justify-center w-16 h-16 rounded-full text-white font-bold text-xl border-2 border-white">
-                                    {hotel.score}
+                                    {!hotel.score ? <HotelDetailsSkeletonRating /> : <span>{hotel.score} </span>}
                                 </div>
                                 <div className="text-white">
                                     <p className="text-lg font-semibold">{hotel.score > 6 ? "Excelente" : "Normal"}</p>
@@ -73,8 +74,13 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                         </div>
 
                         <div className="text-right text-white">
-                            <div className="text-3xl font-bold">ARS($) {hotel.price}</div>
-                            <div className="text-sm opacity-90">por noche</div>
+                            <div className="text-3xl font-bold">
+                                {!hotel.price ? <HotelDetailSkeletonNames width={"10rem"} /> : <span>ARS($) {hotel.price}</span>}
+                            </div>
+                            <div className="text-sm opacity-90">
+                                {!hotel.price ? <HotelDetailSkeletonNames width={"10rem"} /> : <span>por noche</span>}
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -180,9 +186,11 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                                 <CardTitle style={{ color: "#3B234A" }}>Acerca de este hotel</CardTitle>
                             </CardHeader>
                             <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
-                                <p className="text-gray-700 leading-relaxed mb-4">
-                                    {hotel.description}
-                                </p>
+                                {!hotel.description ? <HotelDetailsSkeletonDescription /> :
+                                    <p className="text-gray-700 leading-relaxed mb-4">
+                                        {hotel.description}
+                                    </p>
+                                }
                             </CardContent>
                         </Card>
 
@@ -191,10 +199,10 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                                 <CardTitle style={{ color: "#3B234A" }}>Servicios y Amenidades</CardTitle>
                             </CardHeader>
                             <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
-                                {hotel && hotel.features ? (
-                                    <BadgeListFromJsonBigger key={hotel.id} features={hotel.features} />
+                                {!hotel.features ? (
+                                    <HotelDetailsSkeletonBagdes />
                                 ) : (
-                                    "Esperando datos del hotel..."
+                                    <BadgeListFromJsonBigger key={hotel.id} features={hotel.features} />
                                 )}
                             </CardContent>
                         </Card>
@@ -286,23 +294,20 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-3">
                                         <Phone className="w-5 h-5" style={{ color: "#523961" }} />
-                                        <span className="text-sm" style={{ color: "#523961" }}>
-                                            +34 123 456 789
-                                        </span>
+                                        {!hotel.phone ? <HotelDetailSkeletonNames width={"10rem"} /> :
+                                            <span className="text-sm" style={{ color: "#523961" }}>
+                                                {hotel.phone}
+                                            </span>}
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <Mail className="w-5 h-5" style={{ color: "#523961" }} />
-                                        <span className="text-sm" style={{ color: "#523961" }}>
-                                            info@hotelelegante.com
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <MapPin className="w-5 h-5" style={{ color: "#523961" }} />
-                                        <span className="text-sm" style={{ color: "#523961" }}>
-                                            Calle Ejemplo 123
-                                            <br />
-                                            08001 Barcelona, España
-                                        </span>
+                                        {!hotel.email ? <HotelDetailSkeletonNames width={"10rem"} />
+                                            :
+                                            <span className="text-sm" style={{ color: "#523961" }}>
+                                                {hotel.email}
+                                            </span>
+                                        }
+
                                     </div>
                                 </div>
                             </CardContent>

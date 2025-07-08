@@ -12,6 +12,8 @@ export interface Hotel {
     imageUrl: string;
     price: number;
     features: { name: string; icon: JSX.Element }[];
-    discount?: number;
     score: number;
+    phone: number;
+    email: string;
+    category: string;
 }

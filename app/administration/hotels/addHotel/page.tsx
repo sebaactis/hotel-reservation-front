@@ -73,7 +73,6 @@ export default function AddHotel() {
         }
     }
 
-    console.log("Hotel Data:", hotelData)
     return (
         <div className="min-h-screen p-8" style={{ backgroundColor: "#D4C7BF" }}>
             <div className="max-w-2xl mx-auto">
@@ -85,7 +84,7 @@ export default function AddHotel() {
 
                     <CardContent className="p-8" style={{ backgroundColor: "#C3BBC9" }}>
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            {/* Información Básica */}
+
                             <div className="space-y-4">
                                 <h3 className="text-lg font-semibold" style={{ color: "#3B234A" }}>
                                     Información Básica

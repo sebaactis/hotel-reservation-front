@@ -1,9 +1,9 @@
 import { colorsAux } from "@/styles/colorsAux"
-import { MapIcon, WifiIcon } from "../icons"
 import BadgeList from "../BagdeListFromJson";
 import { BadgeListFromJson } from "../BagdeListFromJson";
 import Link from "next/link";
 import { Hotel } from "@/types";
+import { MapPin, FileBadgeIcon } from "lucide-react";
 
 
 const HotelCard = ({ hotel }: { hotel: Hotel }) => {
@@ -24,8 +24,13 @@ const HotelCard = ({ hotel }: { hotel: Hotel }) => {
                 <p className="text-indigo-950 text-2xl font-bold ">{hotel.name}</p>
 
                 <div style={{ color: colorsAux.primary }} className="flex items-center gap-1">
-                    <MapIcon />
+                    <MapPin width={20} />
                     <p>{hotel.location}</p>
+                </div>
+
+                <div style={{ color: colorsAux.primary }} className="flex items-center gap-1">
+                    <FileBadgeIcon width={20} />
+                    <p>{hotel.category}</p>
                 </div>
 
 

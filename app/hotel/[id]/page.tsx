@@ -29,7 +29,6 @@ export default function HotelDetailsPage() {
         fetchHotel();
     }, [])
 
-
     return (
         <HotelDetails hotel={hotel} />
     )
