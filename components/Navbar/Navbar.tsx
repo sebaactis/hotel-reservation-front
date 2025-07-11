@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Navbar as HeroUINavbar,
   NavbarContent,
@@ -15,19 +17,22 @@ import clsx from "clsx";
 
 import { Logo } from "@/components/icons";
 import { colorsAux } from "@/styles/colorsAux";
+import { useAuth } from "@/hooks/useAuth";
 
 
 
 export const Navbar = () => {
 
+  const { isAuthenticated, email, roles, logout } = useAuth();
+
   return (
     <HeroUINavbar maxWidth="2xl" position="sticky" className="bg-[#523961]">
-      
+
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-      
+
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-3" href="/">
-            <Logo width={50} heigth={50}/>
+            <Logo width={50} heigth={50} />
             <p className="text-inherit italic text-white">Solo pensá a donde ir</p>
           </NextLink>
         </NavbarBrand>
@@ -40,30 +45,44 @@ export const Navbar = () => {
       >
         <NavbarItem className="hidden md:flex">
           <Button
-            isExternal
+
             as={Link}
             className={`text-sm font-bold text-white transition-all hover:bg-[#a47ac4]`}
-            href="/"
+            href="/auth/register"
             variant="flat"
-            style={{backgroundColor: colorsAux.primarylighter}}
+            style={{ backgroundColor: colorsAux.primarylighter }}
           >
             Crear cuenta
           </Button>
         </NavbarItem>
 
-        <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className={`text-sm font-bold text-white italic transition-all hover:bg-[#a092ad]`}
-            href="/"
-            variant="flat"
-            style={{backgroundColor: colorsAux.secondary}}
-          >
-            Iniciar Sesión
-          </Button>
-        </NavbarItem>
-        
+        {isAuthenticated ?
+          <NavbarItem className="hidden md:flex">
+            <Button
+              as={Link}
+              className={`text-sm font-bold text-white italic transition-all hover:bg-[#a092ad]`}
+              href="/"
+              variant="flat"
+              style={{ backgroundColor: colorsAux.secondary }}
+              onClick={logout}
+            >
+              Cerrar Sesión
+            </Button>
+          </NavbarItem>
+          : <NavbarItem className="hidden md:flex">
+            <Button
+              as={Link}
+              className={`text-sm font-bold text-white italic transition-all hover:bg-[#a092ad]`}
+              href="/auth/login"
+              variant="flat"
+              style={{ backgroundColor: colorsAux.secondary }}
+            >
+              Iniciar Sesión
+            </Button>
+          </NavbarItem>}
+
+
+
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">

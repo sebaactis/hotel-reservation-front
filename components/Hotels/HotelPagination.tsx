@@ -7,10 +7,17 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination"
+import { Dispatch, SetStateAction } from "react";
+
+interface Props {
+    totalPages: number;
+    page: number;
+    seed: string;
+    onChangePage: Dispatch<SetStateAction<number>>;
+}
 
 
-const HotelPagination = ({ totalPages, page, seed, onChangePage }: { totalPages: number, page: number, seed: string, onChangePage: any }) => {
-
+const HotelPagination = ({ totalPages, page, seed, onChangePage }: Props) => {
 
     const renderPageLinks = () => {
         const pageLinks = [];

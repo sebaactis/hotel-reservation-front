@@ -31,7 +31,7 @@ export default function HotelAdministration() {
     const [seed, setSeed] = useState("");
 
 
-    const filteredHotels = hotels.filter((hotel) => {
+    const filteredHotels = hotels.filter((hotel: Hotel) => {
         const matchesSearch =
             hotel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             hotel.location.toLowerCase().includes(searchTerm.toLowerCase())

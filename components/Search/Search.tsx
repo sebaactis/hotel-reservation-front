@@ -1,9 +1,7 @@
 import { colorsAux } from "@/styles/colorsAux"
 import { Calendar } from "@heroui/calendar";
 
-
 const Search = () => {
-
 
   return (
     <div className="flex flex-col justify-center items-center bg-[#c3bbc9] py-20 gap-7">

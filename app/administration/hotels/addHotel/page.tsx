@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Upload, MapPin, Wifi, Car, Coffee, Waves, Utensils, Dumbbell, Shirt } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,12 +10,15 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { features } from "process"
 import { toast } from "sonner"
+import { Categorie, Hotel } from "@/types"
 
 export default function AddHotel() {
 
-    const [hotelData, setHotelData] = useState([])
+    const [categories, setCategories] = useState<Categorie[]>([]);
+    const [hotelData, setHotelData] = useState<Hotel[]>([])
     const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
     const [rating, setRating] = useState(0)
+
 
     const amenities = [
         { id: "Wifi", label: "WiFi Gratis", icon: Wifi },
@@ -54,6 +57,8 @@ export default function AddHotel() {
             ]
         }
 
+        console.log(newHotel);
+
         const submit = await fetch("http://localhost:8080/api/v1/hotel", {
             method: "POST",
             headers: {
@@ -67,11 +72,21 @@ export default function AddHotel() {
             setHotelData([])
             setSelectedAmenities([])
             setRating(0)
-            window.reload();
         } else {
             toast.error("Error al intentar agregar hotel")
         }
     }
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const request = await fetch("http://localhost:8080/api/v1/category")
+            const data = await request.json();
+
+            setCategories(data.entity);
+        }
+
+        fetchCategories();
+    }, [])
 
     return (
         <div className="min-h-screen p-8" style={{ backgroundColor: "#D4C7BF" }}>
@@ -128,24 +143,42 @@ export default function AddHotel() {
                                         />
                                     </div>
                                 </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <Label htmlFor="location" className="text-sm font-medium" style={{ color: "#523961" }}>
+                                            <MapPin className="w-4 h-4 inline mr-1" />
+                                            Ubicación *
+                                        </Label>
+                                        <Input
+                                            id="location"
+                                            placeholder="Ej: Centro Histórico, Barcelona"
+                                            name="location"
+                                            className="mt-1 border-2 focus:ring-0 text-gray-500"
+                                            style={{
+                                                borderColor: "#BAAFC4",
+                                                backgroundColor: "white",
+                                            }}
+                                            required
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
 
-                                <div>
-                                    <Label htmlFor="location" className="text-sm font-medium" style={{ color: "#523961" }}>
-                                        <MapPin className="w-4 h-4 inline mr-1" />
-                                        Ubicación *
-                                    </Label>
-                                    <Input
-                                        id="location"
-                                        placeholder="Ej: Centro Histórico, Barcelona"
-                                        name="location"
-                                        className="mt-1 border-2 focus:ring-0 text-gray-500"
-                                        style={{
-                                            borderColor: "#BAAFC4",
-                                            backgroundColor: "white",
-                                        }}
-                                        required
-                                        onChange={handleInputChange}
-                                    />
+                                    <div className="grid gap-1">
+                                        <Label htmlFor="category" className="text-sm font-medium" style={{ color: "#523961" }}>Categoria del hotel *</Label>
+
+                                        <select
+                                            style={{
+                                                borderColor: "#BAAFC4",
+                                                backgroundColor: "white",
+                                            }}
+                                            className="border-2 focus:ring-0 text-gray-500 py-1 rounded-md text-sm"
+                                            name="category"
+                                            onChange={handleInputChange}>
+                                            {categories.map(category => (
+                                                <option style={{ backgroundColor: "white", color: "#523961" }} key={category.description} value={category.description} >{category.description}</option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
 
                                 <div>

@@ -1,41 +1,46 @@
 "use client"
 
 import { useEffect, useState } from "react";
+
 import HotelCard from "./HotelCard"
 import HotelPagination from "./HotelPagination";
 import HotelSkeleton from "./HotelSkeleton";
+
+import { toast } from "sonner";
+import { Hotel } from "@/types";
 
 const Hotels = () => {
 
   const baseUrl = "http://localhost:8080/api/v1/hotel?"
 
-  const [hotels, setHotels] = useState([]);
+  const [hotels, setHotels] = useState<Hotel[]>([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [seed, setSeed] = useState<string>("");
+  const [seed, setSeed] = useState("");
 
 
   useEffect(() => {
     const fetchHotels = async () => {
 
-      const request = await fetch(`${baseUrl}page=${page}&random=true` + (seed ? `&seed=${seed}` : ""))
-      const data = await request.json();
+      try {
+        const request = await fetch(`${baseUrl}page=${page}&random=true` + (seed ? `&seed=${seed}` : ""))
+        const data = await request.json();
 
-      setHotels(data.entity.page.content);
-      setPage(data.entity.page.pageable.pageNumber);
-      setTotalPages(data.entity.page.totalPages);
+        
+        setHotels(data.entity.page.content);
+        setPage(data.entity.page.pageable.pageNumber);
+        setTotalPages(data.entity.page.totalPages);
 
-      if (!seed) setSeed(data.entity.seed);
+        if (!seed) setSeed(data.entity.seed);
 
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (error) {
+        toast.error("Error al cargar los hoteles: " + error);
+      }
     }
 
     fetchHotels();
-
   }, [page])
-
-
 
   return (
     <div className="py-6">

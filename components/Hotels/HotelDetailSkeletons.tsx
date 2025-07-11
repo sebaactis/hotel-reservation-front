@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const HotelDetailSkeletonNames = ({ width }) => {
+export const HotelDetailSkeletonNames = ({ width }: { width: string | number }) => {
     return (
         <div style={{ width }} role="status" class="max-w-2xl p-4 rounded-sm shadow-sm animate-pulse md:p-6">
             <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-500"></div>
@@ -9,7 +9,7 @@ export const HotelDetailSkeletonNames = ({ width }) => {
     )
 }
 
-export const HotelDetailsSkeletonRating = ({ width }) => {
+export const HotelDetailsSkeletonRating = ({ width }: { width: string | number }) => {
     return (
         <div role="status" class="max-w-2xl rounded-full shadow-sm animate-pulse md:p-6">
             <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-500 p-5"></div>

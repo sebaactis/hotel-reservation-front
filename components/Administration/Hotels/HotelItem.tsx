@@ -1,4 +1,4 @@
-import { Hotel } from '@/types'
+import { Categorie, Hotel } from '@/types'
 import {
     Dialog,
     DialogClose,
@@ -17,13 +17,19 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
+interface Props {
+    hotel: Hotel;
+    index: number;
+    handleDelete: (hotelId: number) => void;
+    categories: Categorie[];
+}
 
-const HotelItem = ({ hotel, index, handleDelete }: { hotel: Hotel }) => {
 
+const HotelItem = ({ hotel, index, handleDelete, categories }: Props) => {
 
     const [hotelData, setHotelData] = useState([])
     const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
-    const [rating, setRating] = useState(0)
+    const [rating, setRating] = useState(0);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
@@ -40,8 +46,6 @@ const HotelItem = ({ hotel, index, handleDelete }: { hotel: Hotel }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-
-        console.log("Editando hotel")
 
         const editHotel = {
             ...hotelData,
@@ -149,19 +153,6 @@ const HotelItem = ({ hotel, index, handleDelete }: { hotel: Hotel }) => {
 
 
                 <div className="flex lg:flex-col gap-2 lg:w-auto w-full">
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        className="flex-1 lg:flex-none border-2 hover:bg-opacity-10 bg-transparent"
-                        style={{
-                            borderColor: "#523961",
-                            color: "#523961",
-                        }}
-                        onClick={() => handleView(hotel.id)}
-                    >
-                        <Eye className="w-4 h-4 mr-1" />
-                        Ver
-                    </Button>
 
                     <Dialog>
 
@@ -275,7 +266,12 @@ const HotelItem = ({ hotel, index, handleDelete }: { hotel: Hotel }) => {
 
                                     <div className="grid gap-3">
                                         <Label htmlFor="name-1">Categoria del hotel</Label>
-                                        <Input className="bg-slate-300/10 py-2 rounded-md pl-3" name="category" value={hotelData.category} onChange={handleInputChange} />
+
+                                        <select className="bg-slate-300/10 py-2 rounded-md pl-3" name="category" value={hotelData.category} onChange={handleInputChange}>
+                                            {categories.map(category => (
+                                                <option style={{ backgroundColor: "gray" }} key={category.id} value={category.description} >{category.description}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                 </div>
 

@@ -17,10 +17,18 @@ import { Input } from "@/components/ui/input"
 import { useEffect, useState } from "react"
 
 import { Plus, Search, MapPin, Edit, Trash2, Eye, MoreVertical, Star, AlertCircle } from "lucide-react"
-import { Hotel } from "@/types"
+import { Categorie, Hotel } from "@/types"
 import HotelItem from "./HotelItem"
 
-const HotelsList = ({ filteredHotels, searchTerm, handleDelete }: { filteredHotels: Hotel[], searchTerm: string }) => {
+interface Props {
+    filteredHotels: Hotel[];
+    searchTerm: string;
+    handleDelete: (hotelId: number) => void;
+}
+
+const HotelsList = ({ filteredHotels, searchTerm, handleDelete }: Props) => {
+
+    const [categories, setCategories] = useState<Categorie[]>();
 
     const handleEdit = (hotelId: number) => {
         console.log("Editar hotel:", hotelId)
@@ -32,12 +40,23 @@ const HotelsList = ({ filteredHotels, searchTerm, handleDelete }: { filteredHote
 
     }
 
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const request = await fetch("http://localhost:8080/api/v1/category")
+            const data = await request.json();
+
+            setCategories(data.entity);
+        }
+
+        fetchCategories();
+    }, [])
+
     return (
         <Card className="shadow-lg border-0">
             <CardContent className="p-0" style={{ backgroundColor: "#C3BBC9" }}>
                 <div className="space-y-0">
                     {filteredHotels.map((hotel, index) => (
-                        <HotelItem key={index} hotel={hotel} index={index} handleDelete={handleDelete} />
+                        <HotelItem key={index} hotel={hotel} index={index} handleDelete={handleDelete} categories={categories} />
                     ))}
                 </div>
 

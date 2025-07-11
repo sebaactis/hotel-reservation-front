@@ -34,7 +34,7 @@ export const stringToIconMapToDetails: Record<string, LucideIcon> = {
 };
 
 
-export const BadgeListFromJson: React.FC<BadgeListFromJsonProps> = ({ features }) => {
+export const BadgeListFromJson = ({ features }: BadgeListFromJsonProps) => {
     return (
         <div className="flex flex-wrap gap-2">
             {
@@ -55,7 +55,7 @@ export const BadgeListFromJson: React.FC<BadgeListFromJsonProps> = ({ features }
     );
 };
 
-export const BadgeListFromJsonBigger: React.FC<BadgeListFromJsonProps> = ({ features }) => {
+export const BadgeListFromJsonBigger = ({ features }: BadgeListFromJsonProps) => {
     return (
         <div className="flex flex-wrap gap-2">
             {features.map((feature, index) => {
