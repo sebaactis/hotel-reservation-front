@@ -81,7 +81,14 @@ export const Navbar = () => {
             </Button>
           </NavbarItem>}
 
-
+        {isAuthenticated && <NavbarItem className="hidden md:flex">
+          <div
+            className={`text-sm font-bold h-9 w-9 rounded-full text-white transition-all hover:bg-[#a47ac4] flex items-center justify-center`}
+            style={{ backgroundColor: colorsAux.primarylighter }}
+          >
+            <p>{email?.substring(0, 1).toUpperCase()} </p>
+          </div>
+        </NavbarItem>}
 
       </NavbarContent>
 

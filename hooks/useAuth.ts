@@ -7,14 +7,14 @@ import { toast } from "sonner";
 
 interface DecodedToken {
     sub: string;
-    roles?: string;
+    role?: string;
     exp: number;
 }
 
 export const useAuth = () => {
     const [token, setToken] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
-    const [roles, setRoles] = useState<string[]>([]);
+    const [role, setRole] = useState<string>("");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ export const useAuth = () => {
                     setToken(storedToken);
                     setEmail(storedEmail);
                     setIsAuthenticated(true);
-                    setRoles(decoded.roles?.split(",") ?? []);
+                    setRole(decoded.role.name);
                 }
             } catch (err) {
                 console.error("Token inválido", err);
@@ -50,7 +50,7 @@ export const useAuth = () => {
 
         try {
             const decoded: DecodedToken = jwtDecode(token);
-            setRoles(decoded.roles?.split(",") ?? []);
+            setRole(decoded.role.name ?? "");
         } catch (err) {
             console.error("Token inválido", err);
         }
@@ -62,14 +62,14 @@ export const useAuth = () => {
         setToken(null);
         setEmail(null);
         setIsAuthenticated(false);
-        setRoles([]);
+        setRole("");
         toast.success("Logout realizado con éxito");
     };
 
     return {
         token,
         email,
-        roles,
+        role,
         isAuthenticated,
         login,
         logout,
