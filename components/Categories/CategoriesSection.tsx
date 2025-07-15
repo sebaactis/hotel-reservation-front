@@ -41,8 +41,7 @@ export default function CategoriesSection() {
     const updatedCategories = useMemo(() => {
         return categories.map((category) => ({
             ...category,
-            count: filteredHotels.filter((hotel) => hotel.category === category.description).length,
-            filteredCount: filteredHotels.filter((hotel) => hotel.category === category.description).length,
+            count: filteredHotels.filter((hotel) => hotel.category === category.description).length
         }))
     }, [filteredHotels, categories])
 
