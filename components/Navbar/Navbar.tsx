@@ -18,12 +18,13 @@ import clsx from "clsx";
 import { Logo } from "@/components/icons";
 import { colorsAux } from "@/styles/colorsAux";
 import { useAuth } from "@/hooks/useAuth";
+import { UserNavbarItem } from "./UserNavbarItem";
 
 
 
 export const Navbar = () => {
 
-  const { isAuthenticated, email, roles, logout } = useAuth();
+  const { isAuthenticated, email, role, logout } = useAuth();
 
   return (
     <HeroUINavbar maxWidth="2xl" position="sticky" className="bg-[#523961]">
@@ -82,12 +83,7 @@ export const Navbar = () => {
           </NavbarItem>}
 
         {isAuthenticated && <NavbarItem className="hidden md:flex">
-          <div
-            className={`text-sm font-bold h-9 w-9 rounded-full text-white transition-all hover:bg-[#a47ac4] flex items-center justify-center`}
-            style={{ backgroundColor: colorsAux.primarylighter }}
-          >
-            <p>{email?.substring(0, 1).toUpperCase()} </p>
-          </div>
+          <UserNavbarItem email={email} role={role} />
         </NavbarItem>}
 
       </NavbarContent>

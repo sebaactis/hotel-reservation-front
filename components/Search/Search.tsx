@@ -1,5 +1,7 @@
 import { colorsAux } from "@/styles/colorsAux"
 import { Calendar } from "@heroui/calendar";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 const Search = () => {
 
@@ -14,6 +16,12 @@ const Search = () => {
         <input className="bg-slate-100/50 py-2 pl-3 pr-20 rounded-md text-gray-600 font-semibold" type="date" />
         <button style={{ backgroundColor: colorsAux.primary }} className={`py-2 px-10 rounded-md transition-all hover:opacity-90`}>Buscar</button>
       </div>
+
+      <Button>
+        <Link href="/categories">
+          Buscar por categorias
+        </Link>
+      </Button>
     </div>
   )
 }
