@@ -22,7 +22,7 @@ export default function Home() {
       </div>}
 
       <Search />
-      <Hotels />  
+      <Hotels />
       <Recommendations />
     </section>
   );
