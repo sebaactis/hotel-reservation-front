@@ -23,13 +23,14 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useSearchHotels } from "@/hooks/useSearchHotels"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { fr } from "date-fns/locale"
 import { BadgeListFromJson } from "@/components/BagdeListFromJson"
 import { Hotel } from "@/types"
 
 export default function Component() {
-    const searchParams = useSearchParams()
+    const searchParams = useSearchParams();
+    const router = useRouter();
 
     const location = searchParams.get('location') || ''
     const from = searchParams.get('from') || ''
@@ -198,16 +199,10 @@ export default function Component() {
                                                                     borderColor: "#523961",
                                                                     color: "#523961",
                                                                 }}
+                                                                onClick={() => router.push(`/hotel/${hotel.id}`)}
                                                             >
                                                                 <Eye className="w-4 h-4 mr-1" />
                                                                 Ver
-                                                            </Button>
-                                                            <Button
-                                                                size="sm"
-                                                                className="text-white font-semibold hover:opacity-90 transition-opacity"
-                                                                style={{ backgroundColor: "#3B234A" }}
-                                                            >
-                                                                Reservar
                                                             </Button>
                                                         </div>
                                                     </div>
@@ -218,50 +213,6 @@ export default function Component() {
                                 </Card>
                             ))}
                         </div>
-
-                        <Card className="shadow-lg border-0">
-                            <CardContent className="p-4" style={{ backgroundColor: "#C3BBC9" }}>
-                                <div className="flex items-center justify-center gap-2">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="border-2 hover:bg-opacity-10 bg-transparent"
-                                        style={{
-                                            borderColor: "#523961",
-                                            color: "#523961",
-                                        }}
-                                    >
-                                        Anterior
-                                    </Button>
-                                    <div className="flex gap-1">
-                                        {[1, 2, 3].map((page) => (
-                                            <Button
-                                                key={page}
-                                                size="sm"
-                                                className={`${page === 1
-                                                    ? "text-white"
-                                                    : "text-gray-600 bg-transparent hover:bg-opacity-10 border border-gray-300"
-                                                    }`}
-                                                style={page === 1 ? { backgroundColor: "#3B234A" } : {}}
-                                            >
-                                                {page}
-                                            </Button>
-                                        ))}
-                                    </div>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="border-2 hover:bg-opacity-10 bg-transparent"
-                                        style={{
-                                            borderColor: "#523961",
-                                            color: "#523961",
-                                        }}
-                                    >
-                                        Siguiente
-                                    </Button>
-                                </div>
-                            </CardContent>
-                        </Card>
                     </div>
                 </div>
             </div>

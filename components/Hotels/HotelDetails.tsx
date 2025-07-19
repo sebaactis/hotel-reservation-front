@@ -15,25 +15,35 @@ import {
     Mail,
     Calendar,
     Users,
+    CalendarIcon,
+    ChevronDown,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 
+import { Calendar as CalendarComponent } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+
 import { BadgeListFromJsonBigger } from "@/components/BagdeListFromJson"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { HotelDetailSkeletonNames, HotelDetailsSkeletonBagdes, HotelDetailsSkeletonDescription, HotelDetailsSkeletonRating } from './HotelDetailSkeletons';
+import { colorsAux } from '@/styles/colorsAux';
 
 
 const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
 
     const router = useRouter();
 
+    const [reservations, setReservations] = useState([]);
+
     const [checkIn, setCheckIn] = useState("")
     const [checkOut, setCheckOut] = useState("")
-    const [guests, setGuests] = useState(2)
+
+    const [checkInOpen, setCheckInOpen] = useState(false);
+    const [checkOutOpen, setCheckOutOpen] = useState(false);
 
     const [showGallery, setShowGallery] = useState(false)
 
@@ -44,6 +54,50 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
         "https://imgs.search.brave.com/zekckRCy-3DvoqpeSJ7Z4-tU6HAtAcnOFy0K6WxfAFA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS92aXN0YS1waXNj/aW5hXzEwNDg5NDQt/MjA4MjEzMTkuanBn/P3NlbXQ9YWlzX2h5/YnJpZA",
         "https://imgs.search.brave.com/zekckRCy-3DvoqpeSJ7Z4-tU6HAtAcnOFy0K6WxfAFA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS92aXN0YS1waXNj/aW5hXzEwNDg5NDQt/MjA4MjEzMTkuanBn/P3NlbXQ9YWlzX2h5/YnJpZA",
     ]
+
+    const formatDateRange = (date: Date | undefined): string => {
+        if (!date) return "Seleccionar fecha"
+
+        return date.toLocaleDateString("es-ES", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+        })
+    }
+
+    const disabledRanges = reservations.map(reservation => ({
+        from: new Date(reservation.bookedFrom),
+        to: new Date(reservation.bookedTo)
+    }));
+
+    const isDateDisabled = (date: Date) => {
+        return disabledRanges.some(range =>
+            date >= range.from && date <= range.to
+        );
+    };
+
+
+    const handleSubmit = () => {
+        console.log(hotel.id, checkIn, checkOut)
+    }
+
+    useEffect(() => {
+        if (!hotel.id) return;
+        try {
+            const getReservations = async () => {
+                const request = await fetch(`http://localhost:8080/api/v1/hotelBooking/${hotel.id}`)
+                const response = await request.json();
+
+                if (request.ok) {
+                    setReservations(response.entity);
+                }
+            }
+
+            getReservations();
+        } catch (error) {
+            console.log(error)
+        }
+    }, [hotel?.id])
 
     return (
         <div className="min-h-screen" style={{ backgroundColor: "#D4C7BF" }}>
@@ -222,13 +276,39 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                                             <Calendar className="w-4 h-4 inline mr-1" />
                                             Check-in
                                         </label>
-                                        <input
-                                            type="date"
-                                            value={checkIn}
-                                            onChange={(e) => setCheckIn(e.target.value)}
-                                            className="w-full mt-1 p-2 border-2 rounded focus:outline-none"
-                                            style={{ borderColor: "#BAAFC4" }}
-                                        />
+
+                                        <Popover open={checkInOpen} onOpenChange={setCheckInOpen}>
+                                            <PopoverTrigger asChild>
+                                                <button
+                                                    id="dates"
+                                                    className="w-full flex items-center justify-between p-3 rounded-md border-2 bg-white"
+                                                    style={{ borderColor: "#523961" }}
+                                                >
+                                                    <div className="flex items-center">
+                                                        <CalendarIcon className="w-5 h-5 mr-2" style={{ color: "#523961" }} />
+                                                        <span style={{ color: colorsAux.darkprimary }}>
+                                                            {formatDateRange(checkIn)}
+                                                        </span>
+                                                    </div>
+                                                    <ChevronDown className="w-4 h-4" style={{ color: "#523961" }} />
+                                                </button>
+                                            </PopoverTrigger>
+
+                                            <PopoverContent>
+                                                <CalendarComponent
+                                                    mode="single"
+                                                    selected={checkIn}
+                                                    onSelect={(date) => setCheckIn(date)}
+                                                    numberOfMonths={1}
+                                                    className="rounded-lg border"
+                                                    classNames={{
+                                                        disabled: "text-red-400 line-through",
+                                                    }}
+                                                    disabled={(date) => isDateDisabled(date)}
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
+
                                     </div>
 
                                     <div>
@@ -236,31 +316,38 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                                             <Calendar className="w-4 h-4 inline mr-1" />
                                             Check-out
                                         </label>
-                                        <input
-                                            type="date"
-                                            value={checkOut}
-                                            onChange={(e) => setCheckOut(e.target.value)}
-                                            className="w-full mt-1 p-2 border-2 rounded focus:outline-none"
-                                            style={{ borderColor: "#BAAFC4" }}
-                                        />
-                                    </div>
 
-                                    <div>
-                                        <label className="text-sm font-medium" style={{ color: "#523961" }}>
-                                            <Users className="w-4 h-4 inline mr-1" />
-                                            Huéspedes
-                                        </label>
-                                        <select
-                                            value={guests}
-                                            onChange={(e) => setGuests(Number.parseInt(e.target.value))}
-                                            className="w-full mt-1 p-2 border-2 rounded focus:outline-none"
-                                            style={{ borderColor: "#BAAFC4" }}
-                                        >
-                                            <option value={1}>1 Huésped</option>
-                                            <option value={2}>2 Huéspedes</option>
-                                            <option value={3}>3 Huéspedes</option>
-                                            <option value={4}>4 Huéspedes</option>
-                                        </select>
+                                        <Popover open={checkOutOpen} onOpenChange={setCheckOutOpen}>
+                                            <PopoverTrigger asChild>
+                                                <button
+                                                    id="dates"
+                                                    className="w-full flex items-center justify-between p-3 rounded-md border-2 bg-white"
+                                                    style={{ borderColor: "#523961" }}
+                                                >
+                                                    <div className="flex items-center">
+                                                        <CalendarIcon className="w-5 h-5 mr-2" style={{ color: "#523961" }} />
+                                                        <span style={{ color: colorsAux.darkprimary }}>
+                                                            {formatDateRange(checkOut)}
+                                                        </span>
+                                                    </div>
+                                                    <ChevronDown className="w-4 h-4" style={{ color: "#523961" }} />
+                                                </button>
+                                            </PopoverTrigger>
+
+                                            <PopoverContent>
+                                                <CalendarComponent
+                                                    mode="single"
+                                                    selected={checkOut}
+                                                    onSelect={(date) => setCheckOut(date)}
+                                                    numberOfMonths={1}
+                                                    className="rounded-lg border"
+                                                    disabled={(date) => isDateDisabled(date)}
+                                                    classNames={{
+                                                        disabled: "text-red-400 line-through",
+                                                    }}
+                                                />
+                                            </PopoverContent>
+                                        </Popover>
                                     </div>
 
                                     <Separator />
@@ -277,6 +364,7 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                                     <Button
                                         className="w-full text-white font-semibold py-3 hover:opacity-90 transition-opacity"
                                         style={{ backgroundColor: "#3B234A" }}
+                                        onClick={handleSubmit}
                                     >
                                         Reservar Ahora
                                     </Button>

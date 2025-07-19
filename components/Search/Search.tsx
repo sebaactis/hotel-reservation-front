@@ -32,6 +32,7 @@ export default function SearchComponent() {
   const router = useRouter();
 
   const [location, setLocation] = useState("")
+
   const [dateRange, setDateRange] = useState<{
     from: Date | undefined
     to: Date | undefined
@@ -44,6 +45,8 @@ export default function SearchComponent() {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [calendarOpen, setCalendarOpen] = useState(false)
   const suggestionsRef = useRef<HTMLDivElement>(null)
+
+  console.log(dateRange);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -210,6 +213,7 @@ export default function SearchComponent() {
                   </button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
+
                   <Calendar
                     initialFocus
                     mode="range"
@@ -217,13 +221,11 @@ export default function SearchComponent() {
                     selected={dateRange}
                     onSelect={(range) => {
                       setDateRange(range as { from: Date | undefined; to: Date | undefined })
-                      if (range?.to) {
-                        setCalendarOpen(false)
-                      }
                     }}
                     numberOfMonths={2}
                     disabled={{ before: new Date() }}
                   />
+
                 </PopoverContent>
               </Popover>
             </div>
