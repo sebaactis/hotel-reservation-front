@@ -45,7 +45,7 @@ export default function LoginForm() {
                     password: "",
                 })
 
-                login(response.entity.token, response.entity.email);
+                login(response.entity.token, response.entity.email, response.entity.userId);
                 window.location.href = "/";
             }
             else {

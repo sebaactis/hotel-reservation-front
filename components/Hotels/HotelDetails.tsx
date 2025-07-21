@@ -17,6 +17,7 @@ import {
     Users,
     CalendarIcon,
     ChevronDown,
+    Heart,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -31,17 +32,20 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { HotelDetailSkeletonNames, HotelDetailsSkeletonBagdes, HotelDetailsSkeletonDescription, HotelDetailsSkeletonRating } from './HotelDetailSkeletons';
 import { colorsAux } from '@/styles/colorsAux';
+import { useAuth } from '@/hooks/useAuth';
+import { useFavoritesStore } from '@/stores/favoritesStore';
 
 
 const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
 
     const router = useRouter();
+    const { token, userId } = useAuth();
+    const { fetchFavorites, favoriteHotelIds, toggleFavorite } = useFavoritesStore();
 
     const [reservations, setReservations] = useState([]);
 
     const [checkIn, setCheckIn] = useState("")
     const [checkOut, setCheckOut] = useState("")
-
     const [checkInOpen, setCheckInOpen] = useState(false);
     const [checkOutOpen, setCheckOutOpen] = useState(false);
 
@@ -65,16 +69,24 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
         })
     }
 
-    const disabledRanges = reservations.map(reservation => ({
-        from: new Date(reservation.bookedFrom),
-        to: new Date(reservation.bookedTo)
-    }));
+    let disabledRanges = [];
+
+    if (reservations && Array.isArray(reservations)) {
+        disabledRanges = reservations.map(reservation => ({
+            from: new Date(reservation.bookedFrom),
+            to: new Date(reservation.bookedTo)
+        }));
+    }
 
     const isDateDisabled = (date: Date) => {
         return disabledRanges.some(range =>
             date >= range.from && date <= range.to
         );
     };
+
+    const isFavoriteHotel = (hotelId: number) => {
+        return favoriteHotelIds.includes(hotelId);
+    }
 
 
     const handleSubmit = () => {
@@ -99,6 +111,13 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
         }
     }, [hotel?.id])
 
+    useEffect(() => {
+
+        if (!userId) return;
+        fetchFavorites(userId);
+
+    }, [userId])
+
     return (
         <div className="min-h-screen" style={{ backgroundColor: "#D4C7BF" }}>
             <div className="p-6" style={{ backgroundColor: "#3B234A" }}>
@@ -111,7 +130,16 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
 
                     <div className="flex flex-col md:flex-row gap-6">
                         <div className="flex-1">
-                            {!hotel.name ? <HotelDetailSkeletonNames width={"21.8rem"} /> : <h1 className="text-3xl font-bold text-white mb-2">{hotel.name}</h1>}
+                            {!hotel.name ?
+                                <HotelDetailSkeletonNames width={"21.8rem"} />
+                                :
+                                <div className='flex items-center gap-3 mb-2 cursor-pointer'>
+                                    <h1 className="text-3xl font-bold text-white">{hotel.name}</h1>
+                                    <button onClick={() => toggleFavorite(userId, hotel.id)}>{isFavoriteHotel(hotel.id) ? <Heart className='fill-red-500 text-red-500' /> : <Heart />}</button>
+                                </div>
+                            }
+
+
                             <div className="flex items-center gap-2 text-white mb-4">
                                 <MapPin className="w-5 h-5" />
                                 {!hotel.location ? <HotelDetailSkeletonNames width={"20rem"} /> : <span>{hotel.location}</span>}

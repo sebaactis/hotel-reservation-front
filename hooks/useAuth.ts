@@ -14,12 +14,14 @@ interface DecodedToken {
 export const useAuth = () => {
     const [token, setToken] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
+    const [userId, setUserId] = useState<number | null>(null);
     const [role, setRole] = useState<string>("");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         const storedEmail = localStorage.getItem("email");
+        const storesUserId = localStorage.getItem("userId");
 
         if (storedToken) {
             try {
@@ -31,6 +33,7 @@ export const useAuth = () => {
                 } else {
                     setToken(storedToken);
                     setEmail(storedEmail);
+                    setUserId(storesUserId);
                     setIsAuthenticated(true);
                     setRole(decoded.role.name);
                 }
@@ -41,16 +44,20 @@ export const useAuth = () => {
         }
     }, []);
 
-    const login = (token: string, email: string) => {
+    const login = (token: string, email: string, userId: number) => {
         localStorage.setItem("token", token);
         localStorage.setItem("email", email);
+        localStorage.setItem("userId", userId);
         setToken(token);
+        setUserId(userId);
         setEmail(email);
+
         setIsAuthenticated(true);
 
         try {
             const decoded: DecodedToken = jwtDecode(token);
             setRole(decoded.role.name ?? "");
+
         } catch (err) {
             console.error("Token inválido", err);
         }
@@ -59,8 +66,10 @@ export const useAuth = () => {
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("email");
+        localStorage.removeItem("userId");
         setToken(null);
         setEmail(null);
+        setUserId(null);
         setIsAuthenticated(false);
         setRole("");
         toast.success("Logout realizado con éxito");
@@ -69,6 +78,7 @@ export const useAuth = () => {
     return {
         token,
         email,
+        userId,
         role,
         isAuthenticated,
         login,
