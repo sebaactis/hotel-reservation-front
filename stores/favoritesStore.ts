@@ -1,9 +1,10 @@
 // stores/favoritesStore.ts
+import { Hotel } from "@/types"
 import { create } from "zustand"
 
 type FavoriteDto = {
   id: number
-  hotelId: number
+  hotel: Hotel
   userId: number
   createdAt: string;
 }
@@ -34,9 +35,10 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
       const json = await res.json()
 
       if (res.ok) {
-        const ids = json.entity.map((fav: FavoriteDto) => fav.hotelId)
+        const ids = json.entity.map((fav: FavoriteDto) => fav.hotelDto.id)
+        const hotels = json.entity.map((fav: FavoriteDto) => fav.hotelDto)
         set({ favoriteHotelIds: ids })
-        set({ favoriteHotels: json.entity })
+        set({ favoriteHotels: hotels })
       }
     } catch (error) {
       console.error("Error fetching favorites:", error)
@@ -46,7 +48,7 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
   },
 
   toggleFavorite: async (userId, hotelId) => {
-    const { favoriteHotelIds } = get()
+    const { favoriteHotelIds, favoriteHotels } = get()
     const isFav = favoriteHotelIds.includes(hotelId)
 
     try {
@@ -63,6 +65,7 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
           favoriteHotelIds: isFav
             ? favoriteHotelIds.filter((id) => id !== hotelId)
             : [...favoriteHotelIds, hotelId],
+          favoriteHotels: favoriteHotels.filter((hotel) => hotel.id !== hotelId)
         })
       } else {
         const err = await res.json()

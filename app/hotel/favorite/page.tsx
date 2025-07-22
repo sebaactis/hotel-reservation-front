@@ -6,58 +6,15 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useFavoritesStore } from "@/stores/favoritesStore"
 import { useAuth } from "@/hooks/useAuth"
+import { Hotel } from "@/types"
 
 export default function FavoriteComponent() {
 
     const { userId } = useAuth();
-    const { fetchFavorites, favoriteHotels } = useFavoritesStore();
+    const { fetchFavorites, favoriteHotels, toggleFavorite } = useFavoritesStore();
 
-
-    const [favorites, setFavorites] = useState([
-        {
-            id: 1,
-            name: "Hotel Elegante Vista",
-            location: "Centro Histórico, Barcelona",
-            price: 89,
-            rating: 8.9,
-            image: "/placeholder.svg?height=80&width=120&text=Hotel+1",
-        },
-        {
-            id: 2,
-            name: "Gran Hotel Mediterráneo",
-            location: "Playa de la Barceloneta, Barcelona",
-            price: 156,
-            rating: 9.2,
-            image: "/placeholder.svg?height=80&width=120&text=Hotel+2",
-        },
-        {
-            id: 3,
-            name: "Hotel Boutique Gaudí",
-            location: "Eixample, Barcelona",
-            price: 134,
-            rating: 8.7,
-            image: "/placeholder.svg?height=80&width=120&text=Hotel+3",
-        },
-        {
-            id: 4,
-            name: "Hotel Modernista",
-            location: "Gràcia, Barcelona",
-            price: 98,
-            rating: 8.5,
-            image: "/placeholder.svg?height=80&width=120&text=Hotel+4",
-        },
-        {
-            id: 5,
-            name: "Hotel Ramblas Premium",
-            location: "Las Ramblas, Barcelona",
-            price: 112,
-            rating: 8.8,
-            image: "/placeholder.svg?height=80&width=120&text=Hotel+5",
-        },
-    ])
-
-    const removeFromFavorites = (hotelId: number) => {
-        setFavorites(favorites.filter((hotel) => hotel.id !== hotelId))
+    const removeFromFavorites = async (hotelId: number) => {
+        await toggleFavorite(userId, hotelId)
     }
 
     useEffect(() => {
@@ -76,7 +33,7 @@ export default function FavoriteComponent() {
                             Mis Hoteles Favoritos
                         </CardTitle>
                         <p className="text-white opacity-90 text-sm mt-1">
-                            {favorites.length} {favorites.length === 1 ? "hotel guardado" : "hoteles guardados"}
+                            {favoriteHotels.length} {favoriteHotels.length === 1 ? "hotel guardado" : "hoteles guardados"}
                         </p>
                     </CardHeader>
                 </Card>
@@ -84,12 +41,12 @@ export default function FavoriteComponent() {
                 {/* Lista de Favoritos */}
                 <Card className="shadow-lg border-0">
                     <CardContent className="p-0" style={{ backgroundColor: "#C3BBC9" }}>
-                        {favorites.length > 0 ? (
+                        {favoriteHotels.length > 0 ? (
                             <div className="space-y-0">
-                                {favorites.map((hotel, index) => (
+                                {favoriteHotels.map((hotel, index) => (
                                     <div
                                         key={hotel.id}
-                                        className={`p-4 ${index !== favorites.length - 1 ? "border-b" : ""}`}
+                                        className={`p-4 ${index !== favoriteHotels.length - 1 ? "border-b" : ""}`}
                                         style={{ borderColor: "#BAAFC4" }}
                                     >
                                         <div className="flex gap-4">
@@ -114,11 +71,11 @@ export default function FavoriteComponent() {
                                                         <div className="flex items-center gap-1">
                                                             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                                                             <span className="font-medium text-sm" style={{ color: "#3B234A" }}>
-                                                                {hotel.rating}
+                                                                {hotel.score}
                                                             </span>
                                                         </div>
                                                         <div className="text-lg font-bold" style={{ color: "#3B234A" }}>
-                                                            €{hotel.price}
+                                                            ${hotel.price}
                                                             <span className="text-sm font-normal text-gray-600 ml-1">por noche</span>
                                                         </div>
                                                     </div>
