@@ -1,39 +1,28 @@
+import HotelRating from './HotelRating';
+import HotelDescription from './HotelDescription';
+import HotelImages from './HotelImages';
+
+
 import { Hotel } from '@/types';
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useFavoritesStore } from '@/stores/favoritesStore';
+import { useAuth } from '@/hooks/useAuth';
+
+import Link from "next/link"
 
 import {
-    ArrowLeft,
-    MapPin,
-    Wifi,
-    Car,
-    Coffee,
-    Waves,
-    Utensils,
-    Dumbbell,
-    Shirt,
-    Phone,
-    Mail,
-    Calendar,
-    Users,
-    CalendarIcon,
-    ChevronDown,
-    Heart,
+    ArrowLeft, MapPin, Wifi, Car, Coffee, Waves, Utensils, Dumbbell, Shirt, Phone, Mail, Calendar, Users, CalendarIcon, ChevronDown, Heart, Star, MessageSquare
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
-import { BadgeListFromJsonBigger } from "@/components/BagdeListFromJson"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { HotelDetailSkeletonNames, HotelDetailsSkeletonBagdes, HotelDetailsSkeletonDescription, HotelDetailsSkeletonRating } from './HotelDetailSkeletons';
+import { HotelDetailSkeletonNames, HotelDetailsSkeletonRating } from '../HotelDetailSkeletons';
 import { colorsAux } from '@/styles/colorsAux';
-import { useAuth } from '@/hooks/useAuth';
-import { useFavoritesStore } from '@/stores/favoritesStore';
 
 
 const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
@@ -49,15 +38,7 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
     const [checkInOpen, setCheckInOpen] = useState(false);
     const [checkOutOpen, setCheckOutOpen] = useState(false);
 
-    const [showGallery, setShowGallery] = useState(false)
-
-    const images = [
-        "https://imgs.search.brave.com/zekckRCy-3DvoqpeSJ7Z4-tU6HAtAcnOFy0K6WxfAFA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS92aXN0YS1waXNj/aW5hXzEwNDg5NDQt/MjA4MjEzMTkuanBn/P3NlbXQ9YWlzX2h5/YnJpZA",
-        "https://imgs.search.brave.com/zekckRCy-3DvoqpeSJ7Z4-tU6HAtAcnOFy0K6WxfAFA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS92aXN0YS1waXNj/aW5hXzEwNDg5NDQt/MjA4MjEzMTkuanBn/P3NlbXQ9YWlzX2h5/YnJpZA",
-        "https://imgs.search.brave.com/zekckRCy-3DvoqpeSJ7Z4-tU6HAtAcnOFy0K6WxfAFA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS92aXN0YS1waXNj/aW5hXzEwNDg5NDQt/MjA4MjEzMTkuanBn/P3NlbXQ9YWlzX2h5/YnJpZA",
-        "https://imgs.search.brave.com/zekckRCy-3DvoqpeSJ7Z4-tU6HAtAcnOFy0K6WxfAFA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS92aXN0YS1waXNj/aW5hXzEwNDg5NDQt/MjA4MjEzMTkuanBn/P3NlbXQ9YWlzX2h5/YnJpZA",
-        "https://imgs.search.brave.com/zekckRCy-3DvoqpeSJ7Z4-tU6HAtAcnOFy0K6WxfAFA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS92aXN0YS1waXNj/aW5hXzEwNDg5NDQt/MjA4MjEzMTkuanBn/P3NlbXQ9YWlzX2h5/YnJpZA",
-    ]
+    let disabledRanges = [];
 
     const formatDateRange = (date: Date | undefined): string => {
         if (!date) return "Seleccionar fecha"
@@ -68,8 +49,6 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
             year: "numeric"
         })
     }
-
-    let disabledRanges = [];
 
     if (reservations && Array.isArray(reservations)) {
         disabledRanges = reservations.map(reservation => ({
@@ -87,7 +66,6 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
     const isFavoriteHotel = (hotelId: number) => {
         return favoriteHotelIds.includes(hotelId);
     }
-
 
     const handleSubmit = () => {
         console.log(hotel.id, checkIn, checkOut)
@@ -147,7 +125,7 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
 
                             <div className="flex items-center gap-4">
                                 <div className="flex items-center justify-center w-16 h-16 rounded-full text-white font-bold text-xl border-2 border-white">
-                                    {!hotel.score ? <HotelDetailsSkeletonRating /> : <span>{hotel.score} </span>}
+                                    {!hotel.score ? <HotelDetailsSkeletonRating /> : <span>{hotel.score.toFixed(1)} </span>}
                                 </div>
                                 <div className="text-white">
                                     <p className="text-lg font-semibold">{hotel.score > 6 ? "Excelente" : "Normal"}</p>
@@ -170,124 +148,14 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
 
             <div className="max-w-6xl mx-auto p-6 space-y-6">
 
-                <Card className="overflow-hidden shadow-lg border-0">
-                    <CardContent className="p-0">
-                        <div className="relative w-full">
-
-                            <div className="hidden md:flex h-96">
-
-                                <div className="w-1/2 relative">
-                                    <img
-                                        src={images[0] || "/placeholder.svg"}
-                                        alt="Imagen principal del hotel"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-
-                                <div className="w-1/2 grid grid-cols-2 grid-rows-2 gap-1">
-                                    {images.slice(1, 5).map((image, index) => (
-                                        <div key={index} className="relative">
-                                            <img
-                                                src={image || "/placeholder.svg"}
-                                                alt={`Hotel imagen ${index + 2}`}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-
-                            <div className="md:hidden">
-
-                                <div className="relative h-64">
-                                    <img
-                                        src={images[0] || "/placeholder.svg"}
-                                        alt="Imagen principal del hotel"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-
-                                <div className="grid grid-cols-4 gap-1 h-20">
-                                    {images.slice(1, 5).map((image, index) => (
-                                        <div key={index} className="relative">
-                                            <img
-                                                src={image || "/placeholder.svg"}
-                                                alt={`Hotel imagen ${index + 2}`}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <Button
-                                className="absolute bottom-4 right-4 text-white font-semibold hover:opacity-90 transition-opacity shadow-lg"
-                                style={{ backgroundColor: "#3B234A" }}
-                                onClick={() => {
-                                    setShowGallery(true);
-                                }}
-                            >
-                                Ver más
-                            </Button>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {showGallery && (
-                    <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center">
-                        <div className="relative w-full max-w-4xl">
-                            <Button
-                                onClick={() => setShowGallery(false)}
-                                className="absolute top-4 right-4 z-50 bg-white text-black"
-                            >
-                                Cerrar
-                            </Button>
-
-                            {/* Carrusel */}
-                            <div className="flex overflow-x-auto space-x-4 p-4">
-                                {images.map((image, index) => (
-                                    <img
-                                        key={index}
-                                        src={image}
-                                        alt={`Imagen ${index + 1}`}
-                                        className="h-[500px] object-contain rounded shadow-lg"
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                )}
+                <HotelImages />
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                     <div className="lg:col-span-2 space-y-6">
 
-                        <Card className="shadow-lg border-0">
-                            <CardHeader style={{ backgroundColor: "#C3BBC9" }}>
-                                <CardTitle style={{ color: "#3B234A" }}>Acerca de este hotel</CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
-                                {!hotel.description ? <HotelDetailsSkeletonDescription /> :
-                                    <p className="text-gray-700 leading-relaxed mb-4">
-                                        {hotel.description}
-                                    </p>
-                                }
-                            </CardContent>
-                        </Card>
-
-                        <Card className="shadow-lg border-0">
-                            <CardHeader style={{ backgroundColor: "#C3BBC9" }}>
-                                <CardTitle style={{ color: "#3B234A" }}>Servicios y Amenidades</CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
-                                {!hotel.features ? (
-                                    <HotelDetailsSkeletonBagdes />
-                                ) : (
-                                    <BadgeListFromJsonBigger key={hotel.id} features={hotel.features} />
-                                )}
-                            </CardContent>
-                        </Card>
+                        <HotelDescription hotel={hotel} />
+                        <HotelRating hotel={hotel} />
 
                     </div>
 

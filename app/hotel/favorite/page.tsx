@@ -7,9 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useFavoritesStore } from "@/stores/favoritesStore"
 import { useAuth } from "@/hooks/useAuth"
 import { Hotel } from "@/types"
+import { useRouter } from "next/navigation"
 
 export default function FavoriteComponent() {
 
+    const router = useRouter();
     const { userId } = useAuth();
     const { fetchFavorites, favoriteHotels, toggleFavorite } = useFavoritesStore();
 
@@ -109,6 +111,7 @@ export default function FavoriteComponent() {
                                 <Button
                                     className="text-white font-semibold hover:opacity-90 transition-opacity"
                                     style={{ backgroundColor: "#3B234A" }}
+                                    onClick={() => router.push("/")}
                                 >
                                     Explorar Hoteles
                                 </Button>

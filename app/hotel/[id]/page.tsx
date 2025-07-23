@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 
 import { useParams } from "next/navigation"
 import { Hotel } from "@/types"
-import HotelDetails from "@/components/Hotels/HotelDetails";
+import HotelDetails from "@/components/Hotels/HotelDetails/HotelDetails";
 
 
 export default function HotelDetailsPage() {
