@@ -41,7 +41,7 @@ const HotelRating = ({ hotel }: Hotel) => {
             console.log(response);
 
             if (request.ok) {
-                setReviews(response.entity)
+                setReviews(response.entity ?? [])
 
             }
         }
@@ -138,7 +138,7 @@ const HotelRating = ({ hotel }: Hotel) => {
                                 <div className="flex items-center gap-2">
                                     {renderStars(Math.round(hotel.score))}
                                     <span className="text-sm" style={{ color: "#523961" }}>
-                                        Basado en {reviews.length} reseñas
+                                        {reviews?.length > 0 ? `Basado en ${reviews?.length} reseñas` : "No hay reseñas todavia para este hotel"}
                                     </span>
                                 </div>
                             </div>

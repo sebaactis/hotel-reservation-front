@@ -27,7 +27,6 @@ export default function FavoriteComponent() {
     return (
         <div className="min-h-screen p-6" style={{ backgroundColor: "#D4C7BF" }}>
             <div className="max-w-4xl mx-auto space-y-6">
-                {/* Header */}
                 <Card className="shadow-lg border-0">
                     <CardHeader style={{ backgroundColor: "#3B234A" }}>
                         <CardTitle className="text-white text-2xl font-bold flex items-center">
@@ -40,7 +39,6 @@ export default function FavoriteComponent() {
                     </CardHeader>
                 </Card>
 
-                {/* Lista de Favoritos */}
                 <Card className="shadow-lg border-0">
                     <CardContent className="p-0" style={{ backgroundColor: "#C3BBC9" }}>
                         {favoriteHotels.length > 0 ? (
@@ -52,14 +50,14 @@ export default function FavoriteComponent() {
                                         style={{ borderColor: "#BAAFC4" }}
                                     >
                                         <div className="flex gap-4">
-                                            {/* Imagen */}
+
                                             <img
                                                 src={hotel.image || "/placeholder.svg"}
                                                 alt={hotel.name}
                                                 className="w-20 h-16 object-cover rounded-lg flex-shrink-0"
                                             />
 
-                                            {/* Información del Hotel */}
+
                                             <div className="flex-1 min-w-0">
                                                 <h3 className="font-semibold text-lg truncate" style={{ color: "#3B234A" }}>
                                                     {hotel.name}
@@ -73,7 +71,7 @@ export default function FavoriteComponent() {
                                                         <div className="flex items-center gap-1">
                                                             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                                                             <span className="font-medium text-sm" style={{ color: "#3B234A" }}>
-                                                                {hotel.score}
+                                                                {hotel.score.toFixed(2)}
                                                             </span>
                                                         </div>
                                                         <div className="text-lg font-bold" style={{ color: "#3B234A" }}>
@@ -84,7 +82,6 @@ export default function FavoriteComponent() {
                                                 </div>
                                             </div>
 
-                                            {/* Botón Remover */}
                                             <div className="flex items-center">
                                                 <Button
                                                     size="sm"

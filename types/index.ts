@@ -4,6 +4,11 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
+export interface Policy {
+  id: number;
+  title: string;
+  description: string;
+}
 export interface Hotel {
   id: number;
   name: string;
@@ -12,6 +17,7 @@ export interface Hotel {
   imageUrl: string;
   price: number;
   features: { name: string; icon: JSX.Element }[];
+  policies: Policy[];
   score: number;
   phone: number;
   email: string;

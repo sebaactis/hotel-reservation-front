@@ -39,10 +39,8 @@ export default function Component() {
     const { hotelsResult, searchHotels } = useSearchHotels();
     const hotels: Hotel[] = hotelsResult.entity?.page?.content;
 
-
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
 
-    // Criterios de búsqueda (simulados
     const searchCriteria = {
         location,
         checkIn: from,
@@ -61,7 +59,6 @@ export default function Component() {
 
     return (
         <div className="min-h-screen" style={{ backgroundColor: "#D4C7BF" }}>
-
             <div className="p-6" style={{ backgroundColor: "#3B234A" }}>
                 <div className="max-w-7xl mx-auto">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

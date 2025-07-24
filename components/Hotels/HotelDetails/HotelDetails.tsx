@@ -18,76 +18,25 @@ import {
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Calendar as CalendarComponent } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+
+
 
 import { HotelDetailSkeletonNames, HotelDetailsSkeletonRating } from '../HotelDetailSkeletons';
 import { colorsAux } from '@/styles/colorsAux';
+import HotelReservation from './HotelReservation';
 
 
 const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
 
     const router = useRouter();
-    const { token, userId } = useAuth();
+    const { token, userId, isAuthenticated } = useAuth();
     const { fetchFavorites, favoriteHotelIds, toggleFavorite } = useFavoritesStore();
 
-    const [reservations, setReservations] = useState([]);
-
-    const [checkIn, setCheckIn] = useState("")
-    const [checkOut, setCheckOut] = useState("")
-    const [checkInOpen, setCheckInOpen] = useState(false);
-    const [checkOutOpen, setCheckOutOpen] = useState(false);
-
-    let disabledRanges = [];
-
-    const formatDateRange = (date: Date | undefined): string => {
-        if (!date) return "Seleccionar fecha"
-
-        return date.toLocaleDateString("es-ES", {
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-        })
-    }
-
-    if (reservations && Array.isArray(reservations)) {
-        disabledRanges = reservations.map(reservation => ({
-            from: new Date(reservation.bookedFrom),
-            to: new Date(reservation.bookedTo)
-        }));
-    }
-
-    const isDateDisabled = (date: Date) => {
-        return disabledRanges.some(range =>
-            date >= range.from && date <= range.to
-        );
-    };
 
     const isFavoriteHotel = (hotelId: number) => {
         return favoriteHotelIds.includes(hotelId);
     }
 
-    const handleSubmit = () => {
-        console.log(hotel.id, checkIn, checkOut)
-    }
-
-    useEffect(() => {
-        if (!hotel.id) return;
-        try {
-            const getReservations = async () => {
-                const request = await fetch(`http://localhost:8080/api/v1/hotelBooking/${hotel.id}`)
-                const response = await request.json();
-
-                if (request.ok) {
-                    setReservations(response.entity);
-                }
-            }
-
-            getReservations();
-        } catch (error) {
-            console.log(error)
-        }
-    }, [hotel?.id])
 
     useEffect(() => {
 
@@ -111,9 +60,9 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                             {!hotel.name ?
                                 <HotelDetailSkeletonNames width={"21.8rem"} />
                                 :
-                                <div className='flex items-center gap-3 mb-2 cursor-pointer'>
+                                <div className='flex items-center gap-3 mb-2'>
                                     <h1 className="text-3xl font-bold text-white">{hotel.name}</h1>
-                                    <button onClick={() => toggleFavorite(userId, hotel.id)}>{isFavoriteHotel(hotel.id) ? <Heart className='fill-red-500 text-red-500' /> : <Heart />}</button>
+                                    {isAuthenticated && <button onClick={() => toggleFavorite(userId, hotel.id)}>{isFavoriteHotel(hotel.id) ? <Heart className='fill-red-500 text-red-500' /> : <Heart />}</button>}
                                 </div>
                             }
 
@@ -147,128 +96,16 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
             </div>
 
             <div className="max-w-6xl mx-auto p-6 space-y-6">
-
                 <HotelImages />
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
                     <div className="lg:col-span-2 space-y-6">
-
                         <HotelDescription hotel={hotel} />
                         <HotelRating hotel={hotel} />
-
                     </div>
 
                     <div className="space-y-6">
-
-                        <Card className="shadow-lg border-0 top-6">
-                            <CardHeader style={{ backgroundColor: "#3B234A" }}>
-                                <CardTitle className="text-white text-center">Reservar Ahora</CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
-                                <div className="space-y-4">
-                                    <div>
-                                        <label className="text-sm font-medium" style={{ color: "#523961" }}>
-                                            <Calendar className="w-4 h-4 inline mr-1" />
-                                            Check-in
-                                        </label>
-
-                                        <Popover open={checkInOpen} onOpenChange={setCheckInOpen}>
-                                            <PopoverTrigger asChild>
-                                                <button
-                                                    id="dates"
-                                                    className="w-full flex items-center justify-between p-3 rounded-md border-2 bg-white"
-                                                    style={{ borderColor: "#523961" }}
-                                                >
-                                                    <div className="flex items-center">
-                                                        <CalendarIcon className="w-5 h-5 mr-2" style={{ color: "#523961" }} />
-                                                        <span style={{ color: colorsAux.darkprimary }}>
-                                                            {formatDateRange(checkIn)}
-                                                        </span>
-                                                    </div>
-                                                    <ChevronDown className="w-4 h-4" style={{ color: "#523961" }} />
-                                                </button>
-                                            </PopoverTrigger>
-
-                                            <PopoverContent>
-                                                <CalendarComponent
-                                                    mode="single"
-                                                    selected={checkIn}
-                                                    onSelect={(date) => setCheckIn(date)}
-                                                    numberOfMonths={1}
-                                                    className="rounded-lg border"
-                                                    classNames={{
-                                                        disabled: "text-red-400 line-through",
-                                                    }}
-                                                    disabled={(date) => isDateDisabled(date)}
-                                                />
-                                            </PopoverContent>
-                                        </Popover>
-
-                                    </div>
-
-                                    <div>
-                                        <label className="text-sm font-medium" style={{ color: "#523961" }}>
-                                            <Calendar className="w-4 h-4 inline mr-1" />
-                                            Check-out
-                                        </label>
-
-                                        <Popover open={checkOutOpen} onOpenChange={setCheckOutOpen}>
-                                            <PopoverTrigger asChild>
-                                                <button
-                                                    id="dates"
-                                                    className="w-full flex items-center justify-between p-3 rounded-md border-2 bg-white"
-                                                    style={{ borderColor: "#523961" }}
-                                                >
-                                                    <div className="flex items-center">
-                                                        <CalendarIcon className="w-5 h-5 mr-2" style={{ color: "#523961" }} />
-                                                        <span style={{ color: colorsAux.darkprimary }}>
-                                                            {formatDateRange(checkOut)}
-                                                        </span>
-                                                    </div>
-                                                    <ChevronDown className="w-4 h-4" style={{ color: "#523961" }} />
-                                                </button>
-                                            </PopoverTrigger>
-
-                                            <PopoverContent>
-                                                <CalendarComponent
-                                                    mode="single"
-                                                    selected={checkOut}
-                                                    onSelect={(date) => setCheckOut(date)}
-                                                    numberOfMonths={1}
-                                                    className="rounded-lg border"
-                                                    disabled={(date) => isDateDisabled(date)}
-                                                    classNames={{
-                                                        disabled: "text-red-400 line-through",
-                                                    }}
-                                                />
-                                            </PopoverContent>
-                                        </Popover>
-                                    </div>
-
-                                    <Separator />
-
-                                    <div className="flex justify-between items-center">
-                                        <span className="font-medium" style={{ color: "#523961" }}>
-                                            Total por noche:
-                                        </span>
-                                        <span className="text-2xl font-bold" style={{ color: "#3B234A" }}>
-                                            ARS 15000
-                                        </span>
-                                    </div>
-
-                                    <Button
-                                        className="w-full text-white font-semibold py-3 hover:opacity-90 transition-opacity"
-                                        style={{ backgroundColor: "#3B234A" }}
-                                        onClick={handleSubmit}
-                                    >
-                                        Reservar Ahora
-                                    </Button>
-
-                                    <p className="text-xs text-center text-gray-600">Cancelación gratuita hasta 24h antes</p>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <HotelReservation hotel={hotel} />
 
                         <Card className="shadow-lg border-0">
                             <CardHeader style={{ backgroundColor: "#C3BBC9" }}>
