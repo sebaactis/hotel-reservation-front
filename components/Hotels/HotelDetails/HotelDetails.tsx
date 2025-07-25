@@ -12,7 +12,12 @@ import { useAuth } from '@/hooks/useAuth';
 import Link from "next/link"
 
 import {
-    ArrowLeft, MapPin, Wifi, Car, Coffee, Waves, Utensils, Dumbbell, Shirt, Phone, Mail, Calendar, Users, CalendarIcon, ChevronDown, Heart, Star, MessageSquare
+    ArrowLeft, MapPin, Wifi, Car, Coffee, Waves, Utensils, Dumbbell, Shirt, Phone, Mail, Calendar, Users, CalendarIcon, ChevronDown, Heart, Star, MessageSquare,
+    Facebook,
+    Twitter,
+    Instagram,
+    Share2,
+    Copy
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -20,10 +25,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 
 
-
 import { HotelDetailSkeletonNames, HotelDetailsSkeletonRating } from '../HotelDetailSkeletons';
 import { colorsAux } from '@/styles/colorsAux';
 import HotelReservation from './HotelReservation';
+
+import HotelShare from './HotelShare';
 
 
 const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
@@ -32,11 +38,15 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
     const { token, userId, isAuthenticated } = useAuth();
     const { fetchFavorites, favoriteHotelIds, toggleFavorite } = useFavoritesStore();
 
+    const [showShareModal, setShowShareModal] = useState(false)
 
     const isFavoriteHotel = (hotelId: number) => {
         return favoriteHotelIds.includes(hotelId);
     }
 
+    const handleOpenShareModal = () => {
+        setShowShareModal(true)
+    }
 
     useEffect(() => {
 
@@ -50,10 +60,21 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
             <div className="p-6" style={{ backgroundColor: "#3B234A" }}>
 
                 <div className="max-w-6xl mx-auto">
-                    <Button onClick={router.back} variant="ghost" className="text-white hover:bg-white hover:bg-opacity-20 mb-4 w-full flex justify-end">
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Volver a resultados
-                    </Button>
+                    <div className="flex items-center justify-between mb-4">
+                        <Button onClick={router.back} variant="ghost" className="text-white hover:bg-white hover:bg-opacity-20 w-full flex justify-end">
+                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            Volver a resultados
+                        </Button>
+
+                        <Button
+                            onClick={handleOpenShareModal}
+                            variant="ghost"
+                            className="text-white hover:bg-white hover:bg-opacity-20"
+                        >
+                            <Share2 className="w-4 h-4 mr-2" />
+                            Compartir
+                        </Button>
+                    </div>
 
                     <div className="flex flex-col md:flex-row gap-6">
                         <div className="flex-1">
@@ -94,6 +115,8 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                     </div>
                 </div>
             </div>
+
+            <HotelShare hotel={hotel} showShareModal={showShareModal} setShowShareModal={setShowShareModal} />
 
             <div className="max-w-6xl mx-auto p-6 space-y-6">
                 <HotelImages />
