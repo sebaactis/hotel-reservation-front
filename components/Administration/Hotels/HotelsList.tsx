@@ -18,15 +18,14 @@ import { useEffect, useState } from "react"
 
 import { Plus, Search, MapPin, Edit, Trash2, Eye, MoreVertical, Star, AlertCircle } from "lucide-react"
 import { Categorie, Hotel } from "@/types"
-import HotelItem from "./HotelItem"
+import HotelItem from "./HotelItem/HotelItem"
 
 interface Props {
     filteredHotels: Hotel[];
     searchTerm: string;
-    handleDelete: (hotelId: number) => void;
 }
 
-const HotelsList = ({ filteredHotels, searchTerm, handleDelete }: Props) => {
+const HotelsList = ({ filteredHotels, searchTerm }: Props) => {
 
     const [categories, setCategories] = useState<Categorie[]>();
 
@@ -56,7 +55,7 @@ const HotelsList = ({ filteredHotels, searchTerm, handleDelete }: Props) => {
             <CardContent className="p-0" style={{ backgroundColor: "#C3BBC9" }}>
                 <div className="space-y-0">
                     {filteredHotels.map((hotel, index) => (
-                        <HotelItem key={index} hotel={hotel} index={index} handleDelete={handleDelete} categories={categories} />
+                        <HotelItem key={index} hotel={hotel} index={index} categories={categories} />
                     ))}
                 </div>
 

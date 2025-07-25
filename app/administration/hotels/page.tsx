@@ -38,19 +38,6 @@ export default function HotelAdministration() {
         return matchesSearch
     })
 
-    const handleDelete = async (hotelId: number) => {
-        const request = await fetch(`http://localhost:8080/api/v1/hotel/${hotelId}`, {
-            method: "DELETE"
-        })
-
-        if (request.ok) {
-            toast.success("Hotel eliminado correctamente")
-            setHotels(prev => prev.filter(h => h.id !== hotelId));
-        } else {
-            toast.error("No se pudo eliminar el hotel")
-        }
-
-    }
 
     useEffect(() => {
 
@@ -123,7 +110,7 @@ export default function HotelAdministration() {
                 </Card>
 
                 {/* Lista de Hoteles */}
-                <HotelsList filteredHotels={filteredHotels} searchTerm={searchTerm} handleDelete={handleDelete} />
+                <HotelsList filteredHotels={filteredHotels} searchTerm={searchTerm} />
                 {hotels.length > 0 && <HotelPagination totalPages={totalPages} page={page} seed={seed} onChangePage={setPage} />}
 
             </div>
