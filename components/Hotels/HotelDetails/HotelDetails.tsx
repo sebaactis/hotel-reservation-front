@@ -27,7 +27,6 @@ import { Separator } from "@/components/ui/separator"
 
 import { HotelDetailSkeletonNames, HotelDetailsSkeletonRating } from '../HotelDetailSkeletons';
 import { colorsAux } from '@/styles/colorsAux';
-import HotelReservation from './HotelReservation';
 
 import HotelShare from './HotelShare';
 
@@ -128,7 +127,14 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                     </div>
 
                     <div className="space-y-6">
-                        <HotelReservation hotel={hotel} />
+                        <Card className="shadow-lg border-0">
+                            <CardHeader style={{ backgroundColor: "#C3BBC9" }}>
+                                <Button onClick={() => router.push(`/reservation/${hotel.id}`)} style={{ backgroundColor: "#3B234A", color: "white" }}>
+                                    Reservar ahora
+                                </Button>
+                            </CardHeader>
+                        </Card>
+
 
                         <Card className="shadow-lg border-0">
                             <CardHeader style={{ backgroundColor: "#C3BBC9" }}>

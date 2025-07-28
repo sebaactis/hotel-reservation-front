@@ -78,9 +78,7 @@ const HotelItem = ({ hotel, index, categories }: Props) => {
 
                 <div className="flex lg:flex-col gap-2 lg:w-auto w-full">
                     <HotelItemEdit hotel={hotel} categories={categories} />
-
                     <HotelItemDelete hotel={hotel} />
-
                 </div>
             </div>
         </div>

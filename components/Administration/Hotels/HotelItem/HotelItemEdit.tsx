@@ -18,9 +18,15 @@ import { useEffect, useState } from "react";
 import { Edit, AlertCircle, Wifi, Car, Coffee, Waves, Utensils, Dumbbell, Shirt } from 'lucide-react'
 import { toast } from "sonner"
 import { useAuth } from "@/hooks/useAuth"
+import { Categorie, Hotel } from "@/types"
+
+interface Props {
+    hotel: Hotel;
+    categories: Categorie[]
+}
 
 
-const HotelItemEdit = ({ hotel, categories }) => {
+const HotelItemEdit = ({ hotel, categories }: Props) => {
 
     const { token } = useAuth();
     const [hotelData, setHotelData] = useState([])
@@ -79,7 +85,7 @@ const HotelItemEdit = ({ hotel, categories }) => {
             toast.success("Hotel editado exitosamente")
             setSelectedAmenities([])
             setRating(0)
-            
+
         } else {
             toast.error("Error al intentar editar hotel")
         }

@@ -8,12 +8,16 @@ import { toast } from "sonner";
 interface DecodedToken {
     sub: string;
     role?: string;
+    name: string;
+    lastName: string;
     exp: number;
 }
 
 export const useAuth = () => {
     const [token, setToken] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
+    const [name, setName] = useState<string | null>(null);
+    const [lastName, setLastName] = useState<string | null>(null);
     const [userId, setUserId] = useState<number | null>(null);
     const [role, setRole] = useState<string>("");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -21,6 +25,8 @@ export const useAuth = () => {
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         const storedEmail = localStorage.getItem("email");
+        const storedName = localStorage.getItem("name");
+        const storedLastName = localStorage.getItem("lastName");
         const storesUserId = localStorage.getItem("userId");
 
         if (storedToken) {
@@ -33,6 +39,8 @@ export const useAuth = () => {
                 } else {
                     setToken(storedToken);
                     setEmail(storedEmail);
+                    setName(storedName);
+                    setLastName(storedLastName);
                     setUserId(storesUserId);
                     setIsAuthenticated(true);
                     setRole(decoded.role.name);
@@ -44,10 +52,16 @@ export const useAuth = () => {
         }
     }, []);
 
-    const login = (token: string, email: string, userId: number) => {
+    const login = (token: string, email: string, userId: number, name: string, lastName: string) => {
+
         localStorage.setItem("token", token);
         localStorage.setItem("email", email);
         localStorage.setItem("userId", userId);
+        localStorage.setItem("name", name);
+        localStorage.setItem("lastName", lastName);
+
+        setName(name);
+        setLastName(lastName);
         setToken(token);
         setUserId(userId);
         setEmail(email);
@@ -57,6 +71,8 @@ export const useAuth = () => {
         try {
             const decoded: DecodedToken = jwtDecode(token);
             setRole(decoded.role.name ?? "");
+            setName(decoded.name);
+            setLastName(decoded.lastName);
 
         } catch (err) {
             console.error("Token inválido", err);
@@ -78,6 +94,8 @@ export const useAuth = () => {
     return {
         token,
         email,
+        name,
+        lastName,
         userId,
         role,
         isAuthenticated,
