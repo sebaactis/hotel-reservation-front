@@ -129,8 +129,12 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                     <div className="space-y-6">
                         <Card className="shadow-lg border-0">
                             <CardHeader style={{ backgroundColor: "#C3BBC9" }}>
-                                <Button onClick={() => router.push(`/reservation/${hotel.id}`)} style={{ backgroundColor: "#3B234A", color: "white" }}>
-                                    Reservar ahora
+                                <Button
+                                    onClick={() => router.push(`/reservation/${hotel.id}`)}
+                                    style={{ backgroundColor: "#3B234A", color: "white" }}
+                                    disabled={!isAuthenticated}
+                                >
+                                    {isAuthenticated ? "Reservar ahora" : "Iniciar sesión para reservar"}
                                 </Button>
                             </CardHeader>
                         </Card>

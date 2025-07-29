@@ -15,6 +15,7 @@ import {
     Clock,
     CheckCircle,
     AlertCircle,
+    User,
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
@@ -39,6 +40,7 @@ export default function HotelReservation() {
 
     const [checkIn, setCheckIn] = useState<Date | undefined>(undefined)
     const [checkOut, setCheckOut] = useState<Date | undefined>(undefined)
+    const [guests, setGuests] = useState<number>(1);
     const [checkInOpen, setCheckInOpen] = useState(false)
     const [checkOutOpen, setCheckOutOpen] = useState(false)
     const [reservations, setReservations] = useState([])
@@ -129,6 +131,9 @@ export default function HotelReservation() {
                 userId,
                 bookedFrom: checkIn,
                 bookedTo: checkOut,
+                guests,
+                totalPrice: calculateTotal(),
+                nights: calculateNights(),
             }
 
             const request = await fetch("http://localhost:8080/api/v1/hotelBooking", {
@@ -142,6 +147,9 @@ export default function HotelReservation() {
 
             if (request.ok) {
                 toast.success("Reserva realizada con éxito")
+                setTimeout(() => {
+                    router.push('/reservation/confirmation?success=true');
+                }, 1000)
 
             } else {
                 toast.error("Error al procesar la reserva")
@@ -264,9 +272,9 @@ export default function HotelReservation() {
                         {/* Selección de Fechas */}
                         <Card className="shadow-lg border-0">
                             <CardHeader style={{ backgroundColor: "#C3BBC9" }}>
-                                <CardTitle style={{ color: "#3B234A" }}>Fechas de Estadía</CardTitle>
+                                <CardTitle style={{ color: "#3B234A" }}>Fechas de Estadía y Huéspedes</CardTitle>
                             </CardHeader>
-                            <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
+                            <CardContent className="px-6" style={{ backgroundColor: "#C3BBC9" }}>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <Label className="text-sm font-medium" style={{ color: "#523961" }}>
@@ -338,6 +346,20 @@ export default function HotelReservation() {
                                             </PopoverContent>
                                         </Popover>
                                     </div>
+                                </div>
+
+                                <div className="pt-5">
+                                    <Label className="text-sm font-medium" style={{ color: "#523961" }}>
+                                        <User className="w-4 h-4 inline mr-1" />
+                                        Huespedes
+                                    </Label>
+                                    <Input
+                                        type="number"
+                                        min="1"
+                                        value={guests}
+                                        onChange={(e) => setGuests(e.target.value)}
+                                        className="w-full p-3 rounded-md border-2 bg-white mt-1 text-[#3B234A]"
+                                    />
                                 </div>
 
                                 {checkIn && checkOut && (
@@ -415,7 +437,7 @@ export default function HotelReservation() {
                             </CardHeader>
                             <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
                                 <div className="space-y-4">
-                                    {checkIn && checkOut && (
+                                    {checkIn && checkOut && guests && (
                                         <>
                                             <div className="flex justify-between items-center">
                                                 <span className="text-sm" style={{ color: "#523961" }}>
@@ -441,6 +463,15 @@ export default function HotelReservation() {
                                                 </span>
                                                 <span className="font-medium" style={{ color: "#3B234A" }}>
                                                     {calculateNights()}
+                                                </span>
+                                            </div>
+
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-sm" style={{ color: "#523961" }}>
+                                                    Huespedes:
+                                                </span>
+                                                <span className="font-medium" style={{ color: "#3B234A" }}>
+                                                    {guests}
                                                 </span>
                                             </div>
 

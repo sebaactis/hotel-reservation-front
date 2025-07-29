@@ -50,6 +50,9 @@ export function UserNavbarItem({ email, role }: { email: string, role: string })
                     <DropdownMenuItem onClick={() => router.push("/hotel/favorite")}>
                         Mis favoritos
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => router.push("/reservation/myReservations")}>
+                        Mis reservas
+                    </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator className="bg-gray-500" />
                 <DropdownMenuLabel className="font-bold text-md">Administrador</DropdownMenuLabel>
