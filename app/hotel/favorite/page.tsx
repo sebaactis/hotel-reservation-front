@@ -12,17 +12,17 @@ import { useRouter } from "next/navigation"
 export default function FavoriteComponent() {
 
     const router = useRouter();
-    const { userId } = useAuth();
+    const { user } = useAuth();
     const { fetchFavorites, favoriteHotels, toggleFavorite } = useFavoritesStore();
 
     const removeFromFavorites = async (hotelId: number) => {
-        await toggleFavorite(userId, hotelId)
+        await toggleFavorite(user.userId, hotelId)
     }
 
     useEffect(() => {
-        if (!userId) return;
-        fetchFavorites(userId)
-    }, [userId])
+        if (!user?.userId) return;
+        fetchFavorites(user?.userId)
+    }, [user])
 
     return (
         <div className="min-h-screen p-6" style={{ backgroundColor: "#D4C7BF" }}>

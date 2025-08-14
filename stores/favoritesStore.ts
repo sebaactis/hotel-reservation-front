@@ -25,6 +25,7 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
 
   fetchFavorites: async (userId) => {
     set({ loading: true })
+    
     try {
       const res = await fetch(`http://localhost:8080/api/v1/favorite/${userId}`, {
         headers: {

@@ -24,7 +24,7 @@ import { UserNavbarItem } from "./UserNavbarItem";
 
 export const Navbar = () => {
 
-  const { isAuthenticated, email, role, logout } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
 
   return (
     <HeroUINavbar maxWidth="2xl" position="sticky" className="bg-[#523961]">
@@ -83,7 +83,7 @@ export const Navbar = () => {
           </NavbarItem>}
 
         {isAuthenticated && <NavbarItem className="hidden md:flex">
-          <UserNavbarItem email={email} role={role} />
+          <UserNavbarItem email={user?.email} role={user?.role} />
         </NavbarItem>}
 
       </NavbarContent>

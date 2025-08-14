@@ -27,32 +27,29 @@ export default function LoginForm() {
 
         try {
 
-            const loginRequest = await fetch("http://localhost:8080/api/v1/auth/login", {
+            const loginRequest = await fetch("/api/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: "include",
                 body: JSON.stringify(formData)
             })
 
-            const response = await loginRequest.json()
-
-
-            if (loginRequest.ok) {
-                toast.success("Login exitoso")
-                setFormData({
-                    email: "",
-                    password: "",
-                })
-
-                login(response.entity.token, response.entity.email, response.entity.userId, response.entity.name, response.entity.lastName);
-                window.location.href = "/";
-            }
-            else {
-                toast.error("No se pudo completar el login por lo siguiente: " + "'" + response.message + "'")
+            if (!loginRequest.ok) {
+                throw new Error("Login invalido")
             }
 
+            const data = await loginRequest.json();
+            login(data.user.email, data.user.password);
 
+            toast.success("Login exitoso")
+
+            setFormData({
+                email: "",
+                password: "",
+            })
+            window.location.href = "/";
 
         } catch (e) {
             toast.error("Error al intentar el registro: "

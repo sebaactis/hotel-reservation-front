@@ -5,101 +5,52 @@ import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
 
-interface DecodedToken {
-    sub: string;
-    role?: string;
+type UserType = {
+    email: string;
     name: string;
     lastName: string;
-    exp: number;
+    userId: number;
+    role: string;
 }
 
 export const useAuth = () => {
-    const [token, setToken] = useState<string | null>(null);
-    const [email, setEmail] = useState<string | null>(null);
-    const [name, setName] = useState<string | null>(null);
-    const [lastName, setLastName] = useState<string | null>(null);
-    const [userId, setUserId] = useState<number | null>(null);
-    const [role, setRole] = useState<string>("");
+
+    const [user, setUser] = useState<UserType | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        const storedToken = localStorage.getItem("token");
-        const storedEmail = localStorage.getItem("email");
-        const storedName = localStorage.getItem("name");
-        const storedLastName = localStorage.getItem("lastName");
-        const storesUserId = localStorage.getItem("userId");
 
-        if (storedToken) {
-            try {
-                const decoded: DecodedToken = jwtDecode(storedToken);
+        const getInfo = async () => {
+            const request = await fetch("/api/auth/me", { credentials: "include" })
+            const response = await request.json();
 
-                const isExpired = decoded.exp * 1000 < Date.now();
-                if (isExpired) {
-                    logout();
-                } else {
-                    setToken(storedToken);
-                    setEmail(storedEmail);
-                    setName(storedName);
-                    setLastName(storedLastName);
-                    setUserId(storesUserId);
-                    setIsAuthenticated(true);
-                    setRole(decoded.role.name);
-                }
-            } catch (err) {
-                console.error("Token inválido", err);
-                logout();
-            }
+            setUser(response.user);
+            setIsAuthenticated(true);
         }
+
+        getInfo();
     }, []);
 
-    const login = (token: string, email: string, userId: number, name: string, lastName: string) => {
-
-        localStorage.setItem("token", token);
-        localStorage.setItem("email", email);
-        localStorage.setItem("userId", userId);
-        localStorage.setItem("name", name);
-        localStorage.setItem("lastName", lastName);
-
-        setName(name);
-        setLastName(lastName);
-        setToken(token);
-        setUserId(userId);
-        setEmail(email);
-
+    const login = async (email: string, password: string) => {
+        const request = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email, password }),
+        });
+        if (!request.ok) throw new Error("Login inválido");
+        const data = await request.json();
+        setUser(data.user);
         setIsAuthenticated(true);
-
-        try {
-            const decoded: DecodedToken = jwtDecode(token);
-            setRole(decoded.role.name ?? "");
-            setName(decoded.name);
-            setLastName(decoded.lastName);
-
-        } catch (err) {
-            console.error("Token inválido", err);
-        }
+        toast.success("Login exitoso")
     };
 
-    const logout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("email");
-        localStorage.removeItem("userId");
-        setToken(null);
-        setEmail(null);
-        setUserId(null);
+    const logout = async () => {
+        await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+        setUser(null);
         setIsAuthenticated(false);
-        setRole("");
-        toast.success("Logout realizado con éxito");
+        toast.success("Logout exitoso")
     };
 
-    return {
-        token,
-        email,
-        name,
-        lastName,
-        userId,
-        role,
-        isAuthenticated,
-        login,
-        logout,
-    };
+    return { user, isAuthenticated, login, logout };
 };
