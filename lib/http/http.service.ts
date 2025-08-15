@@ -5,8 +5,25 @@ export class HttpBaseAPI {
         this.api_url = api_url;
     }
 
-    httpGet = async <T>(endpoint: string, params?: URLSearchParams): Promise<T> => {
-        const res = await fetch(`${this.api_url}${endpoint}${params ? `?${params}` : ''}`);
+    httpGet = async <T>(endpoint: string, params?: URLSearchParams, credentialsInclude?: string): Promise<T> => {
+        const res = await fetch(`${this.api_url}${endpoint}${params ? `?${params}` : ''}`, {
+            credentials: credentialsInclude === "include" ? "include" : "omit"
+        });
+
+        if (!res.ok) {
+            throw new Error(res.statusText);
+        }
+
+        return res.json();
+    }
+
+    httpPost = async <T>(endpoint: string, params?: URLSearchParams, credentialsInclude?: string, body: unknown): Promise<T> => {
+        const res = await fetch(`${this.api_url}${endpoint}${params ? `?${params}` : ''}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: credentialsInclude,
+            body: JSON.stringify(body)
+        });
 
         if (!res.ok) {
             throw new Error(res.statusText);

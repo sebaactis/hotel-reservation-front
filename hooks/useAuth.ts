@@ -23,8 +23,7 @@ export const useAuth = () => {
 
         const getInfo = async () => {
             const data = await authApi.getMe();
-
-            setUser(response.user);
+            setUser(data.user);
             setIsAuthenticated(true);
         }
 
@@ -32,17 +31,9 @@ export const useAuth = () => {
     }, []);
 
     const login = async (email: string, password: string) => {
-        const request = await fetch("/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ email, password }),
-        });
-        if (!request.ok) throw new Error("Login inválido");
-        const data = await request.json();
+        const data = await authApi.login(email, password);
         setUser(data.user);
         setIsAuthenticated(true);
-        toast.success("Login exitoso")
     };
 
     const logout = async () => {

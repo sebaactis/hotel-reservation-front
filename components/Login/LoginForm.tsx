@@ -26,23 +26,7 @@ export default function LoginForm() {
         e.preventDefault()
 
         try {
-
-            const loginRequest = await fetch("/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify(formData)
-            })
-
-            if (!loginRequest.ok) {
-                throw new Error("Login invalido")
-            }
-
-            const data = await loginRequest.json();
-            login(data.user.email, data.user.password);
-
+            const loginRequest = await login(formData.email, formData.password);
             toast.success("Login exitoso")
 
             setFormData({
