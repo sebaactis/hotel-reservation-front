@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
+import authApi from "@/services/auth/auth.service";
 
 type UserType = {
     email: string;
@@ -21,8 +22,7 @@ export const useAuth = () => {
     useEffect(() => {
 
         const getInfo = async () => {
-            const request = await fetch("/api/auth/me", { credentials: "include" })
-            const response = await request.json();
+            const data = await authApi.getMe();
 
             setUser(response.user);
             setIsAuthenticated(true);
