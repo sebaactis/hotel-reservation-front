@@ -13,9 +13,12 @@ export async function POST(req: Request) {
     })
 
     if (!request.ok) {
+
+        const response = await request.json();
+
         return NextResponse.json({
-            error: "Credenciales invalidas"
-        }, { status: 401 })
+            error: response.message,
+        }, { status: 400 })
     }
 
     const response = await request.json();

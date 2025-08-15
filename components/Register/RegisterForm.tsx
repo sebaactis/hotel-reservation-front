@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "sonner"
+import authApi from "@/services/auth/auth.service"
 
 export default function RegisterForm() {
     const [showPassword, setShowPassword] = useState(false)
@@ -32,32 +33,16 @@ export default function RegisterForm() {
                 return
             }
 
-            const register = await fetch("http://localhost:8080/api/v1/auth/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData)
+            const register = await authApi.register(formData);
+
+            toast.success("Registro exitoso")
+            setFormData({
+                name: "",
+                lastName: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
             })
-
-            const response = await register.json()
-
-
-            if (register.ok) {
-                toast.success("Registro exitoso")
-                setFormData({
-                    name: "",
-                    lastName: "",
-                    email: "",
-                    password: "",
-                    confirmPassword: "",
-                })
-
-            } else {
-                toast.error("No se pudo completar el registro por lo siguiente: " + "'" + response.message + "'")
-            }
-
-
 
         } catch (e) {
             toast.error("Error al intentar el registro: "
@@ -122,7 +107,6 @@ export default function RegisterForm() {
                             />
                         </div>
 
-                        {/* Email */}
                         <div className="space-y-2">
                             <Label htmlFor="email" className="text-sm font-medium" style={{ color: "#523961" }}>
                                 <Mail className="w-4 h-4 inline mr-2" />
@@ -144,7 +128,6 @@ export default function RegisterForm() {
                             />
                         </div>
 
-                        {/* Contraseña */}
                         <div className="space-y-2">
                             <Label htmlFor="password" className="text-sm font-medium" style={{ color: "#523961" }}>
                                 <Lock className="w-4 h-4 inline mr-2" />
@@ -176,7 +159,6 @@ export default function RegisterForm() {
                             </div>
                         </div>
 
-                        {/* Confirmar Contraseña */}
                         <div className="space-y-2">
                             <Label htmlFor="confirmPassword" className="text-sm font-medium" style={{ color: "#523961" }}>
                                 <Lock className="w-4 h-4 inline mr-2" />
@@ -208,8 +190,6 @@ export default function RegisterForm() {
                             </div>
                         </div>
 
-
-                        {/* Botón de Registro */}
                         <Button
                             type="submit"
                             className="w-full text-white font-semibold py-3 hover:opacity-90 transition-opacity"
@@ -219,7 +199,6 @@ export default function RegisterForm() {
                             <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
 
-                        {/* Enlace a Login */}
                         <div className="text-center pt-4">
                             <p className="text-sm" style={{ color: "#523961" }}>
                                 ¿Ya tienes una cuenta?{" "}

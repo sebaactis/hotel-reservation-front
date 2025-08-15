@@ -10,11 +10,13 @@ export class HttpBaseAPI {
             credentials: credentialsInclude === "include" ? "include" : "omit"
         });
 
+        const response = await res.json();
+
         if (!res.ok) {
-            throw new Error(res.statusText);
+            throw new Error(response.error);
         }
 
-        return res.json();
+        return response;
     }
 
     httpPost = async <T>(endpoint: string, params?: URLSearchParams, credentialsInclude?: string, body: unknown): Promise<T> => {
@@ -25,11 +27,13 @@ export class HttpBaseAPI {
             body: JSON.stringify(body)
         });
 
+        const response = await res.json();
+
         if (!res.ok) {
-            throw new Error(res.statusText);
+            throw new Error(response.error);
         }
 
-        return res.json();
+        return response;
     }
 
 }

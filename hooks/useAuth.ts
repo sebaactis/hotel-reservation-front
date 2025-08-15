@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
-import authApi from "@/services/auth/auth.service";
+import authApi from "@/services/auth/auth.service.ts";
 
 type UserType = {
     email: string;
@@ -37,7 +37,7 @@ export const useAuth = () => {
     };
 
     const logout = async () => {
-        await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+        await authApi.logout();
         setUser(null);
         setIsAuthenticated(false);
         toast.success("Logout exitoso")

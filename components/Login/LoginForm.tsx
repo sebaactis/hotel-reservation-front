@@ -36,7 +36,7 @@ export default function LoginForm() {
             window.location.href = "/";
 
         } catch (e) {
-            toast.error("Error al intentar el registro: "
+            toast.error("Error al intentar el login: "
                 + e.message);
         }
     }

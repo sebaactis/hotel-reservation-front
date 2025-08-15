@@ -9,5 +9,5 @@ class HttpExternalAPI extends HttpBaseAPI {
 
 }
 
-const HttpExternalApi = new HttpExternalAPI();
-export default HttpExternalApi;
+const httpExternalApi = new HttpExternalAPI();
+export default httpExternalApi;
