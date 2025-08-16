@@ -1,13 +1,8 @@
 // stores/favoritesStore.ts
+import favoriteApi from "@/services/favorite/favorite.service"
 import { Hotel } from "@/types"
 import { create } from "zustand"
 
-type FavoriteDto = {
-  id: number
-  hotel: Hotel
-  userId: number
-  createdAt: string;
-}
 
 type FavoritesState = {
   favoriteHotelIds: number[]
@@ -25,22 +20,12 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
 
   fetchFavorites: async (userId) => {
     set({ loading: true })
-    
+
     try {
-      const res = await fetch(`http://localhost:8080/api/v1/favorite/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+      const res = await favoriteApi.getFavorites(userId);
+      set({ favoriteHotelIds: res.ids })
+      set({ favoriteHotels: res.hotels })
 
-      const json = await res.json()
-
-      if (res.ok) {
-        const ids = json.entity.map((fav: FavoriteDto) => fav.hotelDto.id)
-        const hotels = json.entity.map((fav: FavoriteDto) => fav.hotelDto)
-        set({ favoriteHotelIds: ids })
-        set({ favoriteHotels: hotels })
-      }
     } catch (error) {
       console.error("Error fetching favorites:", error)
     } finally {

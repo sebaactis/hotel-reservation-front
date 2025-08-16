@@ -5,14 +5,14 @@ import { Heart, MapPin, Star, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useFavoritesStore } from "@/stores/favoritesStore"
-import { useAuth } from "@/hooks/useAuth"
 import { Hotel } from "@/types"
 import { useRouter } from "next/navigation"
+import { useAuthStore } from "@/stores/authStore"
 
 export default function FavoriteComponent() {
 
     const router = useRouter();
-    const { user } = useAuth();
+    const { user } = useAuthStore();
     const { fetchFavorites, favoriteHotels, toggleFavorite } = useFavoritesStore();
 
     const removeFromFavorites = async (hotelId: number) => {

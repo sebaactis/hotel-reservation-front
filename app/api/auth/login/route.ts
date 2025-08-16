@@ -70,6 +70,7 @@ export async function POST(req: Request) {
             lastName,
             role,
             userId
-        }
+        },
+        authenticated: true
     }, { status: 200 })
 }

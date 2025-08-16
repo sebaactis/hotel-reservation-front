@@ -9,20 +9,18 @@ import {
     User
 } from "lucide-react"
 import { Hotel } from '@/types'
-import { useAuth } from '@/hooks/useAuth'
 import { toast } from 'sonner';
 import { colorsAux } from '@/styles/colorsAux';
+import { useAuthStore } from '@/stores/authStore';
 
 const HotelRating = ({ hotel }: Hotel) => {
 
-    const { isAuthenticated, userId, token, email } = useAuth();
+    const { isAuthenticated, user: userData } = useAuthStore();
 
     const [reviews, setReviews] = useState([])
     const [userRating, setUserRating] = useState(0)
     const [userComment, setUserComment] = useState("")
     const [showReviewForm, setShowReviewForm] = useState(false)
-
-    console.log(reviews)
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("es-ES", {
@@ -75,7 +73,7 @@ const HotelRating = ({ hotel }: Hotel) => {
 
         try {
 
-            const submit = await fetch(`http://localhost:8080/api/v1/rating/${userId}/${hotel.id}`, {
+            const submit = await fetch(`http://localhost:8080/api/v1/rating/${userData?.userId}/${hotel.id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -91,7 +89,7 @@ const HotelRating = ({ hotel }: Hotel) => {
                     [{
                         ...newReview,
                         user: {
-                            email
+                            userData
                         },
                         date: Date.now()
                     },

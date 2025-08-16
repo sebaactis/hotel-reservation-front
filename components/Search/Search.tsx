@@ -28,11 +28,9 @@ const popularLocations = [
 ]
 
 export default function SearchComponent() {
-
   const router = useRouter();
 
   const [location, setLocation] = useState("")
-
   const [dateRange, setDateRange] = useState<{
     from: Date | undefined
     to: Date | undefined
@@ -45,8 +43,6 @@ export default function SearchComponent() {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [calendarOpen, setCalendarOpen] = useState(false)
   const suggestionsRef = useRef<HTMLDivElement>(null)
-
-  console.log(dateRange);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -102,7 +98,6 @@ export default function SearchComponent() {
 
   }
 
-  // Formatear fechas para mostrar
   const formatDateRange = () => {
     if (!dateRange.from) return <p style={{ color: colorsAux.darkprimary }}>Seleccionar fechas</p>
 
@@ -133,10 +128,9 @@ export default function SearchComponent() {
           </p>
         </div>
 
-        {/* Bloque de búsqueda */}
         <Card className="p-6 md:p-8 shadow-lg border-0 max-w-4xl mx-auto" style={{ backgroundColor: "#BAAFC4" }}>
           <div className="flex flex-col gap-6">
-            {/* Campo de ubicación con autocompletado */}
+
             <div className="relative">
               <label htmlFor="location" className="block text-sm font-medium mb-2" style={{ color: "#3B234A" }}>
                 <MapPin className="w-4 h-4 inline mr-1" />
@@ -171,7 +165,6 @@ export default function SearchComponent() {
                 )}
               </div>
 
-              {/* Sugerencias de autocompletado */}
               {showSuggestions && suggestions.length > 0 && (
                 <div
                   ref={suggestionsRef}
@@ -192,7 +185,6 @@ export default function SearchComponent() {
               )}
             </div>
 
-            {/* Selector de rango de fechas */}
             <div>
               <label htmlFor="dates" className="block text-sm font-medium mb-2" style={{ color: "#3B234A" }}>
                 <CalendarIcon className="w-4 h-4 inline mr-1" />
@@ -230,7 +222,6 @@ export default function SearchComponent() {
               </Popover>
             </div>
 
-            {/* Botones de acción */}
             <div className="flex flex-col sm:flex-row gap-4 pt-2">
               <Button
                 className="flex-1 text-white font-semibold py-6 hover:opacity-90 transition-opacity text-base"

@@ -37,3 +37,22 @@ export interface RegisterData {
   password: string;
   confirmPassword: string;
 }
+
+export interface UserLoginResponse {
+  user: {
+    email: string;
+    userId: number;
+    name: string;
+    lastName: string;
+    role: string;
+  };
+  authenticated: boolean;
+
+}
+
+export type FavoriteDto = {
+  id: number
+  hotel: Hotel
+  userId: number
+  createdAt: string;
+}

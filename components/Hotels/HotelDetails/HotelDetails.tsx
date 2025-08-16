@@ -7,7 +7,7 @@ import { Hotel } from '@/types';
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useFavoritesStore } from '@/stores/favoritesStore';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuthStore } from '@/stores/authStore';
 
 import Link from "next/link"
 
@@ -31,10 +31,11 @@ import { colorsAux } from '@/styles/colorsAux';
 import HotelShare from './HotelShare';
 
 
+
 const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
 
     const router = useRouter();
-    const { token, userId, isAuthenticated } = useAuth();
+    const { user, isAuthenticated } = useAuthStore();
     const { fetchFavorites, favoriteHotelIds, toggleFavorite } = useFavoritesStore();
 
     const [showShareModal, setShowShareModal] = useState(false)
@@ -49,10 +50,10 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
 
     useEffect(() => {
 
-        if (!userId) return;
-        fetchFavorites(userId);
+        if (user?.userId) return;
+        fetchFavorites(user?.userId);
 
-    }, [userId])
+    }, [user?.userId])
 
     return (
         <div className="min-h-screen" style={{ backgroundColor: "#D4C7BF" }}>
@@ -82,7 +83,7 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
                                 :
                                 <div className='flex items-center gap-3 mb-2'>
                                     <h1 className="text-3xl font-bold text-white">{hotel.name}</h1>
-                                    {isAuthenticated && <button onClick={() => toggleFavorite(userId, hotel.id)}>{isFavoriteHotel(hotel.id) ? <Heart className='fill-red-500 text-red-500' /> : <Heart />}</button>}
+                                    {isAuthenticated && <button onClick={() => toggleFavorite(user?.userId, hotel.id)}>{isFavoriteHotel(hotel.id) ? <Heart className='fill-red-500 text-red-500' /> : <Heart />}</button>}
                                 </div>
                             }
 

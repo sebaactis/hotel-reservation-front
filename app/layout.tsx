@@ -10,6 +10,7 @@ import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/Navbar/Navbar";
 import { Toaster } from "sonner";
 import Footer from "@/components/Footer/Footer";
+import AuthBootstrap from "@/components/Auth/AuthBootstrap";
 
 export const metadata: Metadata = {
   title: {
@@ -34,6 +35,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html suppressHydrationWarning lang="en">
       <head />
@@ -47,6 +49,7 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <div className="relative flex flex-col h-screen">
+            <AuthBootstrap />
             <Navbar />
             <main className="container mx-auto max-w-full flex-grow bg-[#d4c7bf]">
               {children}

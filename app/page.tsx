@@ -1,14 +1,15 @@
 "use client"
 
 import Hotels from "@/components/Hotels/Hotels";
+import HotelsServerContainer from "@/components/Hotels/HotelsServerContainer";
 import Recommendations from "@/components/Recommendations/Recommendations";
 import Search from "@/components/Search/Search";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/stores/authStore";
 import { colorsAux } from "@/styles/colorsAux";
 
 export default function Home() {
 
-  const { isAuthenticated, email } = useAuth();
+  const { isAuthenticated, user } = useAuthStore();
 
   return (
     <section className="flex flex-col gap-4">
@@ -17,12 +18,12 @@ export default function Home() {
           className="text-2xl italic"
           style={{ color: colorsAux.primary }}
         >
-          Bienvenido nuevamente: <span className="font-bold">{email}</span>
+          Bienvenido nuevamente: <span className="font-bold">{user?.email}</span>
         </p>
       </div>}
 
       <Search />
-      <Hotels />
+      <HotelsServerContainer />
       <Recommendations />
     </section>
   );

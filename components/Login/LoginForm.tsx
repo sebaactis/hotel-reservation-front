@@ -11,10 +11,11 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "sonner"
 import { useAuth } from "@/hooks/useAuth"
+import { useAuthStore } from "@/stores/authStore"
 
 export default function LoginForm() {
 
-    const { login } = useAuth();
+    const { login } = useAuthStore();
 
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState({

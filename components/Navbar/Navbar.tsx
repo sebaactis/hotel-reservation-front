@@ -19,12 +19,11 @@ import { Logo } from "@/components/icons";
 import { colorsAux } from "@/styles/colorsAux";
 import { useAuth } from "@/hooks/useAuth";
 import { UserNavbarItem } from "./UserNavbarItem";
-
-
+import { useAuthStore } from "@/stores/authStore";
 
 export const Navbar = () => {
 
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, loading, logout } = useAuthStore();
 
   return (
     <HeroUINavbar maxWidth="2xl" position="sticky" className="bg-[#523961]">
