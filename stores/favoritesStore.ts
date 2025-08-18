@@ -1,8 +1,8 @@
-// stores/favoritesStore.ts
+
 import favoriteApi from "@/services/favorite/favorite.service"
 import { Hotel } from "@/types"
+import { toast } from "sonner"
 import { create } from "zustand"
-
 
 type FavoritesState = {
   favoriteHotelIds: number[]
@@ -27,7 +27,7 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
       set({ favoriteHotels: res.hotels })
 
     } catch (error) {
-      console.error("Error fetching favorites:", error)
+      console.log(error)
     } finally {
       set({ loading: false })
     }
@@ -39,24 +39,15 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
 
     try {
       const method = isFav ? "DELETE" : "POST"
-      const res = await fetch(`http://localhost:8080/api/v1/favorite/${userId}/${hotelId}`, {
-        method,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+      const res = isFav ? await favoriteApi.deleteFavorite(userId, hotelId) : await favoriteApi.createFavorite(userId, hotelId)
+
+      set({
+        favoriteHotelIds: isFav
+          ? favoriteHotelIds.filter((id) => id !== hotelId)
+          : [...favoriteHotelIds, hotelId],
+        favoriteHotels: favoriteHotels.filter((hotel) => hotel.id !== hotelId)
       })
 
-      if (res.ok) {
-        set({
-          favoriteHotelIds: isFav
-            ? favoriteHotelIds.filter((id) => id !== hotelId)
-            : [...favoriteHotelIds, hotelId],
-          favoriteHotels: favoriteHotels.filter((hotel) => hotel.id !== hotelId)
-        })
-      } else {
-        const err = await res.json()
-        console.error(err.message)
-      }
     } catch (error) {
       console.error("Error toggling favorite", error)
     }

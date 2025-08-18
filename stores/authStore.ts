@@ -2,7 +2,7 @@ import authApi from "@/services/auth/auth.service";
 import { UserLoginResponse } from "@/types";
 import { create } from "zustand"
 
-type UserType = {
+export type UserType = {
     email: string;
     name: string;
     lastName: string;

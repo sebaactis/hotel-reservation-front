@@ -23,14 +23,16 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { useAuth } from "@/hooks/useAuth"
+
+import hotelBookingApi from "@/services/hotelBooking/hotelBooking.service"
+import { useAuthStore } from "@/stores/authStore"
 
 
 export default function MyReservationPage() {
-    const { userId, isAuthenticated } = useAuth();
+
+    const { user, isAuthenticated } = useAuthStore();
     const [reservations, setReservations] = useState([])
 
-    // Formatear fecha
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString("es-ES", {
             day: "numeric",
@@ -39,7 +41,6 @@ export default function MyReservationPage() {
         })
     }
 
-    // Obtener días hasta la reserva
     const getDaysUntilReservation = (checkInDate: string) => {
         const today = new Date()
         const checkIn = new Date(checkInDate)
@@ -49,22 +50,19 @@ export default function MyReservationPage() {
     }
 
     useEffect(() => {
-        if (!userId) return;
+        if (!user?.userId) return;
         const fetchReservations = async () => {
             try {
-                const request = await fetch(`http://localhost:8080/api/v1/hotelBooking/user/${userId}`)
-                const response = await request.json();
+                const request = await hotelBookingApi.getHotelBooking(user?.userId);
+                setReservations(request.entity);
 
-                if (request.ok) {
-                    setReservations(response.entity);
-                }
             } catch (error) {
                 console.log(error)
             }
         }
 
         fetchReservations();
-    }, [userId])
+    }, [user?.userId])
 
     return (
         <div className="min-h-screen" style={{ backgroundColor: "#D4C7BF" }}>
@@ -82,7 +80,6 @@ export default function MyReservationPage() {
 
             <div className="max-w-6xl mx-auto p-6 space-y-6">
 
-                {/* Lista de Reservas */}
                 <div className="space-y-4">
                     {reservations.length > 0 && isAuthenticated ? (
                         reservations.map((reservation) => {

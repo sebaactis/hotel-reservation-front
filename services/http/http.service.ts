@@ -36,6 +36,23 @@ export class HttpBaseAPI {
         return response;
     }
 
+    httpDelete = async <T>(endpoint: string, params?: URLSearchParams, credentialsInclude?: string, body: unknown): Promise<T> => {
+        const res = await fetch(`${this.api_url}${endpoint}${params ? `?${params}` : ''}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            credentials: credentialsInclude,
+            body: JSON.stringify(body)
+        });
+
+        const response = await res.json();
+
+        if (!res.ok) {
+            throw new Error(response.error);
+        }
+
+        return response;
+    }
+
 }
 
 

@@ -10,7 +10,7 @@ export async function GET(req: Request, { params }: { params: { userId: string }
 
     const favoritesRequest = await fetch(`http://localhost:8080/api/v1/favorite/${userId}`, {
         headers: {
-            Authorization: `Bearer ${token.value}`,
+            Authorization: `Bearer ${token?.value}`
         }
     })
 

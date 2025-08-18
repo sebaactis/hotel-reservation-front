@@ -49,8 +49,7 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
     }
 
     useEffect(() => {
-
-        if (user?.userId) return;
+        if (!user?.userId) return;
         fetchFavorites(user?.userId);
 
     }, [user?.userId])

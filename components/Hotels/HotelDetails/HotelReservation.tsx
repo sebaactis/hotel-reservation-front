@@ -27,8 +27,9 @@ import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Hotel } from "@/types"
-import { useAuth } from "@/hooks/useAuth"
 import { toast } from "sonner"
+import { useAuthStore } from "@/stores/authStore"
+import hotelBookingApi from "@/services/hotelBooking/hotelBooking.service"
 
 
 export default function HotelReservation() {
@@ -36,7 +37,8 @@ export default function HotelReservation() {
     const { id } = useParams();
 
     const [hotel, setHotel] = useState<Hotel>();
-    const { isAuthenticated, userId, name, lastName, email, token } = useAuth();
+    const { isAuthenticated, user } = useAuthStore();
+    const userId = user?.userId;
 
     const [checkIn, setCheckIn] = useState<Date | undefined>(undefined)
     const [checkOut, setCheckOut] = useState<Date | undefined>(undefined)
@@ -124,7 +126,6 @@ export default function HotelReservation() {
     const handleSubmit = async () => {
         setIsSubmitting(true)
 
-
         try {
             const body = {
                 hotelId: hotel?.id,
@@ -136,26 +137,14 @@ export default function HotelReservation() {
                 nights: calculateNights(),
             }
 
-            const request = await fetch("http://localhost:8080/api/v1/hotelBooking", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify(body)
-            })
+            const request = await hotelBookingApi.createHotelBooking(body);
+            toast.success("Reserva realizada con éxito")
+            setTimeout(() => {
+                router.push('/reservation/confirmation?success=true');
+            }, 1000)
 
-            if (request.ok) {
-                toast.success("Reserva realizada con éxito")
-                setTimeout(() => {
-                    router.push('/reservation/confirmation?success=true');
-                }, 1000)
-
-            } else {
-                toast.error("Error al procesar la reserva")
-            }
         } catch (error) {
-            setErrors(["Error al procesar la reserva. Inténtalo nuevamente."])
+            toast.error(error.message)
         } finally {
             setIsSubmitting(false)
         }
@@ -200,7 +189,6 @@ export default function HotelReservation() {
 
     return (
         <div className="min-h-screen" style={{ backgroundColor: "#D4C7BF" }}>
-            {/* Header */}
             <div className="p-6" style={{ backgroundColor: "#3B234A" }}>
                 <div className="max-w-6xl mx-auto">
                     <Button
@@ -219,7 +207,7 @@ export default function HotelReservation() {
                         </div>
                         <div className="text-right text-white">
                             <div className="text-sm opacity-75">Usuario:</div>
-                            <div className="font-semibold">{name + " " + lastName}</div>
+                            <div className="font-semibold">{user?.name + " " + user?.lastName}</div>
                         </div>
                     </div>
                 </div>
@@ -227,9 +215,8 @@ export default function HotelReservation() {
 
             <div className="max-w-6xl mx-auto p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Formulario de Reserva */}
+
                     <div className="lg:col-span-2 space-y-6">
-                        {/* Información del Hotel */}
                         <Card className="shadow-lg border-0">
                             <CardHeader style={{ backgroundColor: "#C3BBC9" }}>
                                 <CardTitle style={{ color: "#3B234A" }}>Hotel Seleccionado</CardTitle>
@@ -269,7 +256,6 @@ export default function HotelReservation() {
                             </CardContent>
                         </Card>
 
-                        {/* Selección de Fechas */}
                         <Card className="shadow-lg border-0">
                             <CardHeader style={{ backgroundColor: "#C3BBC9" }}>
                                 <CardTitle style={{ color: "#3B234A" }}>Fechas de Estadía y Huéspedes</CardTitle>
@@ -375,7 +361,6 @@ export default function HotelReservation() {
                             </CardContent>
                         </Card>
 
-                        {/* Información del Huésped */}
                         <Card className="shadow-lg border-0">
                             <CardHeader style={{ backgroundColor: "#C3BBC9" }}>
                                 <CardTitle style={{ color: "#3B234A" }}>Información del Huésped</CardTitle>
@@ -387,7 +372,7 @@ export default function HotelReservation() {
                                             Nombre
                                         </Label>
                                         <Label htmlFor="firstName" className="text-sm font-medium" style={{ color: "#523961" }}>
-                                            {name}
+                                            {user?.name}
                                         </Label>
                                     </div>
 
@@ -396,7 +381,7 @@ export default function HotelReservation() {
                                             Apellido
                                         </Label>
                                         <Label htmlFor="firstName" className="text-sm font-medium" style={{ color: "#523961" }}>
-                                            {lastName}
+                                            {user?.lastName}
                                         </Label>
                                     </div>
 
@@ -405,7 +390,7 @@ export default function HotelReservation() {
                                             Email
                                         </Label>
                                         <Label htmlFor="firstName" className="text-sm font-medium" style={{ color: "#523961" }}>
-                                            {email}
+                                            {user?.email}
                                         </Label>
                                     </div>
 
@@ -413,8 +398,6 @@ export default function HotelReservation() {
 
                             </CardContent>
                         </Card>
-
-                        {/* Errores */}
                         {errors.length > 0 && (
                             <div>
                                 <AlertCircle className="h-4 w-4" />
@@ -429,7 +412,6 @@ export default function HotelReservation() {
                         )}
                     </div>
 
-                    {/* Resumen de Reserva */}
                     <div className="space-y-6">
                         <Card className="shadow-lg border-0 sticky top-6">
                             <CardHeader style={{ backgroundColor: "#3B234A" }}>
