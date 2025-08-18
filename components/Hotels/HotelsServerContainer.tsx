@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Hotels from './Hotels'
 import { Hotel } from '@/types';
+import hotelApi from '@/services/hotel/hotel.service';
 
 const HotelsServerContainer = () => {
 
@@ -15,8 +16,7 @@ const HotelsServerContainer = () => {
         const fetchHotels = async () => {
 
             try {
-                const request = await fetch(`${baseUrl}page=${page}&random=true` + (seed ? `&seed=${seed}` : ""))
-                const data = await request.json();
+                const data = await hotelApi.getHotels(page, seed);
 
                 setHotels(data.entity.page.content);
                 setPage(data.entity.page.pageable.pageNumber);
