@@ -1,5 +1,6 @@
-import { HotelResponse } from "@/types/hotel";
+import { HotelEditDto, HotelResponse } from "@/types/hotel";
 import httpExternalApi from "../http/httpExternal.service";
+import httpInternalApi from "../http/httpInternal.service";
 
 class HotelAPI {
     getHotels = async (page: number, seed?: string) => {
@@ -12,6 +13,9 @@ class HotelAPI {
 
         return httpExternalApi.httpGet<HotelResponse>("/hotel", params);
     }
+
+    editHotel = async (hotelId: number, hotelData: HotelEditDto) => httpInternalApi.httpPut(`/hotel/${hotelId}`, undefined, "include", hotelData)
+    deleteHotel = async (hotelId: number) => httpInternalApi.httpDelete(`/hotel/${hotelId}`)
 }
 
 const hotelApi = new HotelAPI();

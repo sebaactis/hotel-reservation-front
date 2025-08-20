@@ -13,7 +13,7 @@ export class HttpBaseAPI {
         const response = await res.json();
 
         if (!res.ok) {
-            throw new Error(response.error);
+            throw new Error(response.message);
         }
 
         return response;
@@ -30,7 +30,24 @@ export class HttpBaseAPI {
         const response = await res.json();
 
         if (!res.ok) {
-            throw new Error(response.error);
+            throw new Error(response.message);
+        }
+
+        return response;
+    }
+
+    httpPut = async <T>(endpoint: string, params?: URLSearchParams, credentialsInclude?: string, body: unknown): Promise<T> => {
+        const res = await fetch(`${this.api_url}${endpoint}${params ? `?${params}` : ''}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: credentialsInclude,
+            body: JSON.stringify(body)
+        });
+
+        const response = await res.json();
+
+        if (!res.ok) {
+            throw new Error(response.message);
         }
 
         return response;
@@ -47,7 +64,7 @@ export class HttpBaseAPI {
         const response = await res.json();
 
         if (!res.ok) {
-            throw new Error(response.error);
+            throw new Error(response.message);
         }
 
         return response;

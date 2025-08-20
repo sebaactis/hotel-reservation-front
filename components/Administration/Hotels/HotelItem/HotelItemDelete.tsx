@@ -13,26 +13,18 @@ import { Edit, Eye, MapPin, Star, Trash2, AlertCircle, AlertTriangle, Wifi, Car,
 import { Label } from "@/components/ui/label"
 import { Hotel } from "@/types"
 import { toast } from "sonner"
-import { useAuth } from "@/hooks/useAuth"
+import hotelApi from "@/services/hotel/hotel.service"
 
 const HotelItemDelete = ({ hotel }: Hotel) => {
 
-    const { token } = useAuth();
 
     const handleDelete = async (hotelId: number) => {
-        const request = await fetch(`http://localhost:8080/api/v1/hotel/${hotelId}`, {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        })
-
-        if (request.ok) {
-            toast.success("Hotel eliminado correctamente")
-        } else {
-            toast.error("No se pudo eliminar el hotel")
+        try {
+            const request = await hotelApi.deleteHotel(hotelId)
+            toast.success("Hotel eliminado exitosamente")
+        } catch (error) {
+            toast.error(error.message)
         }
-
     }
 
     return (

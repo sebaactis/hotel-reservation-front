@@ -19,6 +19,8 @@ import { Edit, AlertCircle, Wifi, Car, Coffee, Waves, Utensils, Dumbbell, Shirt 
 import { toast } from "sonner"
 import { useAuth } from "@/hooks/useAuth"
 import { Categorie, Hotel } from "@/types"
+import { HotelEditDto } from "@/types/hotel"
+import hotelApi from "@/services/hotel/hotel.service"
 
 interface Props {
     hotel: Hotel;
@@ -28,8 +30,7 @@ interface Props {
 
 const HotelItemEdit = ({ hotel, categories }: Props) => {
 
-    const { token } = useAuth();
-    const [hotelData, setHotelData] = useState([])
+    const [hotelData, setHotelData] = useState<HotelEditDto>([])
     const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
     const [rating, setRating] = useState(0);
 
@@ -72,22 +73,15 @@ const HotelItemEdit = ({ hotel, categories }: Props) => {
             features: selectedAmenities
         }
 
-        const submit = await fetch(`http://localhost:8080/api/v1/hotel/${hotel.id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify(editHotel),
-        })
+        try {
+            const request = await hotelApi.editHotel(hotel.id, editHotel)
 
-        if (submit.ok) {
             toast.success("Hotel editado exitosamente")
             setSelectedAmenities([])
             setRating(0)
 
-        } else {
-            toast.error("Error al intentar editar hotel")
+        } catch (error) {
+            toast.error(error.message)
         }
     }
 

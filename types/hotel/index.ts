@@ -51,6 +51,20 @@ export interface Hotel {
     images: Image[];
 }
 
+export interface HotelEditDto {
+    name: string;
+    location: string;
+    features: string[];
+    description: string;
+    price: number;
+    score: number;
+    phone: number;
+    policies: Policy[];
+    email: string;
+    category: string;
+    images: Image[];
+}
+
 export interface HotelWithFeatures {
     id: number;
     name: string;

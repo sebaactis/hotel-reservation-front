@@ -19,6 +19,7 @@ import { useEffect, useState } from "react"
 import { Plus, Search, MapPin, Edit, Trash2, Eye, MoreVertical, Star, AlertCircle } from "lucide-react"
 import { Categorie, Hotel } from "@/types"
 import HotelItem from "./HotelItem/HotelItem"
+import categorieAPI from "@/services/categorie/categorie.service"
 
 interface Props {
     filteredHotels: Hotel[];
@@ -29,21 +30,9 @@ const HotelsList = ({ filteredHotels, searchTerm }: Props) => {
 
     const [categories, setCategories] = useState<Categorie[]>();
 
-    const handleEdit = (hotelId: number) => {
-        console.log("Editar hotel:", hotelId)
-
-    }
-
-    const handleView = (hotelId: number) => {
-        console.log("Ver detalles hotel:", hotelId)
-
-    }
-
     useEffect(() => {
         const fetchCategories = async () => {
-            const request = await fetch("http://localhost:8080/api/v1/category")
-            const data = await request.json();
-
+            const data = await categorieAPI.getCategories();
             setCategories(data.entity);
         }
 
