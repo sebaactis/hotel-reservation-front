@@ -12,6 +12,7 @@ import { Hotel } from '@/types'
 import { toast } from 'sonner';
 import { colorsAux } from '@/styles/colorsAux';
 import { useAuthStore } from '@/stores/authStore';
+import hotelRatingApi from '@/services/hotelRating/hotelRating.service';
 
 const HotelRating = ({ hotel }: Hotel) => {
 
@@ -32,15 +33,13 @@ const HotelRating = ({ hotel }: Hotel) => {
 
     useEffect(() => {
         if (!hotel.id) return;
+
         const getRatings = async () => {
-            const request = await fetch(`http://localhost:8080/api/v1/rating/${hotel.id}`)
-            const response = await request.json();
-
-            console.log(response);
-
-            if (request.ok) {
-                setReviews(response.entity ?? [])
-
+            try {
+                const request = await hotelRatingApi.getRating(hotel.id);
+                setReviews(request.entity ?? [])
+            } catch (error) {
+                toast.error(error.message)
             }
         }
 
@@ -73,40 +72,26 @@ const HotelRating = ({ hotel }: Hotel) => {
 
         try {
 
-            const submit = await fetch(`http://localhost:8080/api/v1/rating/${userData?.userId}/${hotel.id}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify(newReview)
-            })
+            const submit = await hotelRatingApi.createRating(userData?.userId, hotel.id, newReview)
 
-            const response = await submit.json();
-
-            if (submit.ok) {
-                setReviews(
-                    [{
-                        ...newReview,
-                        user: {
-                            userData
-                        },
-                        date: Date.now()
+            setReviews(
+                [{
+                    ...newReview,
+                    user: {
+                        userData
                     },
-                    ...reviews]
-                )
-                setUserRating(0)
-                setUserComment("")
-                setShowReviewForm(false)
+                    date: Date.now()
+                },
+                ...reviews]
+            )
+            setUserRating(0)
+            setUserComment("")
+            setShowReviewForm(false)
 
-                toast.success("Reseña agregada correctamente")
-            }
-
+            toast.success("Reseña agregada correctamente")
         } catch (error) {
             toast.error(error.message)
         }
-
-
     }
 
     return (
@@ -119,7 +104,6 @@ const HotelRating = ({ hotel }: Hotel) => {
             </CardHeader>
             <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
 
-                {/* Resumen de puntuación */}
                 <div className="mb-6 p-4 rounded-lg" style={{ backgroundColor: "#BAAFC4" }}>
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-4">

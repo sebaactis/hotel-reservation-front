@@ -5,7 +5,7 @@ export async function GET(
     _req: Request,
     { params }: { params: { userId: string } }
 ) {
-    const { userId } = params;
+    const { userId } = await params;
 
     const res = await fetch(`http://localhost:8080/api/v1/hotelBooking/user/${userId}`);
     const data = await res.json();

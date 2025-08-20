@@ -94,7 +94,11 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
 
                             <div className="flex items-center gap-4">
                                 <div className="flex items-center justify-center w-16 h-16 rounded-full text-white font-bold text-xl border-2 border-white">
-                                    {!hotel.score ? <HotelDetailsSkeletonRating /> : <span>{hotel.score.toFixed(1)} </span>}
+                                    {!hotel.score && hotel.score != 0 ?
+                                        <HotelDetailsSkeletonRating /> :
+                                        hotel.score == 0 ?
+                                            <span>-</span> :
+                                            <span>{hotel.score.toFixed(1)} </span>}
                                 </div>
                                 <div className="text-white">
                                     <p className="text-lg font-semibold">{hotel.score > 6 ? "Excelente" : "Normal"}</p>

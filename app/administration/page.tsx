@@ -3,6 +3,7 @@
 
 import IndexSkeleton from "@/components/Administration/Index/IndexSkeleton";
 import { useAuth } from "@/hooks/useAuth"
+import { useAuthStore } from "@/stores/authStore";
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -10,17 +11,17 @@ import { useEffect } from "react";
 const AdministrationHome = () => {
 
     const router = useRouter();
-    const { role, isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuthStore();
 
     useEffect(() => {
 
-        if (!role) return;
-        if (!isAuthenticated || role.toLowerCase() !== "admin") {
+        if (!user?.role) return;
+        if (!isAuthenticated || user?.role.toLowerCase() !== "admin") {
             router.push("/")
         }
-    }, [role, isAuthenticated])
+    }, [user?.role, isAuthenticated])
 
-    if (!isAuthenticated || role.toLowerCase() !== "admin") return (
+    if (!isAuthenticated || user?.role.toLowerCase() !== "admin") return (
         <div className="flex flex-col justify-center items-center my-20">
             <IndexSkeleton width={"100%"} height={"50rem"} />
         </div>)
