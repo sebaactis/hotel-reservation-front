@@ -7,13 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useAuth } from "@/hooks/useAuth"
 import { toast } from "sonner"
 import { colorsAux } from "@/styles/colorsAux"
+import roleApi from "@/services/role/role.service"
 
 export default function UserRoles() {
-
-    const { token } = useAuth();
 
     const [users, setUsers] = useState([])
 
@@ -29,33 +27,19 @@ export default function UserRoles() {
         return availableRoles.find((role) => role.id === roleId);
     }
 
-    const handleRoleChange = (userEmail: string, newRole: string) => {
-        const postRoles = async () => {
+    const handleRoleChange = async (userEmail: string, newRole: string) => {
+        try {
+            const request = await roleApi.editUserRole({
+                email: userEmail,
+                role: newRole
+            })
 
-            try {
-                const request = await fetch(`http://localhost:8080/api/v1/user/updateRole`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ email: userEmail, role: newRole })
-                })
+            setUsers((prevUsers) => prevUsers.map((user) => (user.email === userEmail ? { ...user, role: newRole } : user)))
+            toast.success(`Se actualizo el usuario: ${userEmail}. Su nuevo rol es: ${newRole}`)
 
-                const response = await request.json();
-
-                if (response.statusCode == "200 OK") {
-                    setUsers((prevUsers) => prevUsers.map((user) => (user.email === userEmail ? { ...user, role: newRole } : user)))
-                    toast.success(`Se actualizo el usuario: ${userEmail}. Su nuevo rol es: ${newRole}`)
-                    return;
-                }
-
-            } catch (error) {
-                toast.error(`No se pudo actualizar el usuario: ${e.message}`)
-            }
+        } catch (error) {
+            toast.error(`No se pudo actualizar el usuario: ${error.message}`)
         }
-
-        postRoles();
     }
 
     const filteredUsers = users.filter((user) => {
@@ -76,27 +60,13 @@ export default function UserRoles() {
     }
 
     useEffect(() => {
-
-        if (!token) return;
-
         const fetchUsers = async () => {
-            const request = await fetch("http://localhost:8080/api/v1/user", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-
-            const data = await request.json();
+            const data = await roleApi.getUsersRole();
             setUsers(data.entity)
-
         }
 
         fetchUsers();
-    }, [token])
-
-    console.log(users);
+    }, [])
 
     return (
         <div className="min-h-screen p-6" style={{ backgroundColor: "#D4C7BF" }}>

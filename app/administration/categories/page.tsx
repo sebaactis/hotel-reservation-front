@@ -39,16 +39,17 @@ import { Categorie } from "@/types"
 import { colorsAux } from "@/styles/colorsAux"
 import { useAuth } from "@/hooks/useAuth"
 import { toast } from "sonner"
+import categorieAPI from "@/services/categorie/categorie.service"
 
 export default function CategoriesEditPage() {
-
-    const { token } = useAuth();
 
     const [searchTerm, setSearchTerm] = useState("")
     const [filterStatus, setFilterStatus] = useState("all")
 
     const [categories, setCategories] = useState<Categorie[]>([]);
     const [categorieDescription, setCategorieDescription] = useState<string>("");
+
+    const totalProducts = categories.reduce((sum, cat) => sum + cat.productCount, 0)
 
     const filteredCategories = categories.filter((category) => {
         const matchesSearch =
@@ -58,22 +59,10 @@ export default function CategoriesEditPage() {
     })
 
     const handleEdit = async (categoryId: number, description: string) => {
-
         try {
-
-            const requestEdit = await fetch(`http://localhost:8080/api/v1/category/${categoryId}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ description: categorieDescription })
-            })
-
-            if (requestEdit.ok) {
-                toast.success("Categoría editada exitosamente")
-                return;
-            }
+            const requestEdit = await categorieAPI.editCategorie(categoryId, description)
+            toast.success("Categoría editada exitosamente")
+            return;
 
         } catch (error) {
             toast.error(error.message)
@@ -84,19 +73,10 @@ export default function CategoriesEditPage() {
     const handleDelete = async (categoryId: number) => {
         try {
 
-            const requestDelete = await fetch(`http://localhost:8080/api/v1/category/${categoryId}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-
-            if (requestDelete.ok) {
-                toast.success("Categoría eliminada exitosamente")
-                setCategories(categories.filter((cat) => cat.id !== categoryId))
-                return;
-            }
+            const requestDelete = await categorieAPI.deleteCategorie(categoryId)
+            toast.success("Categoría eliminada exitosamente")
+            setCategories(categories.filter((cat) => cat.id !== categoryId))
+            return;
 
         } catch (error) {
             toast.error(error.message)
@@ -105,35 +85,19 @@ export default function CategoriesEditPage() {
 
     const handleAddCategory = async () => {
         try {
-
-            const requestCreate = await fetch(`http://localhost:8080/api/v1/category`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({ description: categorieDescription })
-            })
-
-            if (requestCreate.ok) {
-                toast.success("Categoría creada exitosamente")
-                return;
-            }
+            const requestCreate = await categorieAPI.createCategorie(categorieDescription)
+            toast.success("Categoría creada exitosamente")
+            return;
 
         } catch (error) {
             toast.error(error.message)
         }
     }
 
-
-    const totalProducts = categories.reduce((sum, cat) => sum + cat.productCount, 0)
-
     useEffect(() => {
         const fetchCategories = async () => {
-            const requestCategories = await fetch("http://localhost:8080/api/v1/category")
-            const responseCategories = await requestCategories.json()
-
-            setCategories(responseCategories.entity)
+            const data = await categorieAPI.getCategories();
+            setCategories(data.entity)
         }
 
         fetchCategories();

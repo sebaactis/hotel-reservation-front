@@ -13,7 +13,7 @@ class HotelAPI {
 
         return httpExternalApi.httpGet<HotelResponse>("/hotel", params);
     }
-
+    createHotel = async (hotelData: HotelEditDto) => httpInternalApi.httpPost("/hotel", undefined, "include", hotelData)
     editHotel = async (hotelId: number, hotelData: HotelEditDto) => httpInternalApi.httpPut(`/hotel/${hotelId}`, undefined, "include", hotelData)
     deleteHotel = async (hotelId: number) => httpInternalApi.httpDelete(`/hotel/${hotelId}`)
 }

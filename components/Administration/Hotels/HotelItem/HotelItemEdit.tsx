@@ -200,7 +200,7 @@ const HotelItemEdit = ({ hotel, categories }: Props) => {
                             <Label htmlFor="name-1">Categoria del hotel</Label>
 
                             <select className="bg-slate-300/10 py-2 rounded-md pl-3" name="category" value={hotelData.category} onChange={handleInputChange}>
-                                {categories.map(category => (
+                                {categories?.map(category => (
                                     <option style={{ backgroundColor: "gray" }} key={category.id} value={category.description} >{category.description}</option>
                                 ))}
                             </select>

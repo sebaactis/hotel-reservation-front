@@ -11,6 +11,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { features } from "process"
 import { toast } from "sonner"
 import { Categorie, Hotel } from "@/types"
+import hotelApi from "@/services/hotel/hotel.service"
+import categorieAPI from "@/services/categorie/categorie.service"
 
 export default function AddHotel() {
 
@@ -57,31 +59,24 @@ export default function AddHotel() {
             ]
         }
 
-        console.log(newHotel);
+        try {
+            await hotelApi.createHotel(newHotel)
 
-        const submit = await fetch("http://localhost:8080/api/v1/hotel", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newHotel),
-        })
-
-        if (submit.ok) {
             toast.success("Hotel agregado exitosamente")
             setHotelData([])
             setSelectedAmenities([])
             setRating(0)
-        } else {
-            toast.error("Error al intentar agregar hotel")
+
+
+        } catch (error) {
+            toast.error("Error al intentar agregar hotel: " + error.message)
         }
     }
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const request = await fetch("http://localhost:8080/api/v1/category")
-            const data = await request.json();
 
+            const data = await categorieAPI.getCategories();
             setCategories(data.entity);
         }
 
@@ -208,13 +203,13 @@ export default function AddHotel() {
 
                                 <div>
                                     <Label className="text-sm font-medium" style={{ color: "#523961" }}>
-                                        Puntuación (1-10)
+                                        Puntuación (1-5)
                                     </Label>
                                     <div className="flex items-center gap-2 mt-2">
                                         <input
                                             type="range"
                                             min="1"
-                                            max="10"
+                                            max="5"
                                             step="0.1"
                                             value={rating}
                                             onChange={(e) => setRating(Number.parseFloat(e.target.value))}
