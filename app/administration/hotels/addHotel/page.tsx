@@ -21,6 +21,8 @@ export default function AddHotel() {
     const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
     const [rating, setRating] = useState(0)
 
+    const [files, setFiles] = useState<File[]>([]);
+
 
     const amenities = [
         { id: "Wifi", label: "WiFi Gratis", icon: Wifi },
@@ -48,15 +50,25 @@ export default function AddHotel() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
+        let imageUrls: string[] = [];
+        if (files.length > 0) {
+            const fd = new FormData();
+            files.forEach(f => fd.append("files", f));
+            const upReq = await fetch("/api/storage/upload", { method: "POST", body: fd });
+            const upRes = await upReq.json();
+
+            if (!upReq.ok) {
+                toast.error("Error al subir imágenes: " + (upRes?.error ?? "desconocido"));
+                return;
+            }
+            imageUrls = upRes.urls as string[];
+        }
+
         const newHotel = {
             ...hotelData,
             score: rating.toFixed(1),
             features: selectedAmenities,
-            images: [
-                {
-                    "url": "https://example.com/image.jpg",
-                }
-            ]
+            images: imageUrls.map((u: string) => ({ url: u }))
         }
 
         try {
@@ -261,24 +273,30 @@ export default function AddHotel() {
                             {/* Imagen */}
                             <div className="space-y-4">
                                 <h3 className="text-lg font-semibold" style={{ color: "#3B234A" }}>
-                                    Imagen del Hotel
+                                    Imágenes del Hotel
                                 </h3>
 
                                 <div
                                     className="border-2 border-dashed rounded-lg p-8 text-center cursor-pointer hover:bg-opacity-50 transition-colors"
-                                    style={{
-                                        borderColor: "#BAAFC4",
-                                        backgroundColor: "#BAAFC4",
-                                    }}
+                                    style={{ borderColor: "#BAAFC4", backgroundColor: "#BAAFC4" }}
                                 >
                                     <Upload className="w-12 h-12 mx-auto mb-4" style={{ color: "#523961" }} />
                                     <p className="text-sm font-medium" style={{ color: "#523961" }}>
-                                        Haz clic para subir una imagen o arrastra y suelta
+                                        Haz clic para subir imágenes o arrastra y suelta
                                     </p>
                                     <p className="text-xs mt-1" style={{ color: "#523961" }}>
-                                        PNG, JPG hasta 10MB
+                                        PNG, JPG, WEBP hasta 10MB (puedes seleccionar varias)
                                     </p>
-                                    <input type="file" className="hidden" accept="image/*" />
+
+                                    <input
+                                        type="file"
+                                        multiple
+                                        className="mt-3"
+                                        onChange={(e) => {
+                                            const selected = Array.from(e.target.files || []);
+                                            setFiles(selected);
+                                        }}
+                                    />
                                 </div>
                             </div>
 
