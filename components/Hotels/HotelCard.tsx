@@ -13,7 +13,7 @@ const HotelCard = ({ hotel }: { hotel: Hotel }) => {
 
             <div className="w-full rounded-lg">
                 <img
-                    src="https://imgs.search.brave.com/zekckRCy-3DvoqpeSJ7Z4-tU6HAtAcnOFy0K6WxfAFA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS92aXN0YS1waXNj/aW5hXzEwNDg5NDQt/MjA4MjEzMTkuanBn/P3NlbXQ9YWlzX2h5/YnJpZA"
+                    src={hotel.images[0].url}
                     alt={hotel.name}
                     className="w-full object-cover"
                 />

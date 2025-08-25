@@ -2,8 +2,6 @@ import HotelRating from './HotelRating';
 import HotelDescription from './HotelDescription';
 import HotelImages from './HotelImages';
 
-
-import { Hotel } from '@/types';
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useFavoritesStore } from '@/stores/favoritesStore';
@@ -29,11 +27,13 @@ import { HotelDetailSkeletonNames, HotelDetailsSkeletonRating } from '../HotelDe
 import { colorsAux } from '@/styles/colorsAux';
 
 import HotelShare from './HotelShare';
+import { Hotel } from '@/types/hotel';
 
 
 
 const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
 
+    const images = hotel?.images;
     const router = useRouter();
     const { user, isAuthenticated } = useAuthStore();
     const { fetchFavorites, favoriteHotelIds, toggleFavorite } = useFavoritesStore();
@@ -122,7 +122,7 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
             <HotelShare hotel={hotel} showShareModal={showShareModal} setShowShareModal={setShowShareModal} />
 
             <div className="max-w-6xl mx-auto p-6 space-y-6">
-                <HotelImages />
+                <HotelImages images={images}/>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2 space-y-6">

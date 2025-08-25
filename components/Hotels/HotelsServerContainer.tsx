@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import Hotels from './Hotels'
 import { Hotel } from '@/types';
 import hotelApi from '@/services/hotel/hotel.service';
+import { toast } from 'sonner';
 
 const HotelsServerContainer = () => {
-
-    const baseUrl = "http://localhost:8080/api/v1/hotel?"
 
     const [hotels, setHotels] = useState<Hotel[]>([]);
     const [page, setPage] = useState(0);
@@ -36,13 +35,18 @@ const HotelsServerContainer = () => {
 
     return (
         <>
-            <Hotels
-                hotels={hotels}
-                page={page}
-                seed={seed}
-                totalPages={totalPages}
-                setPage={setPage}
-            />
+            {hotels?.length == 0 ?
+                <div className="p-12 text-center">
+                    <div className="text-gray-500 mb-2 text-xl">No se encontraron hoteles</div>
+                </div> :
+                <Hotels
+                    hotels={hotels}
+                    page={page}
+                    seed={seed}
+                    totalPages={totalPages}
+                    setPage={setPage}
+                />}
+
         </>
     )
 }
