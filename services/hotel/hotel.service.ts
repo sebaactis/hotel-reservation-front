@@ -3,13 +3,14 @@ import httpExternalApi from "../http/httpExternal.service";
 import httpInternalApi from "../http/httpInternal.service";
 
 class HotelAPI {
-    getHotels = async (page: number, seed?: string) => {
+    getHotels = async ({ page, seed, size }: { page?: string, seed?: string, size?: string }) => {
         const params = new URLSearchParams({
-            page: page.toString(),
             random: "true"
         })
 
+        if (page) params.append("page", page);
         if (seed) params.append("seed", seed);
+        if (size) params.append("size", size);
 
         return httpExternalApi.httpGet<HotelResponse>("/hotel", params);
     }

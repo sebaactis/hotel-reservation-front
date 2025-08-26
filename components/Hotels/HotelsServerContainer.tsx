@@ -32,7 +32,6 @@ const HotelsServerContainer = () => {
         fetchHotels();
     }, [page])
 
-
     return (
         <>
             {hotels?.length == 0 ?
