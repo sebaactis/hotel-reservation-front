@@ -15,7 +15,7 @@ const HotelsServerContainer = () => {
         const fetchHotels = async () => {
 
             try {
-                const data = await hotelApi.getHotels(page, seed);
+                const data = await hotelApi.getHotels({ page: page, seed: seed });
 
                 setHotels(data.entity.page.content);
                 setPage(data.entity.page.pageable.pageNumber);

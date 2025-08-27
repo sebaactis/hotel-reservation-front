@@ -49,9 +49,9 @@ export default function CategoriesEditPage() {
     const [categories, setCategories] = useState<Categorie[]>([]);
     const [categorieDescription, setCategorieDescription] = useState<string>("");
 
-    const totalProducts = categories.reduce((sum, cat) => sum + cat.productCount, 0)
+    const totalProducts = categories?.reduce((sum, cat) => sum + cat.productCount, 0)
 
-    const filteredCategories = categories.filter((category) => {
+    const filteredCategories = categories?.filter((category) => {
         const matchesSearch =
             category.description.toLowerCase().includes(searchTerm.toLowerCase())
         const matchesFilter = filterStatus === "all" || category.status === filterStatus
@@ -116,7 +116,7 @@ export default function CategoriesEditPage() {
                             </div>
                             <div className="flex items-center gap-6">
                                 <div className="text-center">
-                                    <div className="text-white text-lg font-bold">{categories.length}</div>
+                                    <div className="text-white text-lg font-bold">{categories?.length}</div>
                                     <div className="text-white opacity-75 text-xs">Total</div>
                                 </div>
 
@@ -210,7 +210,7 @@ export default function CategoriesEditPage() {
                         </div>
 
                         <div className="mt-4 flex items-center gap-4 text-sm" style={{ color: "#523961" }}>
-                            <span>Mostrando: {filteredCategories.length} categorías</span>
+                            <span>Mostrando: {filteredCategories?.length} categorías</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -219,11 +219,11 @@ export default function CategoriesEditPage() {
                 <Card className="shadow-lg border-0">
                     <CardContent className="p-0" style={{ backgroundColor: "#C3BBC9" }}>
                         <div className="space-y-0">
-                            {filteredCategories.map((category, index) => {
+                            {filteredCategories?.map((category, index) => {
                                 return (
                                     <div
                                         key={category.id}
-                                        className={`p-6 ${index !== filteredCategories.length - 1 ? "border-b" : ""}`}
+                                        className={`p-6 ${index !== filteredCategories?.length - 1 ? "border-b" : ""}`}
                                         style={{ borderColor: "#BAAFC4" }}
                                     >
                                         <div className="flex flex-col lg:flex-row gap-4">
@@ -350,7 +350,7 @@ export default function CategoriesEditPage() {
                             })}
                         </div>
 
-                        {filteredCategories.length === 0 && (
+                        {filteredCategories?.length === 0 && (
                             <div className="p-12 text-center">
                                 <Package className="w-12 h-12 mx-auto mb-4 opacity-50" style={{ color: "#523961" }} />
                                 <div className="text-gray-500 mb-2">No se encontraron categorías</div>

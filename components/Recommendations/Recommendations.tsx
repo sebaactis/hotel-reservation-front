@@ -15,11 +15,10 @@ const Recommendations = () => {
             try {
                 const data = await hotelApi.getHotels({ size: 2 });
                 setHotels(data.entity.page.content);
-                if (!seed) setSeed(data.entity.seed);
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } catch (error) {
-                toast.error("Error al cargar los hoteles: " + error);
+                toast.error("Error al cargar los hoteles 2: " + error);
             }
         }
 

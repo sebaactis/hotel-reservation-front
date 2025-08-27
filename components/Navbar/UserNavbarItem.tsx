@@ -54,16 +54,16 @@ export function UserNavbarItem({ email, role }: { email: string, role: string })
                         Mis reservas
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator className="bg-gray-500" />
-                <DropdownMenuLabel className="font-bold text-md">Administrador</DropdownMenuLabel>
-                <DropdownMenuGroup>
+                {role == "ADMIN" && <DropdownMenuSeparator className="bg-gray-500" />}
+                {role == "ADMIN" && <DropdownMenuLabel className="font-bold text-md">Administrador</DropdownMenuLabel>}
+                {role == "ADMIN" && <DropdownMenuGroup>
                     <DropdownMenuItem>
                         <Link href="/administration">
 
                             Panel de admistracion
                         </Link>
                     </DropdownMenuItem>
-                </DropdownMenuGroup>
+                </DropdownMenuGroup>}
 
             </DropdownMenuContent>
 

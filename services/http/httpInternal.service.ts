@@ -1,10 +1,9 @@
 import { HttpBaseAPI } from "./http.service";
-
-const API_URL = "http://localhost:3000/api"
+import { API_PRIVATE_URL } from "./urls";
 
 class HttpInternalAPI extends HttpBaseAPI {
     constructor() {
-        super(API_URL);
+        super(API_PRIVATE_URL);
     }
 
 }

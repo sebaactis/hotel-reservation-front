@@ -1,10 +1,9 @@
 import { HttpBaseAPI } from "./http.service";
-
-const API_URL = "http://localhost:8080/api/v1"
+import { API_PUBLIC_URL } from "./urls";
 
 class HttpExternalAPI extends HttpBaseAPI {
     constructor() {
-        super(API_URL);
+        super(API_PUBLIC_URL);
     }
 
 }

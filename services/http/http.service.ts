@@ -1,9 +1,14 @@
+import { toast } from "sonner";
+import { API_PUBLIC_URL } from "./urls";
+
 export class HttpBaseAPI {
     protected api_url: string;
 
     constructor(api_url: string) {
         this.api_url = api_url;
     }
+
+    
 
     httpGet = async <T>(endpoint: string, params?: URLSearchParams, credentialsInclude?: string): Promise<T> => {
         const res = await fetch(`${this.api_url}${endpoint}${params ? `?${params}` : ''}`, {
@@ -12,8 +17,8 @@ export class HttpBaseAPI {
 
         const response = await res.json();
 
-        if (!res.ok) {
-            throw new Error(response.message);
+        if (!res.ok && endpoint != "/auth/me") {
+            toast.error(this.api_url == API_PUBLIC_URL ? response.message : response.error)
         }
 
         return response;
@@ -30,7 +35,7 @@ export class HttpBaseAPI {
         const response = await res.json();
 
         if (!res.ok) {
-            throw new Error(response.message);
+            toast.error(this.api_url == API_PUBLIC_URL ? response.message : response.error)
         }
 
         return response;
@@ -47,7 +52,7 @@ export class HttpBaseAPI {
         const response = await res.json();
 
         if (!res.ok) {
-            throw new Error(response.message);
+            toast.error(this.api_url == API_PUBLIC_URL ? response.message : response.error)
         }
 
         return response;
@@ -64,7 +69,7 @@ export class HttpBaseAPI {
         const response = await res.json();
 
         if (!res.ok) {
-            throw new Error(response.message);
+            toast.error(this.api_url == API_PUBLIC_URL ? response.message : response.error)
         }
 
         return response;

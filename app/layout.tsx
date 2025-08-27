@@ -12,6 +12,8 @@ import { Toaster } from "sonner";
 import Footer from "@/components/Footer/Footer";
 import AuthBootstrap from "@/components/Auth/AuthBootstrap";
 
+import { Phone } from "lucide-react"
+
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -55,6 +57,9 @@ export default function RootLayout({
               {children}
             </main>
             <Toaster richColors position="top-center" />
+            <div className="fixed bottom-4 right-4 p-3 rounded-full bg-green-500 shadow-lg cursor-pointer z-50">
+              <Phone />
+            </div>
             <Footer />
           </div>
         </Providers>

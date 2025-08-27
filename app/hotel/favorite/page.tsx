@@ -34,19 +34,19 @@ export default function FavoriteComponent() {
                             Mis Hoteles Favoritos
                         </CardTitle>
                         <p className="text-white opacity-90 text-sm mt-1">
-                            {favoriteHotels.length} {favoriteHotels.length === 1 ? "hotel guardado" : "hoteles guardados"}
+                            {favoriteHotels?.length} {favoriteHotels?.length === 1 ? "hotel guardado" : "hoteles guardados"}
                         </p>
                     </CardHeader>
                 </Card>
 
                 <Card className="shadow-lg border-0">
                     <CardContent className="p-0" style={{ backgroundColor: "#C3BBC9" }}>
-                        {favoriteHotels.length > 0 ? (
+                        {favoriteHotels?.length > 0 ? (
                             <div className="space-y-0">
-                                {favoriteHotels.map((hotel, index) => (
+                                {favoriteHotels?.map((hotel, index) => (
                                     <div
                                         key={hotel.id}
-                                        className={`p-4 ${index !== favoriteHotels.length - 1 ? "border-b" : ""}`}
+                                        className={`p-4 ${index !== favoriteHotels?.length - 1 ? "border-b" : ""}`}
                                         style={{ borderColor: "#BAAFC4" }}
                                     >
                                         <div className="flex gap-4">

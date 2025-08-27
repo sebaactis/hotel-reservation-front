@@ -28,17 +28,13 @@ export default function LoginForm() {
 
         try {
             const loginRequest = await login(formData.email, formData.password);
-            toast.success("Login exitoso")
-
             setFormData({
                 email: "",
                 password: "",
             })
-            window.location.href = "/";
 
+            toast.success("Login exitoso")
         } catch (e) {
-            toast.error("Error al intentar el login: "
-                + e.message);
         }
     }
 
