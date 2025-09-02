@@ -34,12 +34,6 @@ const HotelCard = ({ hotel }: { hotel: Hotel }) => {
                 </div>
 
 
-                <div className="flex gap-2 flex-wrap pt-2">
-                    {
-                        <BadgeListFromJson key={hotel.id} features={hotel.features} />
-                    }
-                </div>
-
                 <div className="flex items-center justify-between pt-4">
                     <p style={{ color: colorsAux.darkprimary }} className="font-bold text-2xl">$ {hotel.price} <span className="font-normal text-sm text-black/50 ">por noche</span> </p>
                 </div>

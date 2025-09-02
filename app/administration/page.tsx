@@ -32,6 +32,7 @@ const AdministrationHome = () => {
             <Link href="/administration/hotels" className="bg-indigo-500 p-2 rounded-md">Gestionar Hoteles</Link>
             <Link href="/administration/roles" className="bg-indigo-500 p-2 rounded-md">Gestionar Roles</Link>
             <Link href="/administration/categories" className="bg-indigo-500 p-2 rounded-md">Gestionar Categorias</Link>
+            <Link href="/administration/features" className="bg-indigo-500 p-2 rounded-md">Gestionar Caracteristicas</Link>
         </div>
     )
 }

@@ -44,10 +44,6 @@ const RecommendationCard = ({ hotel }: { hotel: Hotel }) => {
                     </div>
                 </div>
 
-                <div className="flex gap-2 flex-wrap mt-5">
-                    <BadgeListFromJson key={hotel.id} features={hotel.features} />
-                </div>
-
                 <p style={{ color: colorsAux.darkprimary }} className='w-[90%] mt-5 text-base font-light'>{hotel.description}</p>
 
                 <div className='flex flex-col md:flex-row gap-5 md:gap-0 justify-between mr-5 mt-7 mb-3'>
