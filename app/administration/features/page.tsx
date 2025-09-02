@@ -65,10 +65,10 @@ export default function FeaturesEditPage() {
         return features.filter(f => f.name?.toLowerCase().includes(term));
     }, [features, searchTerm]);
 
-    const handleEdit = async (categoryId: number, description: string) => {
+    const handleEdit = async (featureId: number, featureName: string, featureIcon: string) => {
         try {
-            const requestEdit = await categorieAPI.editCategorie(categoryId, description)
-            toast.success("Categoría editada exitosamente")
+            const requestEdit = await featureAPI.editFeature({ name: featureName, icon: featureIcon }, featureId)
+            toast.success("Caracteristica editada exitosamente")
             return;
 
         } catch (error) {
@@ -77,12 +77,12 @@ export default function FeaturesEditPage() {
 
     }
 
-    const handleDelete = async (categoryId: number) => {
+    const handleDelete = async (featureId: number) => {
         try {
 
-            const requestDelete = await categorieAPI.deleteCategorie(categoryId)
+            const requestDelete = await featureAPI.deleteFeature(featureId)
             toast.success("Categoría eliminada exitosamente")
-            setfeatures(features?.filter((cat) => cat.id !== categoryId))
+            setfeatures(features?.filter((feature) => feature.id !== featureId))
             return;
 
         } catch (error) {
@@ -93,7 +93,7 @@ export default function FeaturesEditPage() {
     const handleAddFeature = async () => {
         try {
             const requestCreate = await featureAPI.createFeature({ name: featureName, icon: iconName })
-            toast.success("Categoría creada exitosamente")
+            toast.success("Caracteristica creada exitosamente")
             return;
 
         } catch (error) {
@@ -272,7 +272,10 @@ export default function FeaturesEditPage() {
                                                             <Button
                                                                 className="flex-1 lg:flex-none text-white font-semibold hover:opacity-90 transition-opacity"
                                                                 style={{ backgroundColor: "#523961" }}
-                                                                onClick={() => setfeatureName(feature.name)}
+                                                                onClick={() => {
+                                                                    setfeatureName(feature.name)
+                                                                    setIconName(feature.icon)
+                                                                }}
                                                             >
                                                                 <Edit className="w-4 h-4 mr-1" />
                                                                 Editar
@@ -297,6 +300,7 @@ export default function FeaturesEditPage() {
                                                                         value={featureName}
                                                                         onChange={(e) => setfeatureName(e.target.value)} />
                                                                 </div>
+                                                                <IconPicker value={iconName ? iconName : "Elegir icono"} onChange={setIconName} />
                                                             </div>
                                                             <DialogFooter>
                                                                 <DialogClose asChild>
@@ -304,7 +308,7 @@ export default function FeaturesEditPage() {
                                                                 </DialogClose>
                                                                 <Button
                                                                     type="submit"
-                                                                    onClick={() => handleEdit(feature.id, featureName)}
+                                                                    onClick={() => handleEdit(feature.id, featureName, iconName)}
                                                                 >
                                                                     Guardar Cambios
                                                                 </Button>
