@@ -1,8 +1,9 @@
-import { BadgeListFromJsonBigger } from "@/components/BagdeListFromJson"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Hotel, Policie, Policy } from "@/types"
 import { HotelDetailsSkeletonBagdes, HotelDetailsSkeletonDescription } from "../HotelDetailSkeletons"
-import { Shield } from "lucide-react"
+import { MessageCircleWarningIcon, Shield } from "lucide-react"
+import { IconBagde } from "@/components/Icons/IconBagde"
+import { Hotel } from "@/types/hotel"
 
 const HotelDescription = ({ hotel }: Hotel) => {
     return (
@@ -28,7 +29,7 @@ const HotelDescription = ({ hotel }: Hotel) => {
                     {!hotel.features ? (
                         <HotelDetailsSkeletonBagdes />
                     ) : (
-                        <BadgeListFromJsonBigger key={hotel.id} features={hotel.features} />
+                        <IconBagde key={hotel.id} features={hotel.features} />
                     )}
                 </CardContent>
             </Card>
@@ -41,19 +42,29 @@ const HotelDescription = ({ hotel }: Hotel) => {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
-                    <div className="space-y-6">
-                        {hotel.policies?.map((policy, index) => (
-                            <div key={index} className="border-l-4 pl-4 py-2" style={{ borderColor: "#523961" }}>
-                                <h4 className="text-lg font-semibold mb-2 flex items-center gap-2" style={{ color: "#3B234A" }}>
-                                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#523961" }} />
-                                    {policy.title}
-                                </h4>
-                                <p className="text-sm leading-relaxed pl-4" style={{ color: "#523961" }}>
-                                    {policy.description}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
+                    {hotel.policies?.length <= 0 ?
+                        <div
+                            style={{ color: "#3B234A" }}
+                            className="flex gap-2"
+                        >
+                            <MessageCircleWarningIcon />
+                            <p>No hay políticas para este hotel</p>
+
+                        </div>
+                        :
+                        <div className="space-y-6">
+                            {hotel.policies?.map((policy, index) => (
+                                <div key={index} className="border-l-4 pl-4 py-2" style={{ borderColor: "#523961" }}>
+                                    <h4 className="text-lg font-semibold mb-2 flex items-center gap-2" style={{ color: "#3B234A" }}>
+                                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#523961" }} />
+                                        {policy.title}
+                                    </h4>
+                                    <p className="text-sm leading-relaxed pl-4" style={{ color: "#523961" }}>
+                                        {policy.description}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>}
                 </CardContent>
             </Card>
         </>

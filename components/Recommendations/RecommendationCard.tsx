@@ -2,7 +2,7 @@ import React from 'react'
 import { LikeIcon, MapIcon, WifiIcon } from '../icons'
 import { colorsAux } from '@/styles/colorsAux'
 import { Hotel } from '@/types/hotel'
-import { BadgeListFromJson } from '../BagdeListFromJson'
+import { BadgeListFromJson } from '../Icons/IconBagde'
 
 const RecommendationCard = ({ hotel }: { hotel: Hotel }) => {
 

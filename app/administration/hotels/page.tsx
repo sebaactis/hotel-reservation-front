@@ -109,7 +109,6 @@ export default function HotelAdministration() {
                     </CardContent>
                 </Card>
 
-                {/* Lista de Hoteles */}
                 <HotelsList filteredHotels={filteredHotels} searchTerm={searchTerm} />
                 {hotels.length > 0 && <HotelPagination totalPages={totalPages} page={page} seed={seed} onChangePage={setPage} />}
 

@@ -25,7 +25,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useSearchHotels } from "@/hooks/useSearchHotels"
 import { useRouter, useSearchParams } from "next/navigation"
 import { fr } from "date-fns/locale"
-import { BadgeListFromJson } from "@/components/BagdeListFromJson"
+import { BadgeListFromJson } from "@/components/Icons/IconBagde"
 import { Hotel } from "@/types"
 
 export default function Component() {

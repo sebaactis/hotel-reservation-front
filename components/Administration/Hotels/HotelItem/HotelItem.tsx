@@ -1,17 +1,21 @@
-import { Categorie, Hotel } from '@/types'
+
 
 import { MapPin, Star } from 'lucide-react'
 
 import HotelItemEdit from './HotelItemEdit'
 import HotelItemDelete from './HotelItemDelete'
+import { Feature } from '@/types/feature';
+import { Categorie } from '@/types/categorie';
+import { Hotel } from '@/types/hotel';
 
 interface Props {
     hotel: Hotel;
     index: number;
     categories: Categorie[];
+    features: Feature[];
 }
 
-const HotelItem = ({ hotel, index, categories }: Props) => {
+const HotelItem = ({ hotel, index, categories, features }: Props) => {
 
     return (
         <div
@@ -23,7 +27,7 @@ const HotelItem = ({ hotel, index, categories }: Props) => {
 
                 <div className="flex gap-4 flex-1">
                     <img
-                        src={"https://imgs.search.brave.com/zekckRCy-3DvoqpeSJ7Z4-tU6HAtAcnOFy0K6WxfAFA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS92aXN0YS1waXNj/aW5hXzEwNDg5NDQt/MjA4MjEzMTkuanBn/P3NlbXQ9YWlzX2h5/YnJpZA"}
+                        src={hotel.images[0].url}
                         alt={hotel.name}
                         className="w-24 h-16 object-cover rounded-lg flex-shrink-0"
                     />
@@ -77,7 +81,7 @@ const HotelItem = ({ hotel, index, categories }: Props) => {
 
 
                 <div className="flex lg:flex-col gap-2 lg:w-auto w-full">
-                    <HotelItemEdit hotel={hotel} categories={categories} />
+                    <HotelItemEdit hotel={hotel} categories={categories} features={features} />
                     <HotelItemDelete hotel={hotel} />
                 </div>
             </div>

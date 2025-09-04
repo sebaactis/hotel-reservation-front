@@ -10,40 +10,35 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { features } from "process"
 import { toast } from "sonner"
-import { Categorie, Hotel } from "@/types"
 import hotelApi from "@/services/hotel/hotel.service"
 import categorieAPI from "@/services/categorie/categorie.service"
+import { Feature } from "@/types/feature"
+import featureAPI from "@/services/feature/feature.service"
+import IconRender from "@/components/Icons/IconRender"
+import { Categorie } from "@/types/categorie"
+import { Hotel } from "@/types/hotel"
 
 export default function AddHotel() {
 
     const [categories, setCategories] = useState<Categorie[]>([]);
-    const [hotelData, setHotelData] = useState<Hotel[]>([])
-    const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
+    const [features, setFeatures] = useState<Feature[]>([]);
+
+    const [hotelData, setHotelData] = useState<Hotel>([])
+    const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
     const [rating, setRating] = useState(0)
 
     const [files, setFiles] = useState<File[]>([]);
-
-
-    const amenities = [
-        { id: "Wifi", label: "WiFi Gratis", icon: Wifi },
-        { id: "Estacionamiento", label: "Parking", icon: Car },
-        { id: "Desayuno", label: "Desayuno", icon: Coffee },
-        { id: "Piscina", label: "Piscina", icon: Waves },
-        { id: "Restaurante", label: "Restaurante", icon: Utensils },
-        { id: "Gimnasio", label: "Gimnasio", icon: Dumbbell },
-        { id: "Lavanderia", label: "Lavandería", icon: Shirt },
-    ]
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
         setHotelData({ ...hotelData, [name]: value })
     }
 
-    const handleAmenityChange = (amenityId: string, checked: boolean) => {
+    const handleFeatureChange = (featureId: string, checked: boolean) => {
         if (checked) {
-            setSelectedAmenities([...selectedAmenities, amenityId])
+            setSelectedFeatures([...selectedFeatures, featureId])
         } else {
-            setSelectedAmenities(selectedAmenities.filter((id) => id !== amenityId))
+            setSelectedFeatures(selectedFeatures.filter((id) => id !== featureId))
         }
     }
 
@@ -67,16 +62,21 @@ export default function AddHotel() {
         const newHotel = {
             ...hotelData,
             score: rating.toFixed(1),
-            features: selectedAmenities,
-            images: imageUrls.map((u: string) => ({ url: u }))
+            featureIds: selectedFeatures,
+            images: imageUrls.map((u: string) => ({ url: u })),
+            category: !hotelData.category ? "Estandar" : hotelData.category
         }
+
+        console.log(newHotel)
+
+        console.log(newHotel.category)
 
         try {
             await hotelApi.createHotel(newHotel)
 
             toast.success("Hotel agregado exitosamente")
             setHotelData([])
-            setSelectedAmenities([])
+            setSelectedFeatures([])
             setRating(0)
 
 
@@ -92,7 +92,13 @@ export default function AddHotel() {
             setCategories(data.entity);
         }
 
+        const fetchFeatures = async () => {
+            const data = await featureAPI.getFeatures();
+            setFeatures(data.entity.content)
+        }
+
         fetchCategories();
+        fetchFeatures();
     }, [])
 
     return (
@@ -180,7 +186,8 @@ export default function AddHotel() {
                                             }}
                                             className="border-2 focus:ring-0 text-gray-500 py-1 rounded-md text-sm"
                                             name="category"
-                                            onChange={handleInputChange}>
+                                            onChange={handleInputChange}
+                                        >
                                             {categories.map(category => (
                                                 <option style={{ backgroundColor: "white", color: "#523961" }} key={category.description} value={category.description} >{category.description}</option>
                                             ))}
@@ -238,31 +245,29 @@ export default function AddHotel() {
                                 </div>
                             </div>
 
-                            {/* Amenidades */}
                             <div className="space-y-4">
                                 <h3 className="text-lg font-semibold" style={{ color: "#3B234A" }}>
-                                    Amenidades
+                                    Caracteristicas
                                 </h3>
 
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                    {amenities.map((amenity) => {
-                                        const IconComponent = amenity.icon
+                                    {features.map((feature) => {
                                         return (
-                                            <div key={amenity.id} className="flex items-center space-x-2">
+                                            <div key={feature.id} className="flex items-center space-x-2">
                                                 <Checkbox
-                                                    id={amenity.id}
-                                                    checked={selectedAmenities.includes(amenity.id)}
-                                                    onCheckedChange={(checked) => handleAmenityChange(amenity.id, checked as boolean)}
+                                                    id={feature.id}
+                                                    checked={selectedFeatures.includes(feature.id)}
+                                                    onCheckedChange={(checked) => handleFeatureChange(feature.id, checked as boolean)}
                                                     className="border-2"
                                                     style={{ borderColor: "#523961" }}
                                                 />
                                                 <Label
-                                                    htmlFor={amenity.id}
+                                                    htmlFor={feature.id}
                                                     className="text-sm font-medium cursor-pointer flex items-center gap-1 "
                                                     style={{ color: "#523961" }}
                                                 >
-                                                    <IconComponent className="w-4 h-4" />
-                                                    {amenity.label}
+                                                    <IconRender name={feature.icon} />
+                                                    {feature.name}
                                                 </Label>
                                             </div>
                                         )

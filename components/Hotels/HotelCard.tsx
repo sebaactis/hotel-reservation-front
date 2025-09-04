@@ -1,9 +1,9 @@
 import { colorsAux } from "@/styles/colorsAux"
-import BadgeList from "../BagdeListFromJson";
-import { BadgeListFromJson } from "../BagdeListFromJson";
+import { IconBagde } from "../Icons/IconBagde";
+
 import Link from "next/link";
-import { Hotel } from "@/types";
 import { MapPin, FileBadgeIcon } from "lucide-react";
+import { Hotel } from "@/types/hotel";
 
 
 const HotelCard = ({ hotel }: { hotel: Hotel }) => {
@@ -15,7 +15,7 @@ const HotelCard = ({ hotel }: { hotel: Hotel }) => {
                 <img
                     src={hotel.images[0].url}
                     alt={hotel.name}
-                    className="w-full object-cover"
+                    className="w-full object-cover max-h-96"
                 />
             </div>
 
@@ -31,6 +31,10 @@ const HotelCard = ({ hotel }: { hotel: Hotel }) => {
                 <div style={{ color: colorsAux.primary }} className="flex items-center gap-1">
                     <FileBadgeIcon width={20} />
                     <p>{hotel.category}</p>
+                </div>
+
+                <div>
+                    <IconBagde features={hotel?.features} />
                 </div>
 
 

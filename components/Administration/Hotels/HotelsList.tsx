@@ -20,6 +20,8 @@ import { Plus, Search, MapPin, Edit, Trash2, Eye, MoreVertical, Star, AlertCircl
 import { Categorie, Hotel } from "@/types"
 import HotelItem from "./HotelItem/HotelItem"
 import categorieAPI from "@/services/categorie/categorie.service"
+import { Feature } from "@/types/feature"
+import featureAPI from "@/services/feature/feature.service"
 
 interface Props {
     filteredHotels: Hotel[];
@@ -29,6 +31,7 @@ interface Props {
 const HotelsList = ({ filteredHotels, searchTerm }: Props) => {
 
     const [categories, setCategories] = useState<Categorie[]>();
+    const [features, setFeatures] = useState<Feature[]>();
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -36,7 +39,13 @@ const HotelsList = ({ filteredHotels, searchTerm }: Props) => {
             setCategories(data.entity);
         }
 
+        const fetchFeatures = async () => {
+            const data = await featureAPI.getFeatures();
+            setFeatures(data.entity.content)
+        }
+
         fetchCategories();
+        fetchFeatures();
     }, [])
 
     return (
@@ -44,7 +53,7 @@ const HotelsList = ({ filteredHotels, searchTerm }: Props) => {
             <CardContent className="p-0" style={{ backgroundColor: "#C3BBC9" }}>
                 <div className="space-y-0">
                     {filteredHotels.map((hotel, index) => (
-                        <HotelItem key={index} hotel={hotel} index={index} categories={categories} />
+                        <HotelItem key={index} hotel={hotel} index={index} categories={categories} features={features} />
                     ))}
                 </div>
 

@@ -21,18 +21,23 @@ import { useAuth } from "@/hooks/useAuth"
 import { Categorie, Hotel } from "@/types"
 import { HotelEditDto } from "@/types/hotel"
 import hotelApi from "@/services/hotel/hotel.service"
+import { Feature } from "@/types/feature"
+import IconRender from "@/components/Icons/IconRender"
 
 interface Props {
     hotel: Hotel;
-    categories: Categorie[]
+    categories: Categorie[];
+    features: Feature[];
 }
 
 
-const HotelItemEdit = ({ hotel, categories }: Props) => {
+const HotelItemEdit = ({ hotel, categories, features }: Props) => {
 
     const [hotelData, setHotelData] = useState<HotelEditDto>([])
-    const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
+    const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
     const [rating, setRating] = useState(0);
+
+    console.log(selectedFeatures);
 
     const amenities = [
         { id: "Wifi", label: "WiFi Gratis", icon: Wifi },
@@ -49,20 +54,19 @@ const HotelItemEdit = ({ hotel, categories }: Props) => {
         setHotelData({ ...hotelData, [name]: value })
     }
 
-    const handleAmenityChange = (amenityId: string, checked: boolean) => {
+    const handleFeatureChange = (featureName: string, checked: boolean) => {
         if (checked) {
-            setSelectedAmenities([...selectedAmenities, amenityId])
+            setSelectedFeatures([...selectedFeatures, featureName])
         } else {
-            setSelectedAmenities(selectedAmenities.filter((id) => id !== amenityId))
+            setSelectedFeatures(selectedFeatures.filter((name) => name !== featureName))
         }
     }
 
     useEffect(() => {
         setHotelData(hotel);
         setRating(hotel.score);
-        setSelectedAmenities(hotel.features);
+        setSelectedFeatures(hotel.features.map((feature) => feature.name));
     }, [hotel])
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -70,14 +74,14 @@ const HotelItemEdit = ({ hotel, categories }: Props) => {
         const editHotel = {
             ...hotelData,
             score: rating.toFixed(1),
-            features: selectedAmenities
+            features: selectedFeatures
         }
 
         try {
             const request = await hotelApi.editHotel(hotel.id, editHotel)
 
             toast.success("Hotel editado exitosamente")
-            setSelectedAmenities([])
+            setSelectedFeatures([])
             setRating(0)
 
         } catch (error) {
@@ -128,25 +132,24 @@ const HotelItemEdit = ({ hotel, categories }: Props) => {
 
                         <div className="grid gap-5">
                             <Label htmlFor="name-1">Caracteristicas del hotel</Label>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                {amenities.map((amenity) => {
-                                    const IconComponent = amenity.icon
+                            <div className="grid grid-cols-2">
+                                {features.map((feature) => {
                                     return (
-                                        <div key={amenity.id} className="flex items-center space-x-2">
+                                        <div key={feature.id} className="flex items-center">
                                             <Checkbox
-                                                id={amenity.id}
-                                                checked={selectedAmenities.includes(amenity.id)}
-                                                onCheckedChange={(checked) => handleAmenityChange(amenity.id, checked as boolean)}
-                                                className="border-2"
+                                                id={feature.name}
+                                                checked={selectedFeatures.includes(feature.name)}
+                                                onCheckedChange={(checked) => handleFeatureChange(feature.name, checked as boolean)}
+                                                className="border-2 mx-2"
                                                 style={{ borderColor: "#ae7acd" }}
                                             />
                                             <Label
-                                                htmlFor={amenity.id}
-                                                className="text-sm font-medium cursor-pointer flex items-center gap-1 "
+                                                htmlFor={feature.id}
+                                                className="text-sm font-medium cursor-pointer flex items-center gap-1"
                                                 style={{ color: "#ae7acd" }}
                                             >
-                                                <IconComponent className="w-4 h-4" />
-                                                {amenity.label}
+                                                <IconRender name={feature.icon} />
+                                                {feature.name}
                                             </Label>
                                         </div>
                                     )

@@ -1,3 +1,5 @@
+import { Feature } from "../feature";
+
 export interface HotelResponse {
     message: string;
     statusCode: string;
@@ -40,7 +42,7 @@ export interface Hotel {
     id: number;
     name: string;
     location: string;
-    features: string[];
+    features: Feature[];
     description: string;
     price: number;
     score: number;
