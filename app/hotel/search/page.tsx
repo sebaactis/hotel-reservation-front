@@ -25,10 +25,15 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useSearchHotels } from "@/hooks/useSearchHotels"
 import { useRouter, useSearchParams } from "next/navigation"
 import { fr } from "date-fns/locale"
-import { BadgeListFromJson } from "@/components/Icons/IconBagde"
+import { BadgeListFromJson, IconBagde } from "@/components/Icons/IconBagde"
 import { Hotel } from "@/types"
+import { useAuthStore } from "@/stores/authStore"
+import { useFavoritesStore } from "@/stores/favoritesStore"
 
 export default function Component() {
+    const { isAuthenticated, user } = useAuthStore();
+    const { favoriteHotelIds, toggleFavorite } = useFavoritesStore();
+
     const searchParams = useSearchParams();
     const router = useRouter();
 
@@ -45,6 +50,10 @@ export default function Component() {
         location,
         checkIn: from,
         checkOut: to
+    }
+
+    const isFavoriteHotel = (hotelId: number) => {
+        return favoriteHotelIds?.includes(hotelId);
     }
 
     useEffect(() => {
@@ -134,17 +143,11 @@ export default function Component() {
                                         <div className={viewMode === "grid" ? "flex flex-col" : "flex"}>
                                             <div className={viewMode === "grid" ? "relative" : "relative w-1/3 min-h-[200px]"}>
                                                 <img
-                                                    src={"https://imgs.search.brave.com/zekckRCy-3DvoqpeSJ7Z4-tU6HAtAcnOFy0K6WxfAFA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/Zm90b3MtcHJlbWl1/bS92aXN0YS1waXNj/aW5hXzEwNDg5NDQt/MjA4MjEzMTkuanBn/P3NlbXQ9YWlzX2h5/YnJpZA"}
+                                                    src={hotel.images[0].url}
                                                     alt={hotel.name}
                                                     className="w-full h-48 object-cover"
                                                 />
-                                                <Button
-                                                    size="sm"
-                                                    variant="ghost"
-                                                    className="absolute top-2 right-2 bg-white bg-opacity-80 hover:bg-opacity-100"
-                                                >
-                                                    <Heart className="w-4 h-4" />
-                                                </Button>
+                                                {isAuthenticated && <button className="absolute top-2 right-2" onClick={() => toggleFavorite(user?.userId, hotel.id)}>{isFavoriteHotel(hotel.id) ? <Heart className='fill-red-500 text-red-500 w-7 h-7' /> : <Heart className="w-7 h-7"/>}</button>}
                                             </div>
 
                                             <div className={viewMode === "grid" ? "p-4" : "flex-1 p-4"}>
@@ -173,7 +176,7 @@ export default function Component() {
 
                                                     <div className="flex gap-2 flex-wrap pt-2">
                                                         {
-                                                            <BadgeListFromJson key={hotel.id} features={hotel.features} />
+                                                            <IconBagde features={hotel.features} />
                                                         }
                                                     </div>
 

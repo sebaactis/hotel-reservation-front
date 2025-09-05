@@ -49,11 +49,6 @@ const RecommendationCard = ({ hotel }: { hotel: Hotel }) => {
                 <div className='flex flex-col md:flex-row gap-5 md:gap-0 justify-between mr-5 mt-7 mb-3'>
                     <p style={{ color: colorsAux.darkprimary }} className="font-bold text-2xl">${hotel.price} <span className="font-normal text-sm text-black/50 ">por noche</span> </p>
                     <div className='flex gap-2'>
-
-                        <button style={{ borderColor: colorsAux.darkprimary, color: colorsAux.darkprimary }} className="flex px-4 gap-2 py-1 pl-3 pr-4 rounded-lg transition-all hover:opacity-90 text-white border-3 text-sm font-semibold items-center">
-                            <LikeIcon />
-                            Favorito
-                        </button>
                         <button style={{ backgroundColor: colorsAux.darkprimary }} className="py-1.5 px-4 md:px-5 rounded-lg transition-all hover:opacity-90 text-white text-base font-normal">
                             Ver detalles
                         </button>

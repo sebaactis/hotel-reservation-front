@@ -26,10 +26,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Hotel } from "@/types"
+
 import { toast } from "sonner"
 import { useAuthStore } from "@/stores/authStore"
 import hotelBookingApi from "@/services/hotelBooking/hotelBooking.service"
+import IconRender from "@/components/Icons/IconRender"
+import { Hotel } from "@/types/hotel"
+import hotelApi from "@/services/hotel/hotel.service"
 
 
 export default function HotelReservation() {
@@ -137,8 +140,24 @@ export default function HotelReservation() {
                 nights: calculateNights(),
             }
 
+
             const request = await hotelBookingApi.createHotelBooking(body);
             toast.success("Reserva realizada con éxito")
+
+            await fetch("/api/email", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    hotelName: hotel?.name,
+                    reservationDate: new Date(),
+                    hotelEmail: hotel?.email,
+                    hotelPhone: hotel?.phone,
+                    to: user?.email
+                })
+            })
+
             setTimeout(() => {
                 router.push('/reservation/confirmation?success=true');
             }, 1000)
@@ -154,12 +173,8 @@ export default function HotelReservation() {
         if (!id) return;
         try {
             const getHotel = async () => {
-                const request = await fetch(`http://localhost:8080/api/v1/hotel/${id}`)
-                const response = await request.json();
-
-                if (request.ok) {
-                    setHotel(response.entity);
-                }
+                const data = await hotelApi.getHotel(id);
+                setHotel(data.entity)
             }
 
             getHotel();
@@ -172,17 +187,13 @@ export default function HotelReservation() {
         if (!id) return;
         try {
             const getReservations = async () => {
-                const request = await fetch(`http://localhost:8080/api/v1/hotelBooking/hotel/${id}`)
-                const response = await request.json();
-
-                if (request.ok) {
-                    setReservations(response.entity);
-                }
+                const data = await hotelBookingApi.getHotelBookings(id);
+                setReservations(data.entity);
             }
 
             getReservations();
         } catch (error) {
-            console.log(error)
+            toast.error(error.message)
         }
     }, [id])
 
@@ -242,13 +253,6 @@ export default function HotelReservation() {
                                                 <span className="font-medium text-sm" style={{ color: "#3B234A" }}>
                                                     {hotel?.score.toFixed(1)}
                                                 </span>
-                                            </div>
-                                            <div className="flex flex-wrap gap-1">
-                                                {hotel?.features.slice(0, 2).map((feature, index) => (
-                                                    <Badge key={index} variant="outline" className="text-xs">
-                                                        {feature}
-                                                    </Badge>
-                                                ))}
                                             </div>
                                         </div>
                                     </div>

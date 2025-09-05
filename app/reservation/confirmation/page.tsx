@@ -26,7 +26,9 @@ const ConfirmationPage = () => {
             <p style={{ color: colorsAux.darkprimary }} className="text-3xl">Reserva realizada con éxito!</p>
             <Button
                 style={{ backgroundColor: colorsAux.primary, color: "white" }}
-                className="hover:opacity-90 transition-all">
+                className="hover:opacity-90 transition-all"
+                onClick={() => router.push('/reservation/myReservations')}
+                >
                 Ir a ver mis reservas
             </Button>
         </div>

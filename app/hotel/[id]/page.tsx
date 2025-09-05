@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { Hotel } from "@/types"
 import HotelDetails from "@/components/Hotels/HotelDetails/HotelDetails";
+import hotelApi from "@/services/hotel/hotel.service";
 
 
 export default function HotelDetailsPage() {
@@ -15,11 +16,7 @@ export default function HotelDetailsPage() {
     useEffect(() => {
         const fetchHotel = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/v1/hotel/${id}`)
-                if (!response.ok) {
-                    throw new Error("Error al obtener los datos del hotel")
-                }
-                const data = await response.json()
+                const data = await hotelApi.getHotel(id);
                 setHotel(data.entity)
             } catch (error) {
                 console.error("Error fetching hotel data:", error)

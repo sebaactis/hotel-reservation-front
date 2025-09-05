@@ -41,7 +41,7 @@ const HotelDetails = ({ hotel }: { hotel: Hotel }) => {
     const [showShareModal, setShowShareModal] = useState(false)
 
     const isFavoriteHotel = (hotelId: number) => {
-        return favoriteHotelIds.includes(hotelId);
+        return favoriteHotelIds?.includes(hotelId);
     }
 
     const handleOpenShareModal = () => {

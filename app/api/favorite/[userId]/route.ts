@@ -16,12 +16,6 @@ export async function GET(req: Request, { params }: { params: { userId: string }
 
     const response = await favoritesRequest.json();
 
-    if (!favoritesRequest.ok) {
-        return NextResponse.json({
-            error: response.message,
-        }, { status: 400 })
-    }
-
     const ids = response.entity.map((fav: FavoriteDto) => fav.hotelDto.id)
     const hotels = response.entity.map((fav: FavoriteDto) => fav.hotelDto)
 
