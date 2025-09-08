@@ -56,7 +56,6 @@ export default function SearchComponent() {
     }
   }, [])
 
-  // Filtrar sugerencias basadas en la entrada del usuario
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setLocation(value)

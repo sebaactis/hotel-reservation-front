@@ -17,9 +17,12 @@ import featureAPI from "@/services/feature/feature.service"
 import IconRender from "@/components/Icons/IconRender"
 import { Categorie } from "@/types/categorie"
 import { Hotel } from "@/types/hotel"
+import { useRouter } from "next/navigation"
 
 export default function AddHotel() {
 
+    const router = useRouter();
+    
     const [categories, setCategories] = useState<Categorie[]>([]);
     const [features, setFeatures] = useState<Feature[]>([]);
 
@@ -66,10 +69,6 @@ export default function AddHotel() {
             images: imageUrls.map((u: string) => ({ url: u })),
             category: !hotelData.category ? "Estandar" : hotelData.category
         }
-
-        console.log(newHotel)
-
-        console.log(newHotel.category)
 
         try {
             await hotelApi.createHotel(newHotel)
@@ -214,7 +213,6 @@ export default function AddHotel() {
                                 </div>
                             </div>
 
-                            {/* Calificación */}
                             <div className="space-y-4">
                                 <h3 className="text-lg font-semibold" style={{ color: "#3B234A" }}>
                                     Calificación
@@ -275,7 +273,6 @@ export default function AddHotel() {
                                 </div>
                             </div>
 
-                            {/* Imagen */}
                             <div className="space-y-4">
                                 <h3 className="text-lg font-semibold" style={{ color: "#3B234A" }}>
                                     Imágenes del Hotel
@@ -305,7 +302,6 @@ export default function AddHotel() {
                                 </div>
                             </div>
 
-                            {/* Información de Contacto */}
                             <div className="space-y-4">
                                 <h3 className="text-lg font-semibold" style={{ color: "#3B234A" }}>
                                     Información de Contacto
@@ -350,7 +346,6 @@ export default function AddHotel() {
                                 </div>
                             </div>
 
-                            {/* Botones */}
                             <div className="flex gap-4 pt-6">
                                 <Button
                                     type="button"
@@ -359,6 +354,9 @@ export default function AddHotel() {
                                     style={{
                                         borderColor: "#523961",
                                         color: "#523961",
+                                    }}
+                                    onClick={() => {
+                                        router.push("/administration/hotels")
                                     }}
                                 >
                                     Cancelar

@@ -1,12 +1,14 @@
 
 
-import { MapPin, Star } from 'lucide-react'
+import { MapPin, PenToolIcon, Star } from 'lucide-react'
 
 import HotelItemEdit from './HotelItemEdit'
 import HotelItemDelete from './HotelItemDelete'
 import { Feature } from '@/types/feature';
 import { Categorie } from '@/types/categorie';
 import { Hotel } from '@/types/hotel';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 interface Props {
     hotel: Hotel;
@@ -16,6 +18,8 @@ interface Props {
 }
 
 const HotelItem = ({ hotel, index, categories, features }: Props) => {
+
+    const router = useRouter();
 
     return (
         <div
@@ -82,6 +86,24 @@ const HotelItem = ({ hotel, index, categories, features }: Props) => {
 
                 <div className="flex lg:flex-col gap-2 lg:w-auto w-full">
                     <HotelItemEdit hotel={hotel} categories={categories} features={features} />
+
+                    <div className='flex gap-2'>
+                        <Button
+                            style={{
+                                borderColor: "#523961",
+                                color: "#523961",
+                                backgroundColor: "transparent",
+
+                            }}
+                            variant="outline"
+                            className='border-2'
+                            onClick={() => router.push(`/administration/policies/${hotel.id}`)}
+                        >
+                            <PenToolIcon />
+                            Politicas
+                        </Button>
+                    </div>
+
                     <HotelItemDelete hotel={hotel} />
                 </div>
             </div>

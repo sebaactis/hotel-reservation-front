@@ -1,10 +1,13 @@
-import React from 'react'
+import { useRouter } from "next/navigation"
+
 import { LikeIcon, MapIcon, WifiIcon } from '../icons'
 import { colorsAux } from '@/styles/colorsAux'
 import { Hotel } from '@/types/hotel'
 import { BadgeListFromJson } from '../Icons/IconBagde'
 
 const RecommendationCard = ({ hotel }: { hotel: Hotel }) => {
+
+    const router = useRouter();
 
     const badgesTest = [
         { name: "Desayuno", icon: <WifiIcon /> },
@@ -49,7 +52,11 @@ const RecommendationCard = ({ hotel }: { hotel: Hotel }) => {
                 <div className='flex flex-col md:flex-row gap-5 md:gap-0 justify-between mr-5 mt-7 mb-3'>
                     <p style={{ color: colorsAux.darkprimary }} className="font-bold text-2xl">${hotel.price} <span className="font-normal text-sm text-black/50 ">por noche</span> </p>
                     <div className='flex gap-2'>
-                        <button style={{ backgroundColor: colorsAux.darkprimary }} className="py-1.5 px-4 md:px-5 rounded-lg transition-all hover:opacity-90 text-white text-base font-normal">
+                        <button
+                            style={{ backgroundColor: colorsAux.darkprimary }}
+                            className="py-1.5 px-4 md:px-5 rounded-lg transition-all hover:opacity-90 text-white text-base font-normal"
+                            onClick={() => router.push(`/hotel/${hotel.id}`)}
+                        >
                             Ver detalles
                         </button>
                     </div>

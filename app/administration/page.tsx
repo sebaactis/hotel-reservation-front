@@ -4,6 +4,7 @@
 import IndexSkeleton from "@/components/Administration/Index/IndexSkeleton";
 import { useAuth } from "@/hooks/useAuth"
 import { useAuthStore } from "@/stores/authStore";
+import { Hotel, PenBoxIcon, PenToolIcon, StarIcon, UserCog } from "lucide-react";
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -28,11 +29,26 @@ const AdministrationHome = () => {
 
     return (
 
-        <div className="flex flex-col justify-center items-center my-20 gap-5">
-            <Link href="/administration/hotels" className="bg-indigo-500 p-2 rounded-md">Gestionar Hoteles</Link>
-            <Link href="/administration/roles" className="bg-indigo-500 p-2 rounded-md">Gestionar Roles</Link>
-            <Link href="/administration/categories" className="bg-indigo-500 p-2 rounded-md">Gestionar Categorias</Link>
-            <Link href="/administration/features" className="bg-indigo-500 p-2 rounded-md">Gestionar Caracteristicas</Link>
+        <div className="grid grid-cols-1 md:grid-cols-2 place-items-center gap-4 mt-10">
+            <div className="bg-indigo-500 hover:bg-indigo-400 transition-all p-8 rounded-md flex gap-2">
+                <Hotel width={30} height={30} />
+                <Link href="/administration/hotels" className="text-xl">Gestionar Hoteles</Link>
+            </div>
+
+            <div className="bg-indigo-500 hover:bg-indigo-400 transition-all p-8 rounded-md flex gap-2">
+                <UserCog width={30} height={30} />
+                <Link href="/administration/roles" className="text-xl">Gestionar Roles</Link>
+            </div>
+
+            <div className="bg-indigo-500 hover:bg-indigo-400 transition-all p-8 rounded-md flex gap-2">
+                <StarIcon width={30} height={30} />
+                <Link href="/administration/categories" className="text-xl">Gestionar Categorias</Link>
+            </div>
+
+            <div className="bg-indigo-500 hover:bg-indigo-400 transition-all p-8 rounded-md flex gap-2">
+                <PenBoxIcon width={30} height={30} />
+                <Link href="/administration/features" className="text-xl">Gestionar Caracteristicas</Link>
+            </div>
         </div>
     )
 }

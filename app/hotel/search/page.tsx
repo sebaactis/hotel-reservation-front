@@ -87,9 +87,9 @@ export default function Component() {
                         <Button
                             variant="outline"
                             className="text-white border-white hover:bg-white hover:text-purple-900 bg-transparent"
+                            onClick={() => router.push("/")}
                         >
-                            <Search className="w-4 h-4 mr-2" />
-                            Modificar búsqueda
+                            Volver al inicio
                         </Button>
                     </div>
                 </div>
@@ -147,7 +147,7 @@ export default function Component() {
                                                     alt={hotel.name}
                                                     className="w-full h-48 object-cover"
                                                 />
-                                                {isAuthenticated && <button className="absolute top-2 right-2" onClick={() => toggleFavorite(user?.userId, hotel.id)}>{isFavoriteHotel(hotel.id) ? <Heart className='fill-red-500 text-red-500 w-7 h-7' /> : <Heart className="w-7 h-7"/>}</button>}
+                                                {isAuthenticated && <button className="absolute top-2 right-2" onClick={() => toggleFavorite(user?.userId, hotel.id)}>{isFavoriteHotel(hotel.id) ? <Heart className='fill-red-500 text-red-500 w-7 h-7' /> : <Heart className="w-7 h-7" />}</button>}
                                             </div>
 
                                             <div className={viewMode === "grid" ? "p-4" : "flex-1 p-4"}>
@@ -194,11 +194,7 @@ export default function Component() {
                                                             <Button
                                                                 size="sm"
                                                                 variant="outline"
-                                                                className="border-2 hover:bg-opacity-10 bg-transparent"
-                                                                style={{
-                                                                    borderColor: "#523961",
-                                                                    color: "#523961",
-                                                                }}
+                                                                className="border-2 hover:bg-opacity-10 bg-transparent text-[#523961] border-[#523961] hover:text-[#3b234a] hover:border-[#3b234a] transition-all"
                                                                 onClick={() => router.push(`/hotel/${hotel.id}`)}
                                                             >
                                                                 <Eye className="w-4 h-4 mr-1" />

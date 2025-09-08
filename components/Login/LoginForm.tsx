@@ -12,9 +12,11 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { toast } from "sonner"
 import { useAuth } from "@/hooks/useAuth"
 import { useAuthStore } from "@/stores/authStore"
+import { useRouter } from "next/navigation"
 
 export default function LoginForm() {
 
+    const router = useRouter();
     const { login } = useAuthStore();
 
     const [showPassword, setShowPassword] = useState(false)
@@ -28,12 +30,20 @@ export default function LoginForm() {
 
         try {
             const loginRequest = await login(formData.email, formData.password);
-            setFormData({
-                email: "",
-                password: "",
-            })
 
-            toast.success("Login exitoso")
+            if (loginRequest) {
+                setFormData({
+                    email: "",
+                    password: "",
+                })
+
+                toast.success("Login exitoso")
+
+                setTimeout(() => {
+                    router.push("/")
+                }, 1000)
+            }
+
         } catch (e) {
         }
     }
