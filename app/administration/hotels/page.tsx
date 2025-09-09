@@ -14,6 +14,7 @@ import HotelsList from "@/components/Administration/Hotels/HotelsList"
 import HotelPagination from "@/components/Hotels/HotelPagination"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import hotelApi from "@/services/hotel/hotel.service"
 
 export default function HotelAdministration() {
     const baseUrl = "http://localhost:8080/api/v1/hotel?"
@@ -42,13 +43,13 @@ export default function HotelAdministration() {
     useEffect(() => {
 
         const fetchHotels = async () => {
-            const request = await fetch(`${baseUrl}page=${page}&random=true` + (seed ? `&seed=${seed}` : ""))
-            const data = await request.json();
+            const data = await hotelApi.getHotels({ page: page, seed: seed });
 
             setHotels(data.entity.page.content);
             setPage(data.entity.page.pageable.pageNumber);
             setTotalPages(data.entity.page.totalPages);
-            setTotalHotels(data.entity.page.totalElements);
+
+            if (!seed) setSeed(data.entity.seed);
         }
 
         fetchHotels();

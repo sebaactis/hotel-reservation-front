@@ -34,8 +34,10 @@ export default function UserRoles() {
                 role: newRole
             })
 
-            setUsers((prevUsers) => prevUsers.map((user) => (user.email === userEmail ? { ...user, role: newRole } : user)))
-            toast.success(`Se actualizo el usuario: ${userEmail}. Su nuevo rol es: ${newRole}`)
+            if (request) {
+                setUsers((prevUsers) => prevUsers.map((user) => (user.email === userEmail ? { ...user, role: newRole } : user)))
+                toast.success(`Se actualizo el usuario: ${userEmail}. Su nuevo rol es: ${newRole}`)
+            }
 
         } catch (error) {
             toast.error(`No se pudo actualizar el usuario: ${error.message}`)

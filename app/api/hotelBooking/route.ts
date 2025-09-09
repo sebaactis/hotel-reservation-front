@@ -27,6 +27,13 @@ export async function POST(req: Request) {
 
 
     if (!res.ok) {
+
+        if (response.errorMap) {
+            return NextResponse.json({
+                errorMap: response.errorMap
+            }, { status: 400 })
+        }
+
         return NextResponse.json({
             message: result.message
         }, {

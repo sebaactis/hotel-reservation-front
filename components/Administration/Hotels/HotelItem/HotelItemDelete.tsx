@@ -14,14 +14,17 @@ import { Label } from "@/components/ui/label"
 import { Hotel } from "@/types"
 import { toast } from "sonner"
 import hotelApi from "@/services/hotel/hotel.service"
+import { useRouter } from "next/navigation"
 
 const HotelItemDelete = ({ hotel }: Hotel) => {
 
+    const router = useRouter();
 
     const handleDelete = async (hotelId: number) => {
         try {
             const request = await hotelApi.deleteHotel(hotelId)
             toast.success("Hotel eliminado exitosamente")
+            router.push("/administration/hotels")
         } catch (error) {
             toast.error(error.message)
         }

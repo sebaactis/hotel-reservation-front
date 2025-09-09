@@ -26,6 +26,14 @@ export async function PUT(req: Request, { params }: { params: { categoryId: stri
     const response = await requestEdit.json();
 
     if (!requestEdit.ok) {
+
+        if (response.errorMap) {
+            return NextResponse.json({
+                errorMap: response.errorMap
+            }, { status: 400 })
+        }
+
+
         return NextResponse.json({
             message: response.message
         }, { status: 400 })

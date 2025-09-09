@@ -56,8 +56,6 @@ export default function FeaturesEditPage() {
     const [featureName, setfeatureName] = useState<string>("");
     const [iconName, setIconName] = useState<string>("");
 
-    console.log(iconName)
-
     const totalProducts = features?.reduce((sum, cat) => sum + cat.productCount, 0)
 
     const filteredFeatures = useMemo(() => {
@@ -68,8 +66,11 @@ export default function FeaturesEditPage() {
     const handleEdit = async (featureId: number, featureName: string, featureIcon: string) => {
         try {
             const requestEdit = await featureAPI.editFeature({ name: featureName, icon: featureIcon }, featureId)
-            toast.success("Caracteristica editada exitosamente")
-            return;
+
+            if (requestEdit) {
+                toast.success("Caracteristica editada exitosamente")
+                return;
+            }
 
         } catch (error) {
             toast.error(error.message)
@@ -93,8 +94,16 @@ export default function FeaturesEditPage() {
     const handleAddFeature = async () => {
         try {
             const requestCreate = await featureAPI.createFeature({ name: featureName, icon: iconName })
-            toast.success("Caracteristica creada exitosamente")
-            return;
+
+            if (requestCreate) {
+                toast.success("Caracteristica creada exitosamente")
+                setfeatures([...features, {
+                    ...requestCreate.entity,
+                    productCount: 0
+                }])
+                return;
+            }
+
 
         } catch (error) {
             toast.error(error.message)
@@ -163,12 +172,13 @@ export default function FeaturesEditPage() {
                                                 <DialogClose asChild>
                                                     <Button variant="outline">Cancelar</Button>
                                                 </DialogClose>
-                                                <Button
+                                                <DialogClose
                                                     type="submit"
                                                     onClick={handleAddFeature}
+                                                    className="bg-green-800 rounded-md text-sm px-3"
                                                 >
                                                     Guardar Cambios
-                                                </Button>
+                                                </DialogClose>
                                             </DialogFooter>
                                         </DialogContent>
                                     </form>
@@ -306,12 +316,13 @@ export default function FeaturesEditPage() {
                                                                 <DialogClose asChild>
                                                                     <Button variant="outline">Cancelar</Button>
                                                                 </DialogClose>
-                                                                <Button
+                                                                <DialogClose
                                                                     type="submit"
                                                                     onClick={() => handleEdit(feature.id, featureName, iconName)}
+                                                                    className="bg-green-800 rounded-md text-sm px-3"
                                                                 >
                                                                     Guardar Cambios
-                                                                </Button>
+                                                                </DialogClose>
                                                             </DialogFooter>
                                                         </DialogContent>
                                                     </form>

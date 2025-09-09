@@ -25,6 +25,13 @@ export async function POST(req: Request) {
     const response = await createHotelRequest.json();
 
     if (!createHotelRequest.ok) {
+
+        if (response.errorMap) {
+            return NextResponse.json({
+                errorMap: response.errorMap
+            }, { status: 400 })
+        }
+
         return NextResponse.json({
             message: response.message
         }, { status: 400 })

@@ -27,13 +27,21 @@ export async function POST(req: Request, { params }: { params: { hotelId: number
     const response = await postHotelRequest.json();
 
     if (!postHotelRequest.ok) {
+
+        if (response.errorMap) {
+            return NextResponse.json({
+                errorMap: response.errorMap
+            }, { status: 400 })
+        }
+
         return NextResponse.json({
             message: response.message
         }, { status: 400 })
     }
 
     return NextResponse.json({
-        message: response.message
+        message: response.message,
+        entity: response.entity
     }, { status: 200 })
 }
 

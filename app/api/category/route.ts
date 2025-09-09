@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     }
 
     const data = await req.json();
-    
+
     const requestCreate = await fetch(`http://localhost:8080/api/v1/category`, {
         method: "POST",
         headers: {
@@ -25,12 +25,21 @@ export async function POST(req: Request) {
     const response = await requestCreate.json();
 
     if (!requestCreate.ok) {
+
+        if (response.errorMap) {
+            return NextResponse.json({
+                errorMap: response.errorMap
+            }, { status: 400 })
+        }
+
+
         return NextResponse.json({
             message: response.message
         }, { status: 400 })
     }
 
     return NextResponse.json({
-        message: response.message
+        message: response.message,
+        entity: response.entity
     }, { status: 201 })
 }

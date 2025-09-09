@@ -8,7 +8,7 @@ export class HttpBaseAPI {
         this.api_url = api_url;
     }
 
-    
+
 
     httpGet = async <T>(endpoint: string, params?: URLSearchParams, credentialsInclude?: string): Promise<T> => {
         const res = await fetch(`${this.api_url}${endpoint}${params ? `?${params}` : ''}`, {
@@ -35,6 +35,15 @@ export class HttpBaseAPI {
         const response = await res.json();
 
         if (!res.ok) {
+
+            if (response.errorMap) {
+                for (const [key, value] of Object.entries(response.errorMap)) {
+                    toast.error(key + " " + value)
+                }
+
+                return false;
+            }
+
             toast.error(this.api_url == API_PUBLIC_URL ? response.message : response.error)
         }
 
@@ -52,6 +61,15 @@ export class HttpBaseAPI {
         const response = await res.json();
 
         if (!res.ok) {
+
+            if (response.errorMap) {
+                for (const [key, value] of Object.entries(response.errorMap)) {
+                    toast.error(key + " " + value)
+                }
+
+                return false;
+            }
+
             toast.error(this.api_url == API_PUBLIC_URL ? response.message : response.error)
         }
 

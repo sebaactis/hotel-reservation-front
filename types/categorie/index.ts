@@ -4,5 +4,6 @@ export interface Categorie {
     hotels: Hotel[];
 }
 
+export type CategorieWithoutHotels = Omit<Categorie, "hotels">;
 
 

@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation"
 export default function AddHotel() {
 
     const router = useRouter();
-    
+
     const [categories, setCategories] = useState<Categorie[]>([]);
     const [features, setFeatures] = useState<Feature[]>([]);
 
@@ -71,13 +71,16 @@ export default function AddHotel() {
         }
 
         try {
-            await hotelApi.createHotel(newHotel)
+            const create = await hotelApi.createHotel(newHotel)
 
-            toast.success("Hotel agregado exitosamente")
-            setHotelData([])
-            setSelectedFeatures([])
-            setRating(0)
+            if (create) {
+                toast.success("Hotel agregado exitosamente")
+                setHotelData([])
+                setSelectedFeatures([])
+                setRating(0)
 
+                router.push("/administration/hotels")
+            }
 
         } catch (error) {
             toast.error("Error al intentar agregar hotel: " + error.message)

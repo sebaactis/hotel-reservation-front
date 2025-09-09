@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import {
     Plus,
     Search,
@@ -58,17 +58,25 @@ export default function PoliciesEditPage() {
     const [policies, setPolicies] = useState<Policy[]>([]);
     const [searchTerm, setSearchTerm] = useState("")
     const [filterStatus, setFilterStatus] = useState("all")
+    const [isLoading, setIsLoading] = useState(false);
 
 
 
     const totalProducts = policies?.reduce((sum, cat) => sum + cat.productCount, 0)
 
-    const filteredPolicies = policies?.filter((policy) => {
-        const matchesSearch =
-            policy.description.toLowerCase().includes(searchTerm.toLowerCase())
-        const matchesFilter = filterStatus === "all" || policy.status === filterStatus
-        return matchesSearch && matchesFilter
-    })
+    const filteredPolicies = useMemo(() => {
+
+        const list = Array.isArray(policies) ? policies : [];
+        const term = (searchTerm ?? "").toLowerCase().trim();
+
+        return list.filter(p => {
+            const desc = (p.description ?? "").toLowerCase();
+            const matchesSearch = desc.includes(term);
+            const matchesFilter = filterStatus === "all" || p.status === filterStatus;
+            return matchesSearch && matchesFilter;
+        });
+    }, [policies, searchTerm, filterStatus]);
+
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
@@ -78,7 +86,11 @@ export default function PoliciesEditPage() {
     const handleEdit = async (policyId: number) => {
         try {
             const requestEdit = await policyAPI.editPolicy(policyId, policyData)
-            toast.success("Politica editada exitosamente")
+
+            if (requestEdit) {
+                toast.success("Politica editada exitosamente")
+            }
+
             return;
 
         } catch (error) {
@@ -103,8 +115,16 @@ export default function PoliciesEditPage() {
     const handleAddPolicy = async () => {
         try {
             const requestCreate = await policyAPI.createPolicy(hotelId, policyData)
-            toast.success("Politica creada exitosamente")
-            return;
+
+            console.log(requestCreate)
+
+            if (requestCreate) {
+                toast.success("Politica creada exitosamente")
+                setPolicies([...policies, {
+                    ...requestCreate.entity,
+                    productCount: 0
+                }])
+            }
 
         } catch (error) {
             toast.error(error.message)
@@ -112,6 +132,8 @@ export default function PoliciesEditPage() {
     }
 
     useEffect(() => {
+
+
         const fetchPolicies = async () => {
             const data = await policyAPI.getPoliciesByHotelId(hotelId);
             setPolicies(data.entity)
@@ -391,23 +413,15 @@ export default function PoliciesEditPage() {
                             })}
                         </div>
 
-                        {filteredPolicies?.length <= 0 && (
+                        {filteredPolicies?.length === 0 && (
                             <div className="p-12 text-center">
                                 <Package className="w-12 h-12 mx-auto mb-4 opacity-50" style={{ color: "#523961" }} />
                                 <div className="text-gray-500 mb-2">No se encontraron politicas</div>
                                 <div className="text-sm text-gray-400 mb-4">
                                     {searchTerm || filterStatus !== "all"
                                         ? "Intenta ajustar los filtros de búsqueda"
-                                        : "Agrega tu primera categoría para comenzar"}
+                                        : "Agrega tu primera politica para comenzar"}
                                 </div>
-                                <Button
-                                    onClick={handleAddPolicy}
-                                    className="text-white font-semibold hover:opacity-90 transition-opacity"
-                                    style={{ backgroundColor: "#3B234A" }}
-                                >
-                                    <Plus className="w-4 h-4 mr-2" />
-                                    Agregar Primera Politica
-                                </Button>
                             </div>
                         )}
                     </CardContent>

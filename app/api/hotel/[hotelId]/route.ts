@@ -26,6 +26,13 @@ export async function PUT(req: Request, { params }: { params: { hotelId: number 
     const response = await editHotelRequest.json();
 
     if (!editHotelRequest.ok) {
+
+        if (response.errorMap) {
+            return NextResponse.json({
+                errorMap: response.errorMap
+            }, { status: 400 })
+        }
+
         return NextResponse.json({
             message: response.message
         }, { status: 400 })

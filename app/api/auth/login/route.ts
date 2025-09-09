@@ -13,16 +13,20 @@ export async function POST(req: Request) {
         body: JSON.stringify(body),
     })
 
+    const response = await request.json();
+
     if (!request.ok) {
 
-        const response = await request.json();
+        if (response.errorMap) {
+            return NextResponse.json({
+                errorMap: response.errorMap
+            }, { status: 400 })
+        }
 
         return NextResponse.json({
             error: response.message,
         }, { status: 400 })
     }
-
-    const response = await request.json();
 
     const { token, email, name, lastName, role, userId } = response.entity;
     const cookieData = { token, email, name, lastName, role, userId };

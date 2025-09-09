@@ -37,18 +37,6 @@ const HotelItemEdit = ({ hotel, categories, features }: Props) => {
     const [selectedFeatures, setSelectedFeatures] = useState<string[]>([])
     const [rating, setRating] = useState(0);
 
-    console.log(selectedFeatures);
-
-    const amenities = [
-        { id: "Wifi", label: "WiFi Gratis", icon: Wifi },
-        { id: "Estacionamiento", label: "Parking", icon: Car },
-        { id: "Desayuno", label: "Desayuno", icon: Coffee },
-        { id: "Piscina", label: "Piscina", icon: Waves },
-        { id: "Restaurante", label: "Restaurante", icon: Utensils },
-        { id: "Gimnasio", label: "Gimnasio", icon: Dumbbell },
-        { id: "Lavanderia", label: "Lavandería", icon: Shirt },
-    ]
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
         setHotelData({ ...hotelData, [name]: value })
@@ -83,6 +71,7 @@ const HotelItemEdit = ({ hotel, categories, features }: Props) => {
             toast.success("Hotel editado exitosamente")
             setSelectedFeatures([])
             setRating(0)
+            
 
         } catch (error) {
             toast.error(error.message)
@@ -133,7 +122,7 @@ const HotelItemEdit = ({ hotel, categories, features }: Props) => {
                         <div className="grid gap-5">
                             <Label htmlFor="name-1">Caracteristicas del hotel</Label>
                             <div className="grid grid-cols-2">
-                                {features.map((feature) => {
+                                {features?.map((feature) => {
                                     return (
                                         <div key={feature.id} className="flex items-center">
                                             <Checkbox

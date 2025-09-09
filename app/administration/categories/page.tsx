@@ -35,21 +35,21 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Categorie } from "@/types"
 import { colorsAux } from "@/styles/colorsAux"
 import { useAuth } from "@/hooks/useAuth"
 import { toast } from "sonner"
 import categorieAPI from "@/services/categorie/categorie.service"
+import { CategorieWithoutHotels } from "@/types/categorie"
 
 export default function CategoriesEditPage() {
 
     const [searchTerm, setSearchTerm] = useState("")
     const [filterStatus, setFilterStatus] = useState("all")
 
-    const [categories, setCategories] = useState<Categorie[]>([]);
+    const [categories, setCategories] = useState<CategorieWithoutHotels[]>([]);
     const [categorieDescription, setCategorieDescription] = useState<string>("");
 
-    const totalProducts = categories?.reduce((sum, cat) => sum + cat.productCount, 0)
+    const totalProducts = (categories ?? []).reduce((sum, cat) => sum + (cat.productCount ?? 0), 0);
 
     const filteredCategories = categories?.filter((category) => {
         const matchesSearch =
@@ -61,8 +61,11 @@ export default function CategoriesEditPage() {
     const handleEdit = async (categoryId: number, description: string) => {
         try {
             const requestEdit = await categorieAPI.editCategorie(categoryId, description)
-            toast.success("Categoría editada exitosamente")
-            return;
+
+            if (requestEdit) {
+                toast.success("Categoría editada exitosamente")
+                return;
+            }
 
         } catch (error) {
             toast.error(error.message)
@@ -86,9 +89,15 @@ export default function CategoriesEditPage() {
     const handleAddCategory = async () => {
         try {
             const requestCreate = await categorieAPI.createCategorie(categorieDescription)
-            toast.success("Categoría creada exitosamente")
-            return;
 
+            if (requestCreate) {
+                toast.success("Categoría creada exitosamente")
+                setCategories([...categories, {
+                    ...requestCreate.entity,
+                    productCount: 0
+                }])
+                return;
+            }
         } catch (error) {
             toast.error(error.message)
         }
@@ -106,7 +115,7 @@ export default function CategoriesEditPage() {
     return (
         <div className="min-h-screen p-6" style={{ backgroundColor: "#D4C7BF" }}>
             <div className="max-w-2xl mx-auto space-y-6">
-                {/* Header */}
+
                 <Card className="shadow-lg border-0">
                     <CardHeader style={{ backgroundColor: "#3B234A" }}>
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -150,12 +159,13 @@ export default function CategoriesEditPage() {
                                                 <DialogClose asChild>
                                                     <Button variant="outline">Cancelar</Button>
                                                 </DialogClose>
-                                                <Button
+                                                <DialogClose
                                                     type="submit"
                                                     onClick={handleAddCategory}
+                                                    className="bg-green-800 rounded-md text-sm px-3"
                                                 >
                                                     Guardar Cambios
-                                                </Button>
+                                                </DialogClose>
                                             </DialogFooter>
                                         </DialogContent>
                                     </form>
@@ -165,7 +175,6 @@ export default function CategoriesEditPage() {
                     </CardHeader>
                 </Card>
 
-                {/* Filtros y Búsqueda */}
                 <Card className="shadow-lg border-0">
                     <CardContent className="p-6" style={{ backgroundColor: "#C3BBC9" }}>
                         <div className="flex flex-col md:flex-row gap-4">
@@ -215,7 +224,6 @@ export default function CategoriesEditPage() {
                     </CardContent>
                 </Card>
 
-                {/* Lista de Categorías */}
                 <Card className="shadow-lg border-0">
                     <CardContent className="p-0" style={{ backgroundColor: "#C3BBC9" }}>
                         <div className="space-y-0">
@@ -227,7 +235,7 @@ export default function CategoriesEditPage() {
                                         style={{ borderColor: "#BAAFC4" }}
                                     >
                                         <div className="flex flex-col lg:flex-row gap-4">
-                                            {/* Icono y Info Principal */}
+
                                             <div className="flex gap-4 flex-1">
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-start justify-between mb-2">
@@ -290,12 +298,13 @@ export default function CategoriesEditPage() {
                                                                 <DialogClose asChild>
                                                                     <Button variant="outline">Cancelar</Button>
                                                                 </DialogClose>
-                                                                <Button
+                                                                <DialogClose
                                                                     type="submit"
                                                                     onClick={() => handleEdit(category.id, categorieDescription)}
+                                                                    className="bg-green-800 rounded-md text-sm px-3"
                                                                 >
                                                                     Guardar Cambios
-                                                                </Button>
+                                                                </DialogClose>
                                                             </DialogFooter>
                                                         </DialogContent>
                                                     </form>

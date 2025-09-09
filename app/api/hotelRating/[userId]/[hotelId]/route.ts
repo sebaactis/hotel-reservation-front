@@ -29,6 +29,13 @@ export async function POST(req: Request, { params }: { params: { userId: string,
     const response = await ratingRequest.json();
 
     if (!ratingRequest.ok) {
+
+        if (response.errorMap) {
+            return NextResponse.json({
+                errorMap: response.errorMap
+            }, { status: 400 })
+        }
+
         return NextResponse.json({
             message: response.message
         }, {

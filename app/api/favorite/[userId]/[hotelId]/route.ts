@@ -18,6 +18,13 @@ export async function POST(req: Request, { params }: { params: { userId: string,
     const response = await favoriteRequest.json();
 
     if (!favoriteRequest.ok) {
+
+        if (response.errorMap) {
+            return NextResponse.json({
+                errorMap: response.errorMap
+            }, { status: 400 })
+        }
+
         return NextResponse.json({
             error: response.message,
         }, { status: 400 })
@@ -45,6 +52,9 @@ export async function DELETE(req: Request, { params }: { params: { userId: strin
     const response = await favoriteRequest.json();
 
     if (!favoriteRequest.ok) {
+
+
+
         return NextResponse.json({
             error: response.message,
         }, { status: 400 })
