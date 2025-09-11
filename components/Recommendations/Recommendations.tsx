@@ -26,11 +26,15 @@ const Recommendations = () => {
     }, [])
 
     return (
-        <div className="p-10 grid grid-cols-1 md:grid-cols-2 gap-20 bg-[#c3bbc98e] w-full">
-            {hotels.map((hotel) => (
-                <RecommendationCard key={hotel.id} hotel={hotel} />
-            ))}
-        </div>
+        <article className="bg-[#c3bbc98e]">
+            <p className="text-center md:text-start md:pl-16 text-2xl md:text-3xl font-bold text-indigo-950 italic mb-8 md:mb-5 pt-5">Hoteles recomendados</p>
+            <div className="p-10 grid grid-cols-1 md:grid-cols-2 gap-20 w-full">
+
+                {hotels.map((hotel) => (
+                    <RecommendationCard key={hotel.id} hotel={hotel} />
+                ))}
+            </div>
+        </article>
     )
 }
 

@@ -5,6 +5,7 @@ import { MessageCircleWarningIcon, Shield } from "lucide-react"
 import { IconBagde } from "@/components/Icons/IconBagde"
 import { Hotel } from "@/types/hotel"
 
+
 const HotelDescription = ({ hotel }: Hotel) => {
     return (
         <>
@@ -29,7 +30,17 @@ const HotelDescription = ({ hotel }: Hotel) => {
                     {!hotel.features ? (
                         <HotelDetailsSkeletonBagdes />
                     ) : (
-                        <IconBagde key={hotel.id} features={hotel.features} />
+                        hotel?.features.length <= 0
+                            ? <div
+                                style={{ color: "#3B234A" }}
+                                className="flex gap-2"
+                            >
+                                <MessageCircleWarningIcon />
+                                <p>No hay servicios o amenidades para este hotel</p>
+
+                            </div>
+                            : <IconBagde key={hotel.id} features={hotel.features} />
+
                     )}
                 </CardContent>
             </Card>

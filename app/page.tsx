@@ -15,7 +15,7 @@ export default function Home() {
     <section className="flex flex-col gap-4">
       {isAuthenticated && <div className="flex items-center justify-center py-10">
         <p
-          className="text-2xl italic"
+          className="text-2xl italic text-center"
           style={{ color: colorsAux.primary }}
         >
           Bienvenido nuevamente: <span className="font-bold">{user?.email}</span>

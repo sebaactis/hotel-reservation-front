@@ -24,7 +24,7 @@ const RecommendationCard = ({ hotel }: { hotel: Hotel }) => {
     }
 
     return (
-        <article style={{ backgroundColor: colorsAux.secondary }} className='grid grid-cols-1 md:grid-cols-[30%_1fr]'>
+        <article style={{ backgroundColor: colorsAux.secondary }} className='grid grid-cols-1 md:grid-cols-[30%_1fr] rounded-md p-5'>
             <div>
                 <img
                     src={hotel.images[0].url}

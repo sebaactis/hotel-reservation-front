@@ -1,3 +1,4 @@
+import { request } from "http";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -14,17 +15,16 @@ export async function PUT(req: Request, { params }: { params: { featureId: strin
     const { featureId } = await params;
     const data = await req.json();
 
+
     const requestEdit = await fetch(`http://localhost:8080/api/v1/feature/${featureId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token?.value}`
         },
-        body: JSON.stringify({
-            name: data.name,
-            icon: data.icon
-        })
+        body: JSON.stringify(data)
     })
+
 
     const response = await requestEdit.json();
 

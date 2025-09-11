@@ -68,10 +68,13 @@ const HotelItemEdit = ({ hotel, categories, features }: Props) => {
         try {
             const request = await hotelApi.editHotel(hotel.id, editHotel)
 
-            toast.success("Hotel editado exitosamente")
-            setSelectedFeatures([])
-            setRating(0)
-            
+            if (request) {
+                toast.success("Hotel editado exitosamente")
+                setSelectedFeatures([])
+                setRating(0)
+
+
+            }
 
         } catch (error) {
             toast.error(error.message)
@@ -121,7 +124,7 @@ const HotelItemEdit = ({ hotel, categories, features }: Props) => {
 
                         <div className="grid gap-5">
                             <Label htmlFor="name-1">Caracteristicas del hotel</Label>
-                            <div className="grid grid-cols-2">
+                            <div className="grid grid-cols-2 gap-2">
                                 {features?.map((feature) => {
                                     return (
                                         <div key={feature.id} className="flex items-center">
@@ -184,7 +187,7 @@ const HotelItemEdit = ({ hotel, categories, features }: Props) => {
                         </div>
 
                         <div className="grid gap-3">
-                            <Label htmlFor="name-1">Email del hotel</Label>
+                            <Label htmlFor="name-1">Telefono del hotel</Label>
                             <Input className="bg-slate-300/10 py-2 rounded-md pl-3" name="phone" value={hotelData.phone} onChange={handleInputChange} />
                         </div>
 

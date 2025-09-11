@@ -9,7 +9,7 @@ import { Hotel } from "@/types/hotel";
 const HotelCard = ({ hotel }: { hotel: Hotel }) => {
 
     return (
-        <article style={{ backgroundColor: colorsAux.secondary }} className="flex flex-col m-2 rounded-lg min-w-[42rem] max-w-2xl shadow-lg transition-all hover:shadow-2xl">
+        <article style={{ backgroundColor: colorsAux.secondary }} className="flex flex-col m-2 rounded-lg md:min-w-[42rem] max-w-2xl shadow-lg transition-all hover:shadow-2xl">
 
             <div className="w-full rounded-lg">
                 <img

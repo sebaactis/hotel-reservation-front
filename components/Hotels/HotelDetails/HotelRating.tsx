@@ -74,21 +74,25 @@ const HotelRating = ({ hotel }: Hotel) => {
 
             const submit = await hotelRatingApi.createRating(userData?.userId, hotel.id, newReview)
 
-            setReviews(
-                [{
-                    ...newReview,
-                    user: {
-                        userData
+            if (submit) {
+                setReviews(
+                    [{
+                        ...newReview,
+                        user: {
+                            userData
+                        },
+                        date: Date.now()
                     },
-                    date: Date.now()
-                },
-                ...reviews]
-            )
-            setUserRating(0)
-            setUserComment("")
-            setShowReviewForm(false)
+                    ...reviews]
+                )
+                setUserRating(0)
+                setUserComment("")
+                setShowReviewForm(false)
 
-            toast.success("Reseña agregada correctamente")
+                toast.success("Reseña agregada correctamente")
+            }
+
+
         } catch (error) {
             toast.error(error.message)
         }

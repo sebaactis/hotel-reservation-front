@@ -36,6 +36,7 @@ const HotelShare = ({ hotel, showShareModal, setShowShareModal }: Props) => {
     const [selectedSocialNetwork, setSelectedSocialNetwork] = useState("")
     const [customMessage, setCustomMessage] = useState("")
     const [linkCopied, setLinkCopied] = useState(false)
+    const firstImage = hotel?.images?.[0]?.url ?? hotel?.imageUrl ?? "/placeholder.jpg";
 
     const productUrl = `http://localhost:3000/hotel/${hotel.id}`
 
@@ -119,9 +120,9 @@ const HotelShare = ({ hotel, showShareModal, setShowShareModal }: Props) => {
                     <div className="border-2 rounded-lg p-4" style={{ borderColor: "#BAAFC4", backgroundColor: "white" }}>
                         <div className="flex gap-3">
                             <img
-                                src={defaultShareContent.image || "/placeholder.svg"}
+                                src={firstImage}
                                 alt={defaultShareContent.title}
-                                className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                                className="w-24 h-24 object-cover rounded-lg flex-shrink-0"
                             />
                             <div className="flex-1 min-w-0">
                                 <h4 className="font-semibold text-sm truncate" style={{ color: "#3B234A" }}>
