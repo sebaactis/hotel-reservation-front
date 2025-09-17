@@ -57,9 +57,13 @@ export default function RootLayout({
               {children}
             </main>
             <Toaster richColors position="top-center" />
-            <div className="fixed bottom-4 right-4 p-3 rounded-full bg-green-500 shadow-lg cursor-pointer z-50">
+            <Link
+              className="fixed bottom-4 right-4 p-3 rounded-full bg-green-500 shadow-lg cursor-pointer z-50"
+              href="https://web.whatsapp.com/"
+              target="_blank"
+            >
               <Phone />
-            </div>
+            </Link>
             <Footer />
           </div>
         </Providers>
