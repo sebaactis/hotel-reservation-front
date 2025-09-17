@@ -62,12 +62,14 @@ export default function AddHotel() {
             imageUrls = upRes.urls as string[];
         }
 
+        
+
         const newHotel = {
             ...hotelData,
             score: rating.toFixed(1),
             featureIds: selectedFeatures,
             images: imageUrls.map((u: string) => ({ url: u })),
-            category: !hotelData.category ? "Estandar" : hotelData.category
+            category: !hotelData.category || hotelData.category == undefined ? "Estandar" : hotelData.category 
         }
 
         try {

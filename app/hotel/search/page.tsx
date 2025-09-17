@@ -143,7 +143,7 @@ export default function Component() {
                                         <div className={viewMode === "grid" ? "flex flex-col" : "flex"}>
                                             <div className={viewMode === "grid" ? "relative" : "relative w-1/3 min-h-[200px]"}>
                                                 <img
-                                                    src={hotel.images[0].url}
+                                                    src={hotel?.images[0]?.url || "placeholder.svg"}
                                                     alt={hotel.name}
                                                     className="w-full h-48 object-cover"
                                                 />

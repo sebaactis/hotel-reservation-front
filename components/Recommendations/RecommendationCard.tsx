@@ -27,7 +27,7 @@ const RecommendationCard = ({ hotel }: { hotel: Hotel }) => {
         <article style={{ backgroundColor: colorsAux.secondary }} className='grid grid-cols-1 md:grid-cols-[30%_1fr] rounded-md p-5'>
             <div>
                 <img
-                    src={hotel.images[0].url}
+                    src={hotel?.images[0]?.url || "placeholder.svg"}
                     alt={hotel.name}
                     className="w-full h-full object-cover"
                 />

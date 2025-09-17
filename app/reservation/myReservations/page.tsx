@@ -92,7 +92,7 @@ export default function MyReservationPage() {
                                             {/* Imagen del Hotel */}
                                             <div className="lg:w-48 h-32 lg:h-auto">
                                                 <img
-                                                    src={reservation.hotel.images[0].url}
+                                                    src={reservation.hotel?.images[0]?.url || "placeholder.svg"}
                                                     alt={reservation.hotel.name}
                                                     className="w-full h-full object-cover"
                                                 />

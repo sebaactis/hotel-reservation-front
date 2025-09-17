@@ -52,12 +52,12 @@ const HotelsList = ({ filteredHotels, searchTerm }: Props) => {
         <Card className="shadow-lg border-0">
             <CardContent className="p-0" style={{ backgroundColor: "#C3BBC9" }}>
                 <div className="space-y-0">
-                    {filteredHotels.map((hotel, index) => (
+                    {filteredHotels?.map((hotel, index) => (
                         <HotelItem key={index} hotel={hotel} index={index} categories={categories} features={features} />
                     ))}
                 </div>
 
-                {filteredHotels.length === 0 && (
+                {filteredHotels?.length === 0 && (
                     <div className="p-12 text-center">
                         <div className="text-gray-500 mb-2">No se encontraron hoteles</div>
                         <div className="text-sm text-gray-400">

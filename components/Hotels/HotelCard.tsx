@@ -13,7 +13,7 @@ const HotelCard = ({ hotel }: { hotel: Hotel }) => {
 
             <div className="w-full rounded-lg">
                 <img
-                    src={hotel.images[0].url}
+                    src={hotel?.images[0]?.url || "placeholder.svg"}
                     alt={hotel.name}
                     className="w-full object-cover max-h-96"
                 />

@@ -32,7 +32,7 @@ export default function HotelAdministration() {
     const [seed, setSeed] = useState("");
 
 
-    const filteredHotels = hotels.filter((hotel: Hotel) => {
+    const filteredHotels = hotels?.filter((hotel: Hotel) => {
         const matchesSearch =
             hotel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             hotel.location.toLowerCase().includes(searchTerm.toLowerCase())
@@ -45,11 +45,11 @@ export default function HotelAdministration() {
         const fetchHotels = async () => {
             const data = await hotelApi.getHotels({ page: page, seed: seed });
 
-            setHotels(data.entity.page.content);
-            setPage(data.entity.page.pageable.pageNumber);
-            setTotalPages(data.entity.page.totalPages);
+            setHotels(data?.entity?.page.content);
+            setPage(data?.entity?.page.pageable.pageNumber);
+            setTotalPages(data?.entity?.page.totalPages);
 
-            if (!seed) setSeed(data.entity.seed);
+            if (!seed) setSeed(data?.entity?.seed);
         }
 
         fetchHotels();
@@ -104,14 +104,14 @@ export default function HotelAdministration() {
                         </div>
 
                         <div className="mt-4 flex flex-col justify-center gap-4 text-sm" style={{ color: "#523961" }}>
-                            <span>Mostrando: {filteredHotels.length} hoteles</span>
+                            <span>Mostrando: {filteredHotels?.length} hoteles</span>
                             <span>Total: {totalHotels} hoteles</span>
                         </div>
                     </CardContent>
                 </Card>
 
                 <HotelsList filteredHotels={filteredHotels} searchTerm={searchTerm} />
-                {hotels.length > 0 && <HotelPagination totalPages={totalPages} page={page} seed={seed} onChangePage={setPage} />}
+                {hotels?.length > 0 && <HotelPagination totalPages={totalPages} page={page} seed={seed} onChangePage={setPage} />}
 
             </div>
         </div>

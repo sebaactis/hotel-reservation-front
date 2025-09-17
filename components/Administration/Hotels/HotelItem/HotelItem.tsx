@@ -31,7 +31,7 @@ const HotelItem = ({ hotel, index, categories, features }: Props) => {
 
                 <div className="flex gap-4 flex-1">
                     <img
-                        src={hotel.images[0].url}
+                        src={hotel?.images[0]?.url || "placeholder.svg"}
                         alt={hotel.name}
                         className="w-24 h-16 object-cover rounded-lg flex-shrink-0"
                     />
