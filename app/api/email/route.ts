@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend"
 import WelcomeEmailTemplate from "@/components/Email/WelcomeEmailTemplate";
+import sg from "@sendgrid/mail"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+sg.setApiKey(process.env.MAIL_API_KEY!)
 
 export async function POST(req: Request) {
 
@@ -14,20 +14,18 @@ export async function POST(req: Request) {
         }, { status: 400 })
     }
 
-    const { error, data } = await resend.emails.send({
-        from: 'App Demo <onboarding@resend.dev>',
-        to: to,
-        subject: "Registro confirmado en HotelWeb",
-        react: WelcomeEmailTemplate({ hotelName, reservationDate, hotelEmail, hotelPhone })
-    })
-
-    console.log(error)
-
-    if (error) {
-        return NextResponse.json({
-            error: error
-        }, { status: 400 })
-    }
+    await sg.send(
+        {
+            to: to,
+            from: "sebaactis@gmail.com",
+            subject: `Gracias por su reserva en ${hotelName}`,
+            html: `
+        <p>Fecha de reserva: ${reservationDate}</p>
+            <p>Email del hotel: ${hotelEmail}</p>
+            <p>Teléfono del hotel: ${hotelPhone} </p>
+        `
+        }
+    )
 
     return NextResponse.json({
         message: data
